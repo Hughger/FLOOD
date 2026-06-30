@@ -2,6 +2,7 @@
 .codex_ssh_known_hosts
 .codex_ssh_keys/
 codex_ssh_keys*/
+github_upload_key/
 *.pem
 *.key
 id_rsa*

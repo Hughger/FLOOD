@@ -1,0 +1,4 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,log
+l01_k1_c16_g4_ci1,1,16,4,4,1,1,1,0,1,230,230,logs/l01_k1_c16_g4_ci1.log
+l02_k1_c32_g4_ci1,1,32,4,4,1,1,1,0,1,438,438,logs/l02_k1_c32_g4_ci1.log
+l03_k3_c8_g4_ci1,3,8,4,4,1,1,1,0,1,457,457,logs/l03_k3_c8_g4_ci1.log

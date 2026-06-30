@@ -1,0 +1,32 @@
+# FLOOD HPCA PyTorchSim 硬件参数模板。
+# 生成论文图表数据前，需要先冻结这个文件。
+
+technology_nm: null
+frequency_mhz: 940
+num_cores: 1
+tiles_per_core: null
+macs_per_tile: null
+int8_peak_ops: null
+int4_peak_ops: null
+weight_sram_kb: null
+activation_sram_kb: null
+output_sram_kb: null
+noc_width_bit: null
+dram_bandwidth_gbps: null
+
+softmax_lanes: 32
+precision_switch_cycles: 2
+dataflow_switch_cycles: null
+bitmap_fetch_cycles: null
+outlier_queue_depth: null
+
+pytorchsim:
+  repo: "D:\\work-yanjiusheng\\HPCA\\PyTorchSim"
+  commit: 509f42554202edb29cf8d31ddf619776f465e717
+  docker_image: ghcr.io/psal-postech/torchsim-ci:v1.1.0
+  default_togsim_config: configs/systolic_ws_128x128_c1_simple_noc_tpuv3_timing_only.yml
+
+notes:
+  - 当前模板以 PyTorchSim 的 TPUv3-like timing-only 配置为起点。
+  - null 值需要替换为冻结后的 FLOOD 芯片参数或等资源 baseline 参数。
+  - 同一张图中不要混用等资源仿真结果和真实实现 PPA 结果。

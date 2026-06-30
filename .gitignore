@@ -1,0 +1,35 @@
+# Secrets and local SSH material
+.codex_ssh_known_hosts
+.codex_ssh_keys/
+codex_ssh_keys*/
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Codex/local agent state
+.agents/
+.codex/
+.git/
+_gitdir/
+.git_empty_backup_*/
+
+# External source trees / large local copies
+FLOOD/
+PyTorchSim/
+
+# Build and simulation byproducts
+**/build/
+**/target/
+**/__pycache__/
+*.pyc
+*.vvp
+*.vcd
+*.fst
+*.log
+*.out
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini

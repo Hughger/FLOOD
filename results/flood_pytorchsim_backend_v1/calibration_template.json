@@ -1,0 +1,16 @@
+{
+  "purpose": "Fill rtl_sim_cycles after FLOOD RTL simulation, then use it to calibrate the backend.",
+  "frequency_mhz": 940.0,
+  "peak_scale_vs_current_rtl": 8.0,
+  "recommended_error_targets": {
+    "microbench_average_error_percent": "<= 20 for preliminary paper use",
+    "microbench_max_error_percent": "<= 35 unless explained by unsupported control behavior"
+  },
+  "calibration_knobs": [
+    "compute_memory_overlap",
+    "output_arbiter_cycles",
+    "joint_sram_cycles",
+    "tile_output_transfer_cycles",
+    "pipeline_stall_cycles"
+  ]
+}

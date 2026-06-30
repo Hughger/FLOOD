@@ -1,0 +1,18 @@
+{
+  "project": "FLOOD HPCA PyTorchSim",
+  "created_at": "2026-06-28T22:03:37+08:00",
+  "pytorchsim_repo": "D:\\work-yanjiusheng\\HPCA\\PyTorchSim",
+  "pytorchsim_commit": "509f42554202edb29cf8d31ddf619776f465e717",
+  "docker_image": "ghcr.io/psal-postech/torchsim-ci:v1.1.0",
+  "status": "仓库已克隆；本地运行入口已准备；当前主机 PATH 中未发现 Docker",
+  "data_source_enum": [
+    "PyTorch measurement",
+    "PyTorchSim cycle simulation",
+    "RTL simulation",
+    "FPGA measurement",
+    "ASIC synthesis",
+    "post-layout estimate",
+    "analytical estimate",
+    "literature-reported"
+  ]
+}

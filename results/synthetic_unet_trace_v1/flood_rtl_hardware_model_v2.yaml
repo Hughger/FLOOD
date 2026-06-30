@@ -1,0 +1,22 @@
+# FLOOD RTL-aware hardware model
+source: FLOOD/src/main/scala/core/Config.scala
+frequency_mhz: 940.0
+tile_size: 16
+cim_core_rows: 32
+cim_core_cols: 32
+data_width_bits: 8
+mactree_pipeline: 2
+mactree_t_latency: 4
+weight_bus_bits: 256
+feature_bus_bits: 256
+output_sram_bus_bits: 512
+joint_sram_bus_bits: 512
+max_kernel_block_cout: 32
+max_kernel_block_cin: 1024
+max_pixel_parallel: 512
+notes:
+  - Conv and GEMM are modeled from implemented FLOOD RTL/Chisel parameters.
+  - k=1 Conv uses Tile.scala pointwise fast path; k>1 Conv includes shift-add and second output transfer.
+  - Cluster.scala RRArbiter output serialization is reported as rtl_output_arbiter_cycles.
+  - MacMachine_top.v 512-bit output/joint SRAM width is used for output/joint SRAM terms.
+  - Outlier bypass, precision switching, and softmax acceleration are not treated as implemented RTL features here.

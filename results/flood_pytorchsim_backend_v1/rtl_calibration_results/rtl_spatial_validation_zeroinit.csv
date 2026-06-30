@@ -1,0 +1,5 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,log
+s01_k1_c1_g4_ci1_rc2_rr1,1,1,4,4,1,2,1,0,2,35;35,70,logs/s01_k1_c1_g4_ci1_rc2_rr1.log
+s02_k1_c1_g4_ci1_rc1_rr2,1,1,4,4,1,1,2,0,2,35;35,70,logs/s02_k1_c1_g4_ci1_rc1_rr2.log
+s03_k1_c1_g4_ci1_rc2_rr2,1,1,4,4,1,2,2,0,4,35;35;35;35,140,logs/s03_k1_c1_g4_ci1_rc2_rr2.log
+s04_k3_c1_g4_ci1_rc2_rr1,3,1,4,4,1,2,1,0,2,79;79,158,logs/s04_k3_c1_g4_ci1_rc2_rr1.log

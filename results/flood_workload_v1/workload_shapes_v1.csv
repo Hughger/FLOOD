@@ -1,0 +1,11 @@
+id,workload,stage,operator,shape_args,shape_desc,reason,max_expected_runtime_s
+unet_conv_64_320_320,SD_UNet,early_down,conv,1 64 64 320 320 3 1 1,B=1,H=64,W=64,Cin=320,Cout=320,K=3,UNet early feature conv, common SD hidden width,120
+unet_conv_32_640_640,SD_UNet,mid_down,conv,1 32 32 640 640 3 1 1,B=1,H=32,W=32,Cin=640,Cout=640,K=3,UNet middle feature conv,180
+unet_conv_16_1280_1280,SD_UNet,late_down,conv,1 16 16 1280 1280 3 1 1,B=1,H=16,W=16,Cin=1280,Cout=1280,K=3,UNet late high-channel conv,240
+attn_qkv_4096_320_320,SD_UNet_Attention,early_attn,gemm,4096 320 320,M=tokens=64x64,K=320,N=320,Attention Q/K/V projection at 64x64,180
+attn_score_1024_64_1024,SD_UNet_Attention,mid_attn,gemm,1024 64 1024,M=tokens,K=head_dim,N=tokens,Attention score GEMM sampled at 32x32,180
+attn_softmax_1024_1024,SD_UNet_Attention,mid_attn,softmax,1024 1024,Attention probability softmax,Softmax path for FLOOD vector/softmax unit,180
+vae_dec_conv_64_256_128,VAE_Decoder,decoder,conv,1 64 64 256 128 3 1 1,B=1,H=64,W=64,Cin=256,Cout=128,K=3,VAE decoder upsampling-side conv proxy,180
+dit_qkv_256_768_768,DiT_B4,transformer,gemm,256 768 768,tokens=256, hidden=768,DiT-B/4 QKV/linear projection proxy,180
+dit_mlp_256_768_3072,DiT_B4,transformer_mlp,gemm,256 768 3072,tokens=256, hidden=768, mlp=3072,DiT-B/4 MLP expansion proxy,240
+dit_softmax_256_256,DiT_B4,transformer_attn,softmax,256 256,tokens=256 attention softmax,DiT attention softmax,120

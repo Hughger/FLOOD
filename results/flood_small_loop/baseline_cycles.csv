@@ -1,0 +1,5 @@
+experiment,operator,shape,log_file,num_simulations,total_cycles,max_cycles,latency_us,wall_clock_s,avg_dram_aggregate_gbps,avg_systolic_util_pct,avg_vector_util_pct,dma_active_cycles,status
+gemm_128,gemm,128x128x128,/root/autodl-tmp/torchsim_work/flood_results/logs/gemm_128.log,1,1089,1089,1.1585106382978723,1.053923,169.71,5.875,3.21,384,ok
+conv_smoke,conv,N1_C32_H32_K320_R3_stride1_pad1,/root/autodl-tmp/torchsim_work/flood_results/logs/conv_smoke.log,1,54336,54336,57.804255319148936,19.453058,198.0583333333333,80.63166666666667,0.77,43824,ok
+softmax_512,softmax,512x512,/root/autodl-tmp/torchsim_work/flood_results/logs/softmax_512.log,1,11804,11804,12.557446808510639,4.68523,353.06,0.0,61.11,15928,ok
+diffusion_smoke,diffusion_unet_smoke,synthetic_unet_block,/root/autodl-tmp/torchsim_work/flood_results/logs/diffusion_smoke_rerun.log,288,2004846,151591,2132.8148936170214,146.69152200000005,313.1405882352941,11.407047058823538,26.464201388888892,2773811,ok

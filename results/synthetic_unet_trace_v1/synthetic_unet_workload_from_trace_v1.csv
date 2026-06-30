@@ -1,0 +1,73 @@
+id,workload,stage,operator,shape_args,shape_desc,reason,max_expected_runtime_s
+gemm_001_op_00000,SD15_UNet_trace,time_embedding.linear_1,gemm,1 64 256,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_002_op_00001,SD15_UNet_trace,time_embedding.linear_2,gemm,1 256 256,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_001_op_00002,SD15_UNet_trace,conv_in,conv,1 32 32 4 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_002_op_00003,SD15_UNet_trace,down_blocks.0.resnets.0.conv1,conv,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_003_op_00004,SD15_UNet_trace,down_blocks.0.resnets.0.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_003_op_00005,SD15_UNet_trace,down_blocks.0.resnets.0.conv2,conv,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_004_op_00006,SD15_UNet_trace,down_blocks.0.attentions.0.proj_in,conv,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_004_op_00007,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_q,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_005_op_00008,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_k,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_006_op_00009,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_v,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_007_op_00010,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_out.0,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_008_op_00011,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_q,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_009_op_00012,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_k,gemm,77 768 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_010_op_00013,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_v,gemm,77 768 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_011_op_00014,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_out.0,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_012_op_00015,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.ff.net.0.proj,gemm,1024 64 512,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_013_op_00016,SD15_UNet_trace,down_blocks.0.attentions.0.transformer_blocks.0.ff.net.2,gemm,1024 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_005_op_00017,SD15_UNet_trace,down_blocks.0.attentions.0.proj_out,conv,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_006_op_00018,SD15_UNet_trace,down_blocks.0.downsamplers.0.conv,conv,1 32 32 64 64 3 2 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_007_op_00019,SD15_UNet_trace,down_blocks.1.resnets.0.conv1,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_014_op_00020,SD15_UNet_trace,down_blocks.1.resnets.0.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_008_op_00021,SD15_UNet_trace,down_blocks.1.resnets.0.conv2,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_009_op_00022,SD15_UNet_trace,mid_block.resnets.0.conv1,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_015_op_00023,SD15_UNet_trace,mid_block.resnets.0.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_010_op_00024,SD15_UNet_trace,mid_block.resnets.0.conv2,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_011_op_00025,SD15_UNet_trace,mid_block.attentions.0.proj_in,conv,1 16 16 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_016_op_00026,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn1.to_q,gemm,256 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_017_op_00027,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn1.to_k,gemm,256 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_018_op_00028,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn1.to_v,gemm,256 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_019_op_00029,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn1.to_out.0,gemm,256 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_020_op_00030,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn2.to_q,gemm,256 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_021_op_00031,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn2.to_k,gemm,77 768 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_022_op_00032,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn2.to_v,gemm,77 768 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_023_op_00033,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.attn2.to_out.0,gemm,256 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_024_op_00034,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.ff.net.0.proj,gemm,256 64 512,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_025_op_00035,SD15_UNet_trace,mid_block.attentions.0.transformer_blocks.0.ff.net.2,gemm,256 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_012_op_00036,SD15_UNet_trace,mid_block.attentions.0.proj_out,conv,1 16 16 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_013_op_00037,SD15_UNet_trace,mid_block.resnets.1.conv1,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_026_op_00038,SD15_UNet_trace,mid_block.resnets.1.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_014_op_00039,SD15_UNet_trace,mid_block.resnets.1.conv2,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_015_op_00040,SD15_UNet_trace,up_blocks.0.resnets.0.conv1,conv,1 16 16 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_027_op_00041,SD15_UNet_trace,up_blocks.0.resnets.0.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_016_op_00042,SD15_UNet_trace,up_blocks.0.resnets.0.conv2,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_017_op_00043,SD15_UNet_trace,up_blocks.0.resnets.0.conv_shortcut,conv,1 16 16 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_018_op_00044,SD15_UNet_trace,up_blocks.0.resnets.1.conv1,conv,1 16 16 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_028_op_00045,SD15_UNet_trace,up_blocks.0.resnets.1.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_019_op_00046,SD15_UNet_trace,up_blocks.0.resnets.1.conv2,conv,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_020_op_00047,SD15_UNet_trace,up_blocks.0.resnets.1.conv_shortcut,conv,1 16 16 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_021_op_00048,SD15_UNet_trace,up_blocks.0.upsamplers.0.conv,conv,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_022_op_00049,SD15_UNet_trace,up_blocks.1.resnets.0.conv1,conv,1 32 32 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_029_op_00050,SD15_UNet_trace,up_blocks.1.resnets.0.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_023_op_00051,SD15_UNet_trace,up_blocks.1.resnets.0.conv2,conv,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_024_op_00052,SD15_UNet_trace,up_blocks.1.resnets.0.conv_shortcut,conv,1 32 32 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_025_op_00053,SD15_UNet_trace,up_blocks.1.attentions.0.proj_in,conv,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_030_op_00054,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_q,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_031_op_00055,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_k,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_032_op_00056,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_v,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_033_op_00057,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_out.0,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_034_op_00058,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_q,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_035_op_00059,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_k,gemm,77 768 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_036_op_00060,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_v,gemm,77 768 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_037_op_00061,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_out.0,gemm,1024 64 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_038_op_00062,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.ff.net.0.proj,gemm,1024 64 512,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+gemm_039_op_00063,SD15_UNet_trace,up_blocks.1.attentions.0.transformer_blocks.0.ff.net.2,gemm,1024 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_026_op_00064,SD15_UNet_trace,up_blocks.1.attentions.0.proj_out,conv,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_027_op_00065,SD15_UNet_trace,up_blocks.1.resnets.1.conv1,conv,1 32 32 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+gemm_040_op_00066,SD15_UNet_trace,up_blocks.1.resnets.1.time_emb_proj,gemm,1 256 64,Linear is mapped to GEMM M K N.,traced from real UNet forward pass,300
+conv_028_op_00067,SD15_UNet_trace,up_blocks.1.resnets.1.conv2,conv,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_029_op_00068,SD15_UNet_trace,up_blocks.1.resnets.1.conv_shortcut,conv,1 32 32 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_030_op_00069,SD15_UNet_trace,up_blocks.1.attentions.1.proj_in,conv,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_031_op_00080,SD15_UNet_trace,up_blocks.1.attentions.1.proj_out,conv,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300
+conv_032_op_00081,SD15_UNet_trace,conv_out,conv,1 32 32 64 4 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.,traced from real UNet forward pass,300

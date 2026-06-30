@@ -1,0 +1,2 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,log
+m02_k3_c10_g4_ci10_complete,3,10,4,4,10,1,1,0,10,562;562;562;562;562;562;562;562;562;565,5623,logs/m02_k3_c10_g4_ci10_complete.log

@@ -1,0 +1,6 @@
+dataset,operator,rtl_workmode_class,num_rows,pytorchsim_cycles,old_rtl_aware_cycles,rtl_bringup_calibrated_cycles,speedup_vs_pytorchsim,bringup_vs_old_model_ratio
+synthetic_unet_trace,conv,pointwise_conv,4,6442.0,15976.0,22080.0,0.291757,1.382073
+synthetic_unet_trace,conv,spatial_conv,7,35075.0,118365.0,704144.0,0.049812,5.948921
+synthetic_unet_trace,gemm,gemm,10,20875.0,68938.0,80054.0,0.260761,1.161246
+workload_v1,conv,spatial_conv,4,665734.0,3317962.0,42600432.0,0.015627,12.839337
+workload_v1,gemm,gemm,4,95217.0,467944.0,1051808.0,0.090527,2.247722

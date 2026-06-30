@@ -1,0 +1,83 @@
+op_id,module_name,operator,batch,h_or_m,w_or_k,in_channels_or_features,out_channels_or_features,kernel,stride,padding,pytorchsim_shape_args,note
+op_00000,time_embedding.linear_1,gemm,1,1,64,64,256,1,1,0,1 64 256,Linear is mapped to GEMM M K N.
+op_00001,time_embedding.linear_2,gemm,1,1,256,256,256,1,1,0,1 256 256,Linear is mapped to GEMM M K N.
+op_00002,conv_in,conv,1,32,32,4,64,3,1,1,1 32 32 4 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00003,down_blocks.0.resnets.0.conv1,conv,1,32,32,64,64,3,1,1,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00004,down_blocks.0.resnets.0.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00005,down_blocks.0.resnets.0.conv2,conv,1,32,32,64,64,3,1,1,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00006,down_blocks.0.attentions.0.proj_in,conv,1,32,32,64,64,1,1,0,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00007,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_q,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00008,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_k,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00009,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_v,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00010,down_blocks.0.attentions.0.transformer_blocks.0.attn1.to_out.0,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00011,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_q,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00012,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_k,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00013,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_v,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00014,down_blocks.0.attentions.0.transformer_blocks.0.attn2.to_out.0,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00015,down_blocks.0.attentions.0.transformer_blocks.0.ff.net.0.proj,gemm,1,1024,64,64,512,1,1,0,1024 64 512,Linear is mapped to GEMM M K N.
+op_00016,down_blocks.0.attentions.0.transformer_blocks.0.ff.net.2,gemm,1,1024,256,256,64,1,1,0,1024 256 64,Linear is mapped to GEMM M K N.
+op_00017,down_blocks.0.attentions.0.proj_out,conv,1,32,32,64,64,1,1,0,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00018,down_blocks.0.downsamplers.0.conv,conv,1,32,32,64,64,3,2,1,1 32 32 64 64 3 2 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00019,down_blocks.1.resnets.0.conv1,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00020,down_blocks.1.resnets.0.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00021,down_blocks.1.resnets.0.conv2,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00022,mid_block.resnets.0.conv1,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00023,mid_block.resnets.0.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00024,mid_block.resnets.0.conv2,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00025,mid_block.attentions.0.proj_in,conv,1,16,16,64,64,1,1,0,1 16 16 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00026,mid_block.attentions.0.transformer_blocks.0.attn1.to_q,gemm,1,256,64,64,64,1,1,0,256 64 64,Linear is mapped to GEMM M K N.
+op_00027,mid_block.attentions.0.transformer_blocks.0.attn1.to_k,gemm,1,256,64,64,64,1,1,0,256 64 64,Linear is mapped to GEMM M K N.
+op_00028,mid_block.attentions.0.transformer_blocks.0.attn1.to_v,gemm,1,256,64,64,64,1,1,0,256 64 64,Linear is mapped to GEMM M K N.
+op_00029,mid_block.attentions.0.transformer_blocks.0.attn1.to_out.0,gemm,1,256,64,64,64,1,1,0,256 64 64,Linear is mapped to GEMM M K N.
+op_00030,mid_block.attentions.0.transformer_blocks.0.attn2.to_q,gemm,1,256,64,64,64,1,1,0,256 64 64,Linear is mapped to GEMM M K N.
+op_00031,mid_block.attentions.0.transformer_blocks.0.attn2.to_k,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00032,mid_block.attentions.0.transformer_blocks.0.attn2.to_v,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00033,mid_block.attentions.0.transformer_blocks.0.attn2.to_out.0,gemm,1,256,64,64,64,1,1,0,256 64 64,Linear is mapped to GEMM M K N.
+op_00034,mid_block.attentions.0.transformer_blocks.0.ff.net.0.proj,gemm,1,256,64,64,512,1,1,0,256 64 512,Linear is mapped to GEMM M K N.
+op_00035,mid_block.attentions.0.transformer_blocks.0.ff.net.2,gemm,1,256,256,256,64,1,1,0,256 256 64,Linear is mapped to GEMM M K N.
+op_00036,mid_block.attentions.0.proj_out,conv,1,16,16,64,64,1,1,0,1 16 16 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00037,mid_block.resnets.1.conv1,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00038,mid_block.resnets.1.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00039,mid_block.resnets.1.conv2,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00040,up_blocks.0.resnets.0.conv1,conv,1,16,16,128,64,3,1,1,1 16 16 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00041,up_blocks.0.resnets.0.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00042,up_blocks.0.resnets.0.conv2,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00043,up_blocks.0.resnets.0.conv_shortcut,conv,1,16,16,128,64,1,1,0,1 16 16 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00044,up_blocks.0.resnets.1.conv1,conv,1,16,16,128,64,3,1,1,1 16 16 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00045,up_blocks.0.resnets.1.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00046,up_blocks.0.resnets.1.conv2,conv,1,16,16,64,64,3,1,1,1 16 16 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00047,up_blocks.0.resnets.1.conv_shortcut,conv,1,16,16,128,64,1,1,0,1 16 16 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00048,up_blocks.0.upsamplers.0.conv,conv,1,32,32,64,64,3,1,1,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00049,up_blocks.1.resnets.0.conv1,conv,1,32,32,128,64,3,1,1,1 32 32 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00050,up_blocks.1.resnets.0.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00051,up_blocks.1.resnets.0.conv2,conv,1,32,32,64,64,3,1,1,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00052,up_blocks.1.resnets.0.conv_shortcut,conv,1,32,32,128,64,1,1,0,1 32 32 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00053,up_blocks.1.attentions.0.proj_in,conv,1,32,32,64,64,1,1,0,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00054,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_q,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00055,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_k,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00056,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_v,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00057,up_blocks.1.attentions.0.transformer_blocks.0.attn1.to_out.0,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00058,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_q,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00059,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_k,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00060,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_v,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00061,up_blocks.1.attentions.0.transformer_blocks.0.attn2.to_out.0,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00062,up_blocks.1.attentions.0.transformer_blocks.0.ff.net.0.proj,gemm,1,1024,64,64,512,1,1,0,1024 64 512,Linear is mapped to GEMM M K N.
+op_00063,up_blocks.1.attentions.0.transformer_blocks.0.ff.net.2,gemm,1,1024,256,256,64,1,1,0,1024 256 64,Linear is mapped to GEMM M K N.
+op_00064,up_blocks.1.attentions.0.proj_out,conv,1,32,32,64,64,1,1,0,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00065,up_blocks.1.resnets.1.conv1,conv,1,32,32,128,64,3,1,1,1 32 32 128 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00066,up_blocks.1.resnets.1.time_emb_proj,gemm,1,1,256,256,64,1,1,0,1 256 64,Linear is mapped to GEMM M K N.
+op_00067,up_blocks.1.resnets.1.conv2,conv,1,32,32,64,64,3,1,1,1 32 32 64 64 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00068,up_blocks.1.resnets.1.conv_shortcut,conv,1,32,32,128,64,1,1,0,1 32 32 128 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00069,up_blocks.1.attentions.1.proj_in,conv,1,32,32,64,64,1,1,0,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00070,up_blocks.1.attentions.1.transformer_blocks.0.attn1.to_q,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00071,up_blocks.1.attentions.1.transformer_blocks.0.attn1.to_k,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00072,up_blocks.1.attentions.1.transformer_blocks.0.attn1.to_v,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00073,up_blocks.1.attentions.1.transformer_blocks.0.attn1.to_out.0,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00074,up_blocks.1.attentions.1.transformer_blocks.0.attn2.to_q,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00075,up_blocks.1.attentions.1.transformer_blocks.0.attn2.to_k,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00076,up_blocks.1.attentions.1.transformer_blocks.0.attn2.to_v,gemm,1,77,768,768,64,1,1,0,77 768 64,Linear is mapped to GEMM M K N.
+op_00077,up_blocks.1.attentions.1.transformer_blocks.0.attn2.to_out.0,gemm,1,1024,64,64,64,1,1,0,1024 64 64,Linear is mapped to GEMM M K N.
+op_00078,up_blocks.1.attentions.1.transformer_blocks.0.ff.net.0.proj,gemm,1,1024,64,64,512,1,1,0,1024 64 512,Linear is mapped to GEMM M K N.
+op_00079,up_blocks.1.attentions.1.transformer_blocks.0.ff.net.2,gemm,1,1024,256,256,64,1,1,0,1024 256 64,Linear is mapped to GEMM M K N.
+op_00080,up_blocks.1.attentions.1.proj_out,conv,1,32,32,64,64,1,1,0,1 32 32 64 64 1 1 0,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.
+op_00081,conv_out,conv,1,32,32,64,4,3,1,1,1 32 32 64 4 3 1 1,Conv2d input is NCHW; PyTorchSim conv expects B H W I_C O_C K S P.

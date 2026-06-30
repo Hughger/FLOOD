@@ -1,0 +1,6 @@
+dataset,operator,rtl_workmode_class,num_rows,pytorchsim_cycles,flood_current_rtl_cycles,speedup_vs_pytorchsim,compute_cycles,max_load_cycles_sum,output_store_cycles,output_arbiter_cycles,shift_add_cycles,joint_sram_cycles
+synthetic_unet_trace,conv,pointwise_conv,4,6442.0,15976.0,0.40323,3840.0,7680.0,2560.0,5120.0,0.0,0.0
+synthetic_unet_trace,conv,spatial_conv,7,35075.0,118365.0,0.296329,42496.0,93312.0,3904.0,17408.0,1088.0,1088.0
+synthetic_unet_trace,gemm,gemm,10,20875.0,68938.0,0.302808,17984.0,20792.0,12886.0,25778.0,0.0,0.0
+workload_v1,conv,spatial_conv,4,665734.0,3317962.0,0.200645,3059712.0,1308672.0,44032.0,176128.0,11008.0,11008.0
+workload_v1,gemm,gemm,4,95217.0,467944.0,0.203479,303104.0,135168.0,52224.0,104448.0,0.0,0.0

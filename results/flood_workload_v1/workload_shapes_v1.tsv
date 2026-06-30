@@ -1,0 +1,9 @@
+id	workload	stage	operator	shape_args	shape_desc	reason	max_expected_runtime_s
+unet_conv_64_320_320	SD_UNet	early_down	conv	1 64 64 320 320 3 1 1	B1 H64 W64 Cin320 Cout320 K3	UNet early feature conv common SD hidden width	240
+unet_conv_32_640_640	SD_UNet	mid_down	conv	1 32 32 640 640 3 1 1	B1 H32 W32 Cin640 Cout640 K3	UNet middle feature conv	300
+unet_conv_16_1280_1280	SD_UNet	late_down	conv	1 16 16 1280 1280 3 1 1	B1 H16 W16 Cin1280 Cout1280 K3	UNet late high-channel conv	360
+attn_qkv_4096_320_320	SD_UNet_Attention	early_attn	gemm	4096 320 320	M4096 K320 N320	Attention QKV projection at 64x64	240
+attn_score_1024_64_1024	SD_UNet_Attention	mid_attn	gemm	1024 64 1024	M1024 K64 N1024	Attention score GEMM sampled at 32x32	240
+vae_dec_conv_64_256_128	VAE_Decoder	decoder	conv	1 64 64 256 128 3 1 1	B1 H64 W64 Cin256 Cout128 K3	VAE decoder upsampling-side conv proxy	240
+dit_qkv_256_768_768	DiT_B4	transformer	gemm	256 768 768	M256 K768 N768	DiT-B4 QKV linear projection proxy	240
+dit_mlp_256_768_3072	DiT_B4	transformer_mlp	gemm	256 768 3072	M256 K768 N3072	DiT-B4 MLP expansion proxy	300

@@ -1,0 +1,7 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,log,source_file,status,invalid_reason,v3_predicted_total,v3_error_percent,v4_predicted_total,v4_error_percent
+u01_k3_c6_g8_ci1,3,6,8,2,1,1,1,0,1,492,492,logs/u01_k3_c6_g8_ci1.log,rtl_v4_independent_validation_zeroinit.csv,valid,,377.0,-23.374,492.0,0.0
+u02_k3_c12_g8_ci1,3,12,8,2,1,1,1,0,1,954,954,logs/u02_k3_c12_g8_ci1.log,rtl_v4_independent_validation_zeroinit.csv,valid,,701.0,-26.5199,954.0,0.0
+u03_k3_c6_g8_ci2,3,6,8,2,2,1,1,0,2,489;492,981,logs/u03_k3_c6_g8_ci2.log,rtl_v4_independent_validation_zeroinit.csv,valid,,751.0,-23.4455,981.0,0.0
+u04_k1_c10_g16_ci1,1,10,16,1,1,1,1,0,1,208,208,logs/u04_k1_c10_g16_ci1.log,rtl_v4_independent_validation_zeroinit.csv,valid,,173.0,-16.8269,208.0,0.0
+u05_k1_c16_g16_ci1,1,16,16,1,1,1,1,0,1,322,322,logs/u05_k1_c16_g16_ci1.log,rtl_v4_independent_validation_zeroinit.csv,valid,,251.0,-22.0497,322.0,0.0
+u06_k1_c12_g16_rc2,1,12,16,1,1,2,1,0,2,246;0,246,logs/u06_k1_c12_g16_rc2.log,rtl_v4_independent_validation_zeroinit.csv,invalid,zero or negative cycle count observed,398.0,61.7886,492.0,100.0

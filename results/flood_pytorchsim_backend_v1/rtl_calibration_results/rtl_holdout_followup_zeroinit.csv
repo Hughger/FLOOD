@@ -1,0 +1,3 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,log
+h05_k1_c6_g16_ci1,1,6,16,1,1,1,1,0,1,132,132,logs/h05_k1_c6_g16_ci1.log
+h06_k1_c6_g8_ci4,1,6,8,2,4,1,1,0,4,103;103;103;106,415,logs/h06_k1_c6_g8_ci4.log

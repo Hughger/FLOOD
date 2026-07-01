@@ -26,6 +26,7 @@ workload 级 FLOOD calibrated projection
 |---|---|
 | [FLOOD_PyTorchSim_工作整理.md](./FLOOD_PyTorchSim_%E5%B7%A5%E4%BD%9C%E6%95%B4%E7%90%86.md) | 当前工作流、产出、结论和下一步计划总览 |
 | [PyTorchSim_服务器使用说明_任务1_2.md](./PyTorchSim_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E_%E4%BB%BB%E5%8A%A11_2.md) | 给任务 1/2 负责人的服务器运行、CSV 输出和日志记录说明 |
+| [team_templates](./team_templates/README.md) | 团队 workload CSV 模板、运行记录模板和自动检查脚本 |
 | [中文产出索引.md](./results/flood_pytorchsim_backend_v1/%E4%B8%AD%E6%96%87%E4%BA%A7%E5%87%BA%E7%B4%A2%E5%BC%95.md) | 结果目录索引 |
 | [rtl_bringup_calibration_v3](./results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3/README.md) | 最新 RTL bring-up 校准报告 |
 | [rtl_bringup_workload_v1](./results/flood_pytorchsim_backend_v1/rtl_bringup_workload_v1/README.md) | workload 级 RTL 校准外推结果 |

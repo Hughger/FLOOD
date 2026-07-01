@@ -106,6 +106,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_holdout_boundary_validation_v2](./results/flood_pytorchsim_backend_v1/rtl_holdout_boundary_validation_v2/README.md) | 汇总留出样本和边界补测，说明 v3 公式在哪些地方失效 |
 | [rtl_boundary_calibration_v4](./results/flood_pytorchsim_backend_v1/rtl_boundary_calibration_v4/README.md) | 候选 v4 校准公式，对当前有效 RTL 样本做一致性拟合 |
 | [rtl_v4_independent_validation_v1](./results/flood_pytorchsim_backend_v1/rtl_v4_independent_validation_v1/README.md) | 使用未参与 v4 拟合的新 RTL 点验证 v4 外推能力 |
+| [rtl_high_group_repeat_issue_v1](./results/flood_pytorchsim_backend_v1/rtl_high_group_repeat_issue_v1/README.md) | 记录 `group_size=16` 重复执行时后续 run 为 0 的阻塞问题 |
 
 重要边界结论：
 

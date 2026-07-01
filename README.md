@@ -96,3 +96,19 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - 支撑论文中的 calibrated workload projection。
 
 当前不应直接声称“完整 workload 已经全部通过 RTL 仿真验证”。
+
+## 2026-07-01 可信度提升记录
+
+新增两类资料：
+
+| 文件 | 作用 |
+|---|---|
+| [rtl_holdout_boundary_validation_v2](./results/flood_pytorchsim_backend_v1/rtl_holdout_boundary_validation_v2/README.md) | 汇总留出样本和边界补测，说明 v3 公式在哪些地方失效 |
+| [rtl_boundary_calibration_v4](./results/flood_pytorchsim_backend_v1/rtl_boundary_calibration_v4/README.md) | 候选 v4 校准公式，对当前有效 RTL 样本做一致性拟合 |
+
+重要边界结论：
+
+- `k=3/group_size=8` 需要额外交互项，旧公式会低估周期。
+- `k=1/group_size=16` 的 `cout` 曲线不能沿用旧的线性项，候选公式为 `56 + 19*max(cout-2,0)`。
+- `group_size=16` 且 `cin_idx_total>1` 的 RTL testbench 会出现后续 run 为 0 的异常，暂不能作为论文性能数据。
+- v4 是候选校准，不是最终论文证据；下一步必须用新的独立 RTL 样本验证。

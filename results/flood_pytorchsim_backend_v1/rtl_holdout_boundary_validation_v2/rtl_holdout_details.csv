@@ -1,0 +1,15 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,log,source_file,status,invalid_reason,predicted_cycle_list,predicted_total_cycles,error_cycles,error_percent,abs_error_percent
+h01_k1_c12_g4_ci3_rc2,1,12,4,4,3,2,1,0,6,175;175;178;175;175;178,1056,logs/h01_k1_c12_g4_ci3_rc2.log,rtl_holdout_validation_zeroinit.csv,valid,,175.0;175.0;178.0;175.0;175.0;178.0,1056.0,0.0,0.0,0.0
+h02_k3_c4_g8_ci2,3,4,8,2,2,1,1,0,2,335;338,673,logs/h02_k3_c4_g8_ci2.log,rtl_holdout_validation_zeroinit.csv,valid,,266.0;269.0,535.0,-138.0,-20.5052,20.5052
+h03_k3_c16_g4_ci1,3,16,4,4,1,1,1,0,1,889,889,logs/h03_k3_c16_g4_ci1.log,rtl_holdout_validation_zeroinit.csv,valid,,889.0,889.0,0.0,0.0,0.0
+h04_k1_c6_g16_ci4,1,6,16,1,4,1,1,0,4,129;0;0;0,129,logs/h04_k1_c6_g16_ci4.log,rtl_holdout_validation_zeroinit.csv,invalid,zero or negative cycle count observed,118.0;118.0;118.0;121.0,475.0,346.0,268.2171,268.2171
+h05_k1_c6_g16_ci1,1,6,16,1,1,1,1,0,1,132,132,logs/h05_k1_c6_g16_ci1.log,rtl_holdout_followup_zeroinit.csv,valid,,121.0,121.0,-11.0,-8.3333,8.3333
+h06_k1_c6_g8_ci4,1,6,8,2,4,1,1,0,4,103;103;103;106,415,logs/h06_k1_c6_g8_ci4.log,rtl_holdout_followup_zeroinit.csv,valid,,103.0;103.0;103.0;106.0,415.0,0.0,0.0,0.0
+h07_k1_c8_g16_ci1,1,8,16,1,1,1,1,0,1,170,170,logs/h07_k1_c8_g16_ci1.log,rtl_holdout_extra_zeroinit.csv,valid,,147.0,147.0,-23.0,-13.5294,13.5294
+b01_k3_c2_g8_ci1,3,2,8,2,1,1,1,0,1,184,184,logs/b01_k3_c2_g8_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,161.0,161.0,-23.0,-12.5,12.5
+b02_k3_c4_g8_ci1,3,4,8,2,1,1,1,0,1,338,338,logs/b02_k3_c4_g8_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,269.0,269.0,-69.0,-20.4142,20.4142
+b03_k3_c8_g8_ci1,3,8,8,2,1,1,1,0,1,646,646,logs/b03_k3_c8_g8_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,485.0,485.0,-161.0,-24.9226,24.9226
+b04_k1_c2_g16_ci1,1,2,16,1,1,1,1,0,1,56,56,logs/b04_k1_c2_g16_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,69.0,69.0,13.0,23.2143,23.2143
+b05_k1_c4_g16_ci1,1,4,16,1,1,1,1,0,1,94,94,logs/b05_k1_c4_g16_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,95.0,95.0,1.0,1.0638,1.0638
+b06_k1_c12_g16_ci1,1,12,16,1,1,1,1,0,1,246,246,logs/b06_k1_c12_g16_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,199.0,199.0,-47.0,-19.1057,19.1057
+b07_k1_c6_g16_ci2,1,6,16,1,2,1,1,0,2,129;0,129,logs/b07_k1_c6_g16_ci2.log,rtl_boundary_validation_zeroinit.csv,invalid,zero or negative cycle count observed,118.0;121.0,239.0,110.0,85.2713,85.2713

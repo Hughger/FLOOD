@@ -1,0 +1,37 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,log,source_file,status,invalid_reason,v3_predicted_total,v3_error_percent,v4_predicted_total,v4_error_percent
+c01_k1_c1_g4_ci1,1,1,4,4,1,1,1,0,1,35,35,logs/c01_k1_c1_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,35.0,0.0,35.0,0.0
+c02_k1_c2_g4_ci1,1,2,4,4,1,1,1,0,1,48,48,logs/c02_k1_c2_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,48.0,0.0,48.0,0.0
+c03_k3_c1_g4_ci1,3,1,4,4,1,1,1,0,1,79,79,logs/c03_k3_c1_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,79.0,0.0,79.0,0.0
+c04_k3_c2_g4_ci1,3,2,4,4,1,1,1,0,1,133,133,logs/c04_k3_c2_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,133.0,0.0,133.0,0.0
+c05_k1_c1_g8_ci1,1,1,8,2,1,1,1,0,1,41,41,logs/c05_k1_c1_g8_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,41.0,0.0,41.0,0.0
+c06_k1_c1_g4_ci2,1,1,4,4,2,1,1,0,2,32;35,67,logs/c06_k1_c1_g4_ci2.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,67.0,0.0,67.0,0.0
+v01_k1_c4_g4_ci1,1,4,4,4,1,1,1,0,1,74,74,logs/v01_k1_c4_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,74.0,0.0,74.0,0.0
+v02_k1_c8_g4_ci1,1,8,4,4,1,1,1,0,1,126,126,logs/v02_k1_c8_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,126.0,0.0,126.0,0.0
+v03_k3_c4_g4_ci1,3,4,4,4,1,1,1,0,1,241,241,logs/v03_k3_c4_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,241.0,0.0,241.0,0.0
+v04_k1_c1_g2_ci1,1,1,2,8,1,1,1,0,1,35,35,logs/v04_k1_c1_g2_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,35.0,0.0,35.0,0.0
+v05_k1_c1_g16_ci1,1,1,16,1,1,1,1,0,1,56,56,logs/v05_k1_c1_g16_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,56.0,0.0,56.0,0.0
+v06_k3_c1_g8_ci1,3,1,8,2,1,1,1,0,1,107,107,logs/v06_k3_c1_g8_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,107.0,0.0,107.0,0.0
+v07_k1_c1_g4_ci4,1,1,4,4,4,1,1,0,4,32;32;32;35,131,logs/v07_k1_c1_g4_ci4.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,131.0,0.0,131.0,0.0
+v08_k1_c2_g4_ci2,1,2,4,4,2,1,1,0,2,45;48,93,logs/v08_k1_c2_g4_ci2.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,93.0,0.0,93.0,0.0
+s01_k1_c1_g4_ci1_rc2_rr1,1,1,4,4,1,2,1,0,2,35;35,70,logs/s01_k1_c1_g4_ci1_rc2_rr1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,70.0,0.0,70.0,0.0
+s02_k1_c1_g4_ci1_rc1_rr2,1,1,4,4,1,1,2,0,2,35;35,70,logs/s02_k1_c1_g4_ci1_rc1_rr2.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,70.0,0.0,70.0,0.0
+s03_k1_c1_g4_ci1_rc2_rr2,1,1,4,4,1,2,2,0,4,35;35;35;35,140,logs/s03_k1_c1_g4_ci1_rc2_rr2.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,140.0,0.0,140.0,0.0
+s04_k3_c1_g4_ci1_rc2_rr1,3,1,4,4,1,2,1,0,2,79;79,158,logs/s04_k3_c1_g4_ci1_rc2_rr1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,158.0,0.0,158.0,0.0
+l01_k1_c16_g4_ci1,1,16,4,4,1,1,1,0,1,230,230,logs/l01_k1_c16_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,230.0,0.0,230.0,0.0
+l02_k1_c32_g4_ci1,1,32,4,4,1,1,1,0,1,438,438,logs/l02_k1_c32_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,438.0,0.0,438.0,0.0
+l03_k3_c8_g4_ci1,3,8,4,4,1,1,1,0,1,457,457,logs/l03_k3_c8_g4_ci1.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,457.0,0.0,457.0,0.0
+m02_k3_c10_g4_ci10_complete,3,10,4,4,10,1,1,0,10,562;562;562;562;562;562;562;562;562;565,5623,logs/m02_k3_c10_g4_ci10_complete.log,rtl_bringup_all_with_mid_complete_zeroinit.csv,valid,,5623.0,0.0,5623.0,0.0
+h01_k1_c12_g4_ci3_rc2,1,12,4,4,3,2,1,0,6,175;175;178;175;175;178,1056,logs/h01_k1_c12_g4_ci3_rc2.log,rtl_holdout_validation_zeroinit.csv,valid,,1056.0,0.0,1056.0,0.0
+h02_k3_c4_g8_ci2,3,4,8,2,2,1,1,0,2,335;338,673,logs/h02_k3_c4_g8_ci2.log,rtl_holdout_validation_zeroinit.csv,valid,,535.0,-20.5052,673.0,0.0
+h03_k3_c16_g4_ci1,3,16,4,4,1,1,1,0,1,889,889,logs/h03_k3_c16_g4_ci1.log,rtl_holdout_validation_zeroinit.csv,valid,,889.0,0.0,889.0,0.0
+h04_k1_c6_g16_ci4,1,6,16,1,4,1,1,0,4,129;0;0;0,129,logs/h04_k1_c6_g16_ci4.log,rtl_holdout_validation_zeroinit.csv,invalid,zero or negative cycle count observed,475.0,268.2171,519.0,302.3256
+h05_k1_c6_g16_ci1,1,6,16,1,1,1,1,0,1,132,132,logs/h05_k1_c6_g16_ci1.log,rtl_holdout_followup_zeroinit.csv,valid,,121.0,-8.3333,132.0,0.0
+h06_k1_c6_g8_ci4,1,6,8,2,4,1,1,0,4,103;103;103;106,415,logs/h06_k1_c6_g8_ci4.log,rtl_holdout_followup_zeroinit.csv,valid,,415.0,0.0,415.0,0.0
+h07_k1_c8_g16_ci1,1,8,16,1,1,1,1,0,1,170,170,logs/h07_k1_c8_g16_ci1.log,rtl_holdout_extra_zeroinit.csv,valid,,147.0,-13.5294,170.0,0.0
+b01_k3_c2_g8_ci1,3,2,8,2,1,1,1,0,1,184,184,logs/b01_k3_c2_g8_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,161.0,-12.5,184.0,0.0
+b02_k3_c4_g8_ci1,3,4,8,2,1,1,1,0,1,338,338,logs/b02_k3_c4_g8_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,269.0,-20.4142,338.0,0.0
+b03_k3_c8_g8_ci1,3,8,8,2,1,1,1,0,1,646,646,logs/b03_k3_c8_g8_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,485.0,-24.9226,646.0,0.0
+b04_k1_c2_g16_ci1,1,2,16,1,1,1,1,0,1,56,56,logs/b04_k1_c2_g16_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,69.0,23.2143,56.0,0.0
+b05_k1_c4_g16_ci1,1,4,16,1,1,1,1,0,1,94,94,logs/b05_k1_c4_g16_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,95.0,1.0638,94.0,0.0
+b06_k1_c12_g16_ci1,1,12,16,1,1,1,1,0,1,246,246,logs/b06_k1_c12_g16_ci1.log,rtl_boundary_validation_zeroinit.csv,valid,,199.0,-19.1057,246.0,0.0
+b07_k1_c6_g16_ci2,1,6,16,1,2,1,1,0,2,129;0,129,logs/b07_k1_c6_g16_ci2.log,rtl_boundary_validation_zeroinit.csv,invalid,zero or negative cycle count observed,239.0,85.2713,261.0,102.3256

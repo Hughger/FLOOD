@@ -1,0 +1,2 @@
+total_cases,valid_cases,invalid_cases,v3_exact_cases,v3_mean_abs_error_percent,v3_max_abs_error_percent,v4_exact_cases,v4_mean_abs_error_percent,v4_max_abs_error_percent,scope
+36,34,2,25,4.2232,24.9226,34,0.0,0.0,candidate calibration fitted with boundary cases

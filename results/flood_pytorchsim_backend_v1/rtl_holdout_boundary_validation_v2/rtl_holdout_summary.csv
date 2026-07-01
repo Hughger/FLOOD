@@ -1,0 +1,2 @@
+total_cases,valid_cases,invalid_cases,exact_match_cases,mean_abs_error_percent_valid,max_abs_error_percent_valid,mean_abs_error_cycles_valid,max_abs_error_cycles_valid,paper_use
+14,12,2,3,11.9657,24.9226,40.5,161.0,diagnostic holdout evidence; not final paper-grade performance data

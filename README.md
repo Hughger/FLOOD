@@ -107,6 +107,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_boundary_calibration_v4](./results/flood_pytorchsim_backend_v1/rtl_boundary_calibration_v4/README.md) | 候选 v4 校准公式，对当前有效 RTL 样本做一致性拟合 |
 | [rtl_v4_independent_validation_v1](./results/flood_pytorchsim_backend_v1/rtl_v4_independent_validation_v1/README.md) | 使用未参与 v4 拟合的新 RTL 点验证 v4 外推能力 |
 | [rtl_high_group_repeat_issue_v1](./results/flood_pytorchsim_backend_v1/rtl_high_group_repeat_issue_v1/README.md) | 记录 `group_size=16` 重复执行时后续 run 为 0 的阻塞问题 |
+| [rtl_high_group_repeat_fix_v1](./results/flood_pytorchsim_backend_v1/rtl_high_group_repeat_fix_v1/README.md) | 验证清中断/drain 修复后，高 group 多 Cin 不再出现 0 周期 |
 
 重要边界结论：
 
@@ -120,3 +121,9 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - 5 个有效独立 RTL 点全部命中 v4。
 - 同一批点上 v3 平均绝对误差为 22.4432%。
 - `group_size=16` 的空间重复执行也复现后续 run 为 0，说明下一步必须优先修复高 group 重复执行控制路径。
+
+2026-07-02 凌晨新增高 group 重复执行修复验证：
+
+- `group_size=16` 多 Cin 的 0 周期问题已通过 testbench drain-before-clear 策略消除。
+- 修复后 `cin=4` 从 `129;0;0;0` 变成 `129;53;53;56`，且没有 X。
+- `group_size=16` 空间重复仍有大量 X，暂不能作为论文性能数据。

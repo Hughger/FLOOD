@@ -30,6 +30,7 @@
 
 ```text
 memclear_matrix_v1.csv
+memclear_holdout_v1.csv
 ```
 
 补测范围：
@@ -59,6 +60,12 @@ res_cols=2/4
 - `res_cols=2` 的 X 可以由 output SRAM 初始清零解决。
 - `res_cols=4` 仍有更深层问题；此时 Router 不再读取 X，但 Cluster 输出已经出现 X。
 - 因此当前可把 `group16/res_cols=2` 作为下一批候选 RTL 校准样本；`group16/res_cols>=4` 仍应列为阻塞项。
+
+后续 holdout 补测进一步确认：
+
+- `cout=4/8/10/14, res_cols=2` 全部无 X。
+- `cout=4/8/10/14, res_cols=3` 全部有 Cluster 输出 X。
+- 因此边界更准确地收敛为：`res_cols<=2` 可进入 v6 候选，`res_cols>=3` 暂列为 blocked。
 
 ## 对论文数据的影响
 

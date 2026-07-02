@@ -112,6 +112,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_group16_v5_holdout_v1](./results/flood_pytorchsim_backend_v1/rtl_group16_v5_holdout_v1/README.md) | 使用未参与 v5 拟合的新 RTL 点验证 v5 外推能力 |
 | [group16_v5_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v5_workload_v1/README.md) | 将 v5 多 Cin 规则接入 workload 级 FLOOD calibrated projection |
 | [rtl_group16_spatial_x_rootcause_v1](./results/flood_pytorchsim_backend_v1/rtl_group16_spatial_x_rootcause_v1/README.md) | 定位 `group_size=16` 空间重复 X 的根因，并验证 SRAM memory 清零后 X 消失 |
+| [rtl_group16_spatial_v6](./results/flood_pytorchsim_backend_v1/rtl_group16_spatial_v6/README.md) | 将 `group16/res_cols<=2` 空间重复整理为 v6 RTL-clean 校准/holdout 证据 |
 
 重要边界结论：
 
@@ -166,3 +167,10 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - `res_cols=2` 三个样本全部无 X：`132;56`、`246;56`、`322;56`。
 - `res_cols=4` 三个样本仍有 X，且探针显示 X 已出现在 Cluster 输出，而不是 Router 读未初始化 SRAM。
 - 因此下一版校准应先把 `res_cols=2` 作为可信候选样本，`res_cols>=4` 继续作为 RTL debug 阻塞项。
+
+2026-07-02 上午新增 group16 空间 v6 校准：
+
+- 新增 `rtl_group16_spatial_v6` 报告，将空间重复拆成论文可用区和阻塞区。
+- fitting：`cout=6/12/16, res_cols=2`，3 个样本全部无 X，v6 误差 `0%`。
+- holdout：`cout=4/8/10/14, res_cols=2`，4 个独立样本全部无 X，v6 误差 `0%`。
+- blocked：`res_cols=3/4` 共 7 个样本仍有 X，探针显示 X 在 Cluster 输出侧产生，暂不纳入论文主性能表。

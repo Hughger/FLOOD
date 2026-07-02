@@ -1,0 +1,4 @@
+split,total_cases,paper_candidate_clean_cases,blocked_cases,v6_mean_abs_error_percent,v6_max_abs_error_percent
+fit,3,3,0,0.0,0.0
+holdout,4,4,0,0.0,0.0
+blocked,7,0,7,0.0,0.0

@@ -55,6 +55,18 @@ res_rows=32
 
 结论：当前可观测边界稳定在 `cout=28/29` 之间；`cout=27/28` 仍 clean，`cout=29/30/32` 会在最后一个 run 出现 0-cycle。
 
+## res_cols 对照补测
+
+固定 `cout=29, cin=2, res_rows=1`，改变空间列数：
+
+| case | res_cols | cycles | zero cycles | x_count | cluster_x |
+|---|---:|---|---:|---:|---:|
+| `thr_attn_cout29_rc1_rr1` | 1 | `566;56` | 0 | 0 | 0 |
+| `thr_attn_cout29_rr1` | 2 | `566;56;53;0` | 1 | 0 | 0 |
+| `thr_attn_cout29_rc3_rr1` | 3 | `566;56;53;0;53;0` | 2 | 1034 | 58 |
+
+结论：`cout=29, cin=2` 在单列空间时 clean；从 `res_cols=2` 开始出现 0-cycle，`res_cols=3` 进一步出现 Cluster/Router/Output 侧 X。因此当前边界应表述为高 `cout` 多 Cin 空间多列控制风险，而不是单纯高 `cout`。
+
 ## 对 simulator 的影响
 
 应新增或保留保守边界：
@@ -68,5 +80,5 @@ k=1/group16/cin>=2/res_cols>=2/cout>=29
 ## 下一步
 
 1. 若要继续修 RTL，应重点检查 `cout>=29` 下第二个 spatial column 的 final Cin run 为什么立即 done。
-2. 建议改变 `res_cols` 或 `cin_idx_total`，确认该边界是否只绑定 `res_cols=2, cin=2`。
+2. 建议改变 `cin_idx_total`，确认该边界是否只绑定 `cin=2`，还是所有多 Cin 都会触发。
 3. 论文主表应继续排除 `attn_score_1024_64_1024` 的直接 RTL 数据，只可作为 blocked case 讨论。

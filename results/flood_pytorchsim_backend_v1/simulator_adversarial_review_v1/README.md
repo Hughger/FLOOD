@@ -77,4 +77,5 @@ The real workload GEMM result is only slow but otherwise valid.
 - `cout=29, cin=2, res_rows=1` 下，`res_cols=1` clean，`res_cols=2` 出现 0-cycle，`res_cols=3` 出现 0-cycle 且伴随 Cluster/Router/Output X。
 - `cout=29, res_cols=2, res_rows=1` 下，`cin=1` clean，`cin=2/3` 出现 0-cycle。
 - `cout=29, cin=2, res_cols=2, res_rows=1` 下，`group_size=4/8` 没有 done interrupt，并出现 Cluster 侧异常摘要；因此不能用小 group 作为 clean 替代证据。
+- consolidated boundary matrix 汇总 16 个阈值 case：6 个 clean、7 个 zero-cycle/no-X、1 个 zero-cycle/X、2 个 no-done。
 - 因此当前 blocked 边界更接近 `cout>=29, cin>=2, res_cols>=2` 的高 `cout` 多 Cin 多列控制路径，而不是单纯大 `res_rows`；group 维度还需要 RTL 状态机解释。

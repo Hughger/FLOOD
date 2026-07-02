@@ -1,0 +1,5 @@
+﻿"status","cases","examples"
+"blocked_no_done","2","thr_attn_cout29_g8_ci2_rc2_rr1;thr_attn_cout29_g4_ci2_rc2_rr1"
+"blocked_zero_cycle_no_x","7","thr_attn_cout29_ci3_rc2_rr1;thr_attn_cout30_rr1;thr_attn_cout32_rr1_v2;thr_attn_cout29_rr1;thr_attn_score_rr1"
+"blocked_zero_cycle_with_x","1","thr_attn_cout29_rc3_rr1"
+"clean","6","thr_attn_cout29_ci1_rc2_rr1;thr_attn_cout16_rr1;thr_attn_cout24_rr1;thr_attn_cout28_rr1;thr_attn_cout27_rr1"

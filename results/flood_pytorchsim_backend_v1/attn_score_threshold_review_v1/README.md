@@ -91,6 +91,26 @@ res_rows=32
 
 结论：较小 group 并没有提供 clean 对照。`group_size=4/8` 在该形状下没有产生 done interrupt，并出现 Cluster 侧异常摘要；`group_size=16` 则表现为可观测的 0-cycle。论文中不能用小 group 跑通样本替代当前 group16 blocked 边界。
 
+## consolidated boundary matrix
+
+为避免只引用单个点造成过度解释，本目录新增两张合并表：
+
+```text
+attn_score_boundary_matrix_v1.csv
+attn_score_boundary_summary_v1.csv
+```
+
+合并后共 16 个阈值 case：
+
+| status | cases | 含义 |
+|---|---:|---|
+| `clean` | 6 | 有 done interrupt、无 0-cycle、无 X |
+| `blocked_zero_cycle_no_x` | 7 | 有 done interrupt，但存在 0-cycle，未观察到 X |
+| `blocked_zero_cycle_with_x` | 1 | 同时出现 0-cycle 和 X |
+| `blocked_no_done` | 2 | 未产生 done interrupt，不能作为性能数据 |
+
+该矩阵支持当前论文口径：`attn_score_1024_64_1024` 不能进入主性能表，只能作为 blocked/risk case；相关 workload projection 必须被 D 级边界排除。
+
 ## 对 simulator 的影响
 
 应新增或保留保守边界：

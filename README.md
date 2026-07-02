@@ -214,4 +214,5 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - 固定 `cout=32, cin=2, res_cols=2` 时，`res_rows=1` 已出现 0-cycle：`623;56;53;0`，说明问题不是单纯由大 `res_rows=32` 引起。
 - 固定 `cin=2, res_cols=2, res_rows=1` 时，`cout=16/24/27/28` clean，`cout=29/30/32` 出现 0-cycle。
 - 固定 `cout=29, cin=2, res_rows=1` 时，`res_cols=1` clean，`res_cols=2` 出现 0-cycle，`res_cols=3` 出现 0-cycle 且伴随 X。
+- 固定 `cout=29, res_cols=2, res_rows=1` 时，`cin=1` clean，`cin=2/3` 出现 0-cycle。
 - simulator/readiness 新增保守边界：`k=1/group16/cin>=2/res_cols>=2/cout>=29` 标为 D 级风险，不能作为论文主性能表数据。

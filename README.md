@@ -111,6 +111,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_group16_multicin_v5](./results/flood_pytorchsim_backend_v1/rtl_group16_multicin_v5/README.md) | 基于修复后 RTL 数据建立 `group_size=16` 多 Cin v5 校准项 |
 | [rtl_group16_v5_holdout_v1](./results/flood_pytorchsim_backend_v1/rtl_group16_v5_holdout_v1/README.md) | 使用未参与 v5 拟合的新 RTL 点验证 v5 外推能力 |
 | [group16_v5_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v5_workload_v1/README.md) | 将 v5 多 Cin 规则接入 workload 级 FLOOD calibrated projection |
+| [rtl_group16_spatial_x_rootcause_v1](./results/flood_pytorchsim_backend_v1/rtl_group16_spatial_x_rootcause_v1/README.md) | 定位 `group_size=16` 空间重复 X 的根因，并验证 SRAM memory 清零后 X 消失 |
 
 重要边界结论：
 
@@ -150,3 +151,11 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - `workload_v1` 的 conv 空间卷积：group16 v5 投影为 `3,197,712` cycles，group4 bring-up 投影为 `42,600,432` cycles，二者比例为 `0.075063`。
 - `workload_v1` 的 gemm：group16 v5 投影为 `294,880` cycles，group4 bring-up 投影为 `1,051,808` cycles，二者比例为 `0.280355`。
 - 该结果仍应标注为 `RTL-calibrated projection`，不是完整 workload RTL validation；`k=3/group16` 与空间重复路径还需要继续做 RTL 验证。
+
+2026-07-02 上午新增 group16 空间重复 X 根因定位：
+
+- 对 `k=1, cout=12, group_size=16, cin=1, res_cols=2` 重新生成输入并重跑探针。
+- 探针确认 `feature_data`、weight 读取、Cluster 输出 NoC 都没有 X。
+- X 首次出现在 `OutRouterPlanePost` 读取 output SRAM 高地址 `513..523` 时；这些地址此前未写入，testbench SRAM memory 未初始化导致读出 X。
+- 使用 memory 初始清零的 SRAM 模型后，同一 case 周期保持 `246;56`，`x_count` 从 `396/419` 降为 `0`。
+- 这说明空间重复路径的下一步应加入明确的 output SRAM 预清零 precondition，并补跑矩阵样本后再纳入论文主数据。

@@ -1,0 +1,5 @@
+probe,case,k,cout,group_size,cin_idx_total,res_cols,res_rows,feature_lines,feature_hex_chars,cycles,x_count,feat_x,wping_x,cluster_x,router_read_x,router_write_x,oping_x,note
+input_rerun,probe_spatial_g16_rc2_rerun,1,12,16,1,2,1,512,128,246;56,396,NA,NA,NA,NA,NA,NA,correct regenerated input still has output X
+xprobe,probe_spatial_g16_rc2_xprobe,1,12,16,1,2,1,512,128,246;56,408,0,0,NA,NA,NA,12,feature and weight are clean; output write has X
+xprobe2,probe_spatial_g16_rc2_xprobe2,1,12,16,1,2,1,512,128,246;56,419,NA,NA,0,11,12,NA,router reads uninitialized output SRAM addresses 513..523 then writes X
+memclear_xprobe2,probe_spatial_g16_rc2_memclear_xprobe2,1,12,16,1,2,1,512,128,246;56,0,NA,NA,0,0,0,NA,zero-initialized SRAM memory removes X without changing cycles

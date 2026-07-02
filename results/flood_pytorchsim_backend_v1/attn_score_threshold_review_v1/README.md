@@ -79,6 +79,18 @@ res_rows=32
 
 结论：单 Cin 不触发该问题；从 `cin_idx_total=2` 开始出现 0-cycle，`cin_idx_total=3` 会进一步扩大 0-cycle 次数。因此当前 simulator 的 `cin>=2` 边界有直接 RTL 对照支撑。
 
+## group_size 对照补测
+
+固定 `cout=29, cin=2, res_cols=2, res_rows=1`，改变 group size：
+
+| case | group_size | group_num | cycles | zero cycles | x_count | cluster_x |
+|---|---:|---:|---|---:|---:|---:|
+| `thr_attn_cout29_g4_ci2_rc2_rr1` | 4 | 4 | `NA` | `NA` | 0 | 1 |
+| `thr_attn_cout29_g8_ci2_rc2_rr1` | 8 | 2 | `NA` | `NA` | 0 | 1 |
+| `thr_attn_cout29_rr1` | 16 | 1 | `566;56;53;0` | 1 | 0 | 0 |
+
+结论：较小 group 并没有提供 clean 对照。`group_size=4/8` 在该形状下没有产生 done interrupt，并出现 Cluster 侧异常摘要；`group_size=16` 则表现为可观测的 0-cycle。论文中不能用小 group 跑通样本替代当前 group16 blocked 边界。
+
 ## 对 simulator 的影响
 
 应新增或保留保守边界：
@@ -92,5 +104,5 @@ k=1/group16/cin>=2/res_cols>=2/cout>=29
 ## 下一步
 
 1. 若要继续修 RTL，应重点检查 `cout>=29` 下第二个 spatial column 的 final Cin run 为什么立即 done。
-2. 下一步可改 `group_size` 或 `cout=28/29` 附近的更多点，确认该边界是否只绑定 `group16` 与当前 output-channel 编址。
+2. 下一步应检查 RTL 控制状态机中空间列切换、Cin final 标志和 group 编址交互，解释为什么 group4/8 不 done、group16 变成 0-cycle。
 3. 论文主表应继续排除 `attn_score_1024_64_1024` 的直接 RTL 数据，只可作为 blocked case 讨论。

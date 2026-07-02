@@ -19,7 +19,7 @@
 | R2 | simulator 输出缺少可信度标签 | high | `group16_v7_workload_details.csv` 只有 projection 结果，单独查看时容易误读为同等级可信 | 新增 `group16_v7_adversarial_scope_status` 和 `group16_v7_adversarial_scope_note`，并生成 `group16_v7_workload_scope_summary.csv` |
 | R3 | blocked 状态文档过期 | medium | direct validation 文档曾写“真实 workload 长跑仍在运行”，但后续进程已停止 | 将状态改为 `observed_blocked_x_and_zero_cycles`，说明已在记录阻塞证据后停止 |
 | R4 | unsupported operator 不够醒目 | medium | softmax 在 scope summary 中显示为 `unsupported_operator`，不够明确 | 改为 `D_excluded`，防止进入论文主表 |
-| R5 | blocked 根因边界不够细 | high | 原先把 `attn_score` blocked 主要描述为大 `res_rows=32`，但扫描发现 `res_rows=1` 已出现 0-cycle；补测进一步显示 `cout=27/28` clean、`cout=29/30/32` blocked，`res_cols=1` clean、`res_cols>=2` blocked，`cin=1` clean、`cin>=2` blocked | 新增 `attn_score_threshold_review_v1`，并在 simulator scope 中加入 `cout>=29, cin>=2, res_cols>=2` 高 cout/multi-Cin 边界保护 |
+| R5 | blocked 根因边界不够细 | high | 原先把 `attn_score` blocked 主要描述为大 `res_rows=32`，但扫描发现 `res_rows=1` 已出现 0-cycle；补测进一步显示 `cout=27/28` clean、`cout=29/30/32` blocked，`res_cols=1` clean、`res_cols>=2` blocked，`cin=1` clean、`cin>=2` blocked，group4/8 也未形成 clean 对照 | 新增 `attn_score_threshold_review_v1`，并在 simulator scope 中加入 `cout>=29, cin>=2, res_cols>=2` 高 cout/multi-Cin 边界保护 |
 
 ## 修复后的关键分级
 
@@ -76,4 +76,5 @@ The real workload GEMM result is only slow but otherwise valid.
 - `cout=29/30/32, cin=2, res_cols=2, res_rows=1` 出现最后一个 run 为 0。
 - `cout=29, cin=2, res_rows=1` 下，`res_cols=1` clean，`res_cols=2` 出现 0-cycle，`res_cols=3` 出现 0-cycle 且伴随 Cluster/Router/Output X。
 - `cout=29, res_cols=2, res_rows=1` 下，`cin=1` clean，`cin=2/3` 出现 0-cycle。
-- 因此当前 blocked 边界更接近 `cout>=29, cin>=2, res_cols>=2` 的高 `cout` 多 Cin 多列控制路径，而不是单纯大 `res_rows`。
+- `cout=29, cin=2, res_cols=2, res_rows=1` 下，`group_size=4/8` 没有 done interrupt，并出现 Cluster 侧异常摘要；因此不能用小 group 作为 clean 替代证据。
+- 因此当前 blocked 边界更接近 `cout>=29, cin>=2, res_cols>=2` 的高 `cout` 多 Cin 多列控制路径，而不是单纯大 `res_rows`；group 维度还需要 RTL 状态机解释。

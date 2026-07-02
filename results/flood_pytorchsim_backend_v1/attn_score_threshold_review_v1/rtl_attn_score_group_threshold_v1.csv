@@ -1,0 +1,3 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,spatial_points,rc,run_count,cycle_list,total_cycles,zero_cycles,x_count,cluster_x,router_read_x,router_write_x,output_read_x,feature_lines,feature_hex_chars,log
+thr_attn_cout29_g8_ci2_rc2_rr1,1,29,8,2,2,2,1,2,0,0,NA,NA,NA,0,1,0,0,0,1024,128,logs/thr_attn_cout29_g8_ci2_rc2_rr1.log
+thr_attn_cout29_g4_ci2_rc2_rr1,1,29,4,4,2,2,1,2,0,0,NA,NA,NA,0,1,0,0,0,1024,128,logs/thr_attn_cout29_g4_ci2_rc2_rr1.log

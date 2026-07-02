@@ -36,6 +36,19 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
+DIRECT_CLEAN_WORKLOAD_IDS = {
+    "trace_gemm_001",
+    "trace_gemm_005",
+    "trace_gemm_002",
+    "trace_conv_013",
+    "trace_gemm_014",
+}
+
+DIRECT_BLOCKED_WORKLOAD_IDS = {
+    "attn_score_1024_64_1024",
+}
+
+
 def workload_grade(row: dict[str, str]) -> tuple[str, str]:
     op = row.get("operator", "")
     if op not in {"conv", "gemm"}:
@@ -43,15 +56,35 @@ def workload_grade(row: dict[str, str]) -> tuple[str, str]:
 
     k = fint(row.get("group16_v5_k"))
     cin = fint(row.get("group16_v5_cin_idx_total"))
+    spatial_points = fint(row.get("group16_v5_spatial_points"))
     workmode = row.get("rtl_workmode_class", "")
+    wid = row.get("id", "")
+
+    if wid in DIRECT_BLOCKED_WORKLOAD_IDS:
+        return "D_direct_rtl_blocked", (
+            "direct RTL attempt observed Cluster_OUT X, Router X, and repeated 0-cycle runs"
+        )
+
+    if wid in DIRECT_CLEAN_WORKLOAD_IDS:
+        return "B_direct_rtl_clean_workload_row", (
+            "this exact workload row was directly RTL-clean and matched v7 projection"
+        )
 
     if k == 1 and workmode in {"gemm", "pointwise_conv"} and cin >= 1:
-        return "B_projection_from_validated_k1_group16_rules", (
-            "uses v5 multi-Cin rule; workload-level spatial/m-block repetition remains calibrated projection"
+        if spatial_points > 16:
+            return "C_projection_large_spatial_extent_unvalidated", (
+                "uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
+            )
+        return "C_projection_small_extent_not_directly_run", (
+            "uses validated k1/group16 rule but this exact row was not directly RTL-run"
         )
     if k == 3:
-        return "B_projection_from_validated_k3_group16_rules", (
-            "uses v7 k3/group16 rule; large workload spatial/multi-Cin extent remains calibrated projection"
+        if spatial_points > 16 or cin > 3:
+            return "C_projection_large_k3_extent_unvalidated", (
+                "uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
+            )
+        return "C_projection_k3_not_directly_run", (
+            "uses validated k3/group16 rule but this exact row was not directly RTL-run"
         )
     return "C_projection_requires_more_rtl", "falls outside current A/B evidence boundary"
 
@@ -171,9 +204,9 @@ def write_readme(path: Path, evidence: list[dict[str, Any]], workload_summary: l
         fh.write("## 证据等级定义\n\n")
         fh.write("- `A_RTL_clean_fit`：直接 RTL 样本，无 X/无 0 周期，用于拟合规则。\n")
         fh.write("- `A_RTL_clean_holdout`：未参与拟合的直接 RTL 样本，无 X/无 0 周期，用于独立验证。\n")
-        fh.write("- `B_projection_from_validated_k1_group16_rules`：workload 行使用已验证 k1/group16 规则外推。\n")
-        fh.write("- `B_projection_from_validated_k3_group16_rules`：workload 行使用已验证 k3/group16 规则外推。\n")
-        fh.write("- `C_projection_outside_current_group16_rtl_clean_scope`：workload 行超出当前 clean RTL 边界，只能作为 calibrated projection。\n")
+        fh.write("- `B_direct_rtl_clean_workload_row`：该 workload 行已经直接 RTL-clean，并且与 projection 一致。\n")
+        fh.write("- `C_projection_*`：有局部 RTL 公式支撑，但该 workload 行没有直接跑通，或空间规模超过已验证边界。\n")
+        fh.write("- `D_direct_rtl_blocked`：该 workload 行直接 RTL 尝试已经观察到 X/0-cycle 阻塞。\n")
         fh.write("- `D_excluded/D_blocked_boundary`：不支持或已知 RTL 阻塞边界，不能进论文主性能表。\n\n")
         fh.write("## RTL 证据汇总\n\n")
         fh.write("| evidence | grade | cases | mean abs err % | max abs err % | scope |\n")
@@ -193,8 +226,9 @@ def write_readme(path: Path, evidence: list[dict[str, Any]], workload_summary: l
         fh.write("\n## 论文使用建议\n\n")
         fh.write(
             "论文主数据应优先使用 A 级 RTL-clean fit/holdout 表支撑校准公式；"
-            "B/C 级 workload 结果可以作为 RTL-calibrated projection，并在图注中明确不是 full workload RTL。"
-            "`res_cols>=3` 和 softmax 暂不进入主性能表。\n"
+            "B 级 workload 行可作为 direct RTL-clean workload 子集；"
+            "C 级只能作为 RTL-calibrated projection；"
+            "D 级 blocked/excluded 不进入主性能表。\n"
         )
 
 

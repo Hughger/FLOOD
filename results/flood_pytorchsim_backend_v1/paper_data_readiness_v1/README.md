@@ -8,9 +8,9 @@
 
 - `A_RTL_clean_fit`：直接 RTL 样本，无 X/无 0 周期，用于拟合规则。
 - `A_RTL_clean_holdout`：未参与拟合的直接 RTL 样本，无 X/无 0 周期，用于独立验证。
-- `B_projection_from_validated_k1_group16_rules`：workload 行使用已验证 k1/group16 规则外推。
-- `B_projection_from_validated_k3_group16_rules`：workload 行使用已验证 k3/group16 规则外推。
-- `C_projection_outside_current_group16_rtl_clean_scope`：workload 行超出当前 clean RTL 边界，只能作为 calibrated projection。
+- `B_direct_rtl_clean_workload_row`：该 workload 行已经直接 RTL-clean，并且与 projection 一致。
+- `C_projection_*`：有局部 RTL 公式支撑，但该 workload 行没有直接跑通，或空间规模超过已验证边界。
+- `D_direct_rtl_blocked`：该 workload 行直接 RTL 尝试已经观察到 X/0-cycle 阻塞。
 - `D_excluded/D_blocked_boundary`：不支持或已知 RTL 阻塞边界，不能进论文主性能表。
 
 ## RTL 证据汇总
@@ -29,10 +29,13 @@
 
 | grade | rows | PyTorchSim cycles | group16 v7 cycles |
 |---|---:|---:|---:|
-| B_projection_from_validated_k1_group16_rules | 18 | 122534.0 | 401246.0 |
-| B_projection_from_validated_k3_group16_rules | 11 | 700809.0 | 116271232.0 |
+| B_direct_rtl_clean_workload_row | 5 | 4319.0 | 4679.0 |
+| C_projection_large_k3_extent_unvalidated | 11 | 700809.0 | 116271232.0 |
+| C_projection_large_spatial_extent_unvalidated | 6 | 51350.0 | 254400.0 |
+| C_projection_small_extent_not_directly_run | 6 | 53795.0 | 98711.0 |
+| D_direct_rtl_blocked | 1 | 13070.0 | 43456.0 |
 | D_excluded | 2 | 48189.0 | 0.0 |
 
 ## 论文使用建议
 
-论文主数据应优先使用 A 级 RTL-clean fit/holdout 表支撑校准公式；B/C 级 workload 结果可以作为 RTL-calibrated projection，并在图注中明确不是 full workload RTL。`res_cols>=3` 和 softmax 暂不进入主性能表。
+论文主数据应优先使用 A 级 RTL-clean fit/holdout 表支撑校准公式；B 级 workload 行可作为 direct RTL-clean workload 子集；C 级只能作为 RTL-calibrated projection；D 级 blocked/excluded 不进入主性能表。

@@ -1,4 +1,4 @@
-readiness_grade,rows,pytorchsim_cycles,group16_v7_cycles
+group16_v7_adversarial_scope_status,num_rows,pytorchsim_cycles,group16_v7_cycles
 B_direct_rtl_clean_workload_row,5,4319.0,4679.0
 C_projection_large_k3_extent_unvalidated,11,700809.0,116271232.0
 C_projection_large_spatial_extent_unvalidated,6,51350.0,254400.0

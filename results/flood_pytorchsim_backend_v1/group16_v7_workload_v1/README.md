@@ -25,3 +25,14 @@ total = spatial_points * per_spatial_cycles
 ## 使用边界
 
 k3 v7 已有小规模 fitting/holdout RTL-clean 证据，但 workload 的大空间点数和大 Cin 仍是外推。论文中应标注为 RTL-calibrated projection。
+
+## 对抗性审查分级
+
+| scope status | rows | PyTorchSim cycles | group16 v7 cycles |
+|---|---:|---:|---:|
+| B_direct_rtl_clean_workload_row | 5 | 4319.0 | 4679.0 |
+| C_projection_large_k3_extent_unvalidated | 11 | 700809.0 | 116271232.0 |
+| C_projection_large_spatial_extent_unvalidated | 6 | 51350.0 | 254400.0 |
+| C_projection_small_extent_not_directly_run | 6 | 53795.0 | 98711.0 |
+| D_direct_rtl_blocked | 1 | 13070.0 | 43456.0 |
+| D_excluded | 2 | 48189.0 | 0.0 |

@@ -96,7 +96,7 @@ def build_details(
 
 def summarize(details: list[dict[str, Any]], workload_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
     clean = [row for row in details if row["direct_status"] == "rtl_clean_direct"]
-    blocked = [row for row in details if str(row["direct_status"]).startswith("running_blocked")]
+    blocked = [row for row in details if "blocked" in str(row["direct_status"])]
     total_candidates = [row for row in workload_rows if row.get("operator") in {"conv", "gemm"}]
     clean_error = [abs(fnum(row["error_percent"])) for row in clean if row["error_percent"] != ""]
     return [
@@ -139,8 +139,9 @@ def write_readme(path: Path, details: list[dict[str, Any]], summary: dict[str, A
             )
         fh.write("\n## 阻塞结论\n\n")
         fh.write(
-            "真实 workload `attn_score_1024_64_1024` 的直接 RTL 长跑仍在服务器上运行，"
-            "但已观察到 `Cluster_OUT` X、Router X 和大量 0-cycle run，因此不能作为 clean direct RTL 样本。"
+            "真实 workload `attn_score_1024_64_1024` 的直接 RTL 尝试已观察到 `Cluster_OUT` X、"
+            "Router X 和大量 0-cycle run，因此不能作为 clean direct RTL 样本；"
+            "该无效长跑已在记录阻塞证据后停止。"
             "这说明完整 workload RTL validation 的下一步不是继续盲目扩大层规模，而是定位大 `res_rows`/长空间循环下的 Cluster 状态污染。\n\n"
         )
         fh.write("## 论文使用建议\n\n")

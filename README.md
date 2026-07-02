@@ -117,6 +117,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_group16_k3_v7](./results/flood_pytorchsim_backend_v1/rtl_group16_k3_v7/README.md) | 补齐真实 conv 关键的 `k=3/group16` RTL-clean fitting/holdout 证据 |
 | [group16_v7_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/README.md) | 用 k1 v5/v6 与 k3 v7 规则重新生成 workload 级 projection |
 | [workload_direct_rtl_validation_v1](./results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/README.md) | 第一批 workload 行直接 RTL validation：5 个 clean，1 个真实 workload blocked |
+| [simulator_adversarial_review_v1](./results/flood_pytorchsim_backend_v1/simulator_adversarial_review_v1/README.md) | 对 simulator/readiness/direct validation 做对抗性审查，修复过度外推和状态标注问题 |
 
 重要边界结论：
 
@@ -199,3 +200,10 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - 当前 clean 覆盖率为 conv/gemm workload candidate 的 `17.2414%`。
 - 真实 workload `attn_score_1024_64_1024` 直跑已观察到 `Cluster_OUT` X、Router X 和大量 0-cycle run，暂列为 blocked。
 - 下一步应定位大 `res_rows=32`/长空间循环下的 Cluster 状态污染，而不是盲目扩大真实 workload 层规模。
+
+2026-07-02 新增 simulator 对抗性审查：
+
+- 修复 readiness 过度乐观问题：只有 exact direct-clean workload 行保留 B 级，其他大范围 projection 降为 C 级，真实 blocked 行标为 D 级。
+- `group16_v7_workload_details.csv` 新增 `group16_v7_adversarial_scope_status` 和 `group16_v7_adversarial_scope_note`。
+- 新增 `group16_v7_workload_scope_summary.csv`，显示 B direct-clean 5 行、C projection 23 行、D blocked/excluded 3 行。
+- 修复 direct validation 文档中过期的“仍在运行”表述，改为已观察 blocked 并停止无效长跑。

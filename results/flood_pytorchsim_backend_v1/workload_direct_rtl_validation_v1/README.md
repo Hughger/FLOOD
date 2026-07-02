@@ -22,11 +22,11 @@
 | `wd_trace_gemm_002` | synthetic_unet_trace | `trace_gemm_002` | rtl_clean_direct | 541.0 | 541.0 | 0.0 | 0 | 0 |
 | `wd_trace_conv_013` | synthetic_unet_trace | `trace_conv_013` | rtl_clean_direct | 1744.0 | 1744.0 | 0.0 | 0 | 0 |
 | `wd_trace_gemm_014` | synthetic_unet_trace | `trace_gemm_014` | rtl_clean_direct | 1744.0 | 1744.0 | 0.0 | 0 | 0 |
-| `wd_attn_score_1024_64_1024` | workload_v1 | `attn_score_1024_64_1024` | running_blocked_x_and_zero_cycles |  | 43456 |  | 436336 | 25 |
+| `wd_attn_score_1024_64_1024` | workload_v1 | `attn_score_1024_64_1024` | observed_blocked_x_and_zero_cycles |  | 43456 |  | 436336 | 25 |
 
 ## 阻塞结论
 
-真实 workload `attn_score_1024_64_1024` 的直接 RTL 长跑仍在服务器上运行，但已观察到 `Cluster_OUT` X、Router X 和大量 0-cycle run，因此不能作为 clean direct RTL 样本。这说明完整 workload RTL validation 的下一步不是继续盲目扩大层规模，而是定位大 `res_rows`/长空间循环下的 Cluster 状态污染。
+真实 workload `attn_score_1024_64_1024` 的直接 RTL 尝试已观察到 `Cluster_OUT` X、Router X 和大量 0-cycle run，因此不能作为 clean direct RTL 样本；该无效长跑已在记录阻塞证据后停止。这说明完整 workload RTL validation 的下一步不是继续盲目扩大层规模，而是定位大 `res_rows`/长空间循环下的 Cluster 状态污染。
 
 ## 论文使用建议
 

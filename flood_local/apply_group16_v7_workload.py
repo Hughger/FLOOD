@@ -13,6 +13,18 @@ from typing import Any
 
 FREQ_MHZ = 940.0
 
+DIRECT_CLEAN_WORKLOAD_IDS = {
+    "trace_gemm_001",
+    "trace_gemm_005",
+    "trace_gemm_002",
+    "trace_conv_013",
+    "trace_gemm_014",
+}
+
+DIRECT_BLOCKED_WORKLOAD_IDS = {
+    "attn_score_1024_64_1024",
+}
+
 
 def fnum(value: Any) -> float:
     if value in ("", None, "NA"):
@@ -55,11 +67,31 @@ def k3_per_spatial(cout: int, cin: int) -> tuple[float, str, str]:
     return sum(cycles), ";".join(str(round(x, 4)) for x in cycles), "k3_group16_v7"
 
 
+def adversarial_scope_status(row: dict[str, str], k: int, cin: int, spatial_points: int) -> tuple[str, str]:
+    wid = row.get("id", "")
+    workmode = row.get("rtl_workmode_class", "")
+    if wid in DIRECT_CLEAN_WORKLOAD_IDS:
+        return "B_direct_rtl_clean_workload_row", "exact workload row directly RTL-clean; projection matched direct RTL"
+    if wid in DIRECT_BLOCKED_WORKLOAD_IDS:
+        return "D_direct_rtl_blocked", "direct RTL attempt observed Cluster_OUT X, Router X, and repeated 0-cycle runs"
+    if k == 1 and workmode in {"gemm", "pointwise_conv"}:
+        if spatial_points > 16:
+            return "C_projection_large_spatial_extent_unvalidated", "large spatial extent exceeds direct-clean workload range"
+        return "C_projection_small_extent_not_directly_run", "formula-supported but this exact workload row was not directly RTL-run"
+    if k == 3:
+        if spatial_points > 16 or cin > 3:
+            return "C_projection_large_k3_extent_unvalidated", "k3 rule-supported but workload extent exceeds direct-clean holdout range"
+        return "C_projection_k3_not_directly_run", "k3 rule-supported but this exact workload row was not directly RTL-run"
+    return "C_projection_unclassified", "projection requires more direct RTL evidence"
+
+
 def estimate(row: dict[str, str]) -> dict[str, Any]:
     out: dict[str, Any] = dict(row)
     op = row.get("operator", "")
     if op not in {"conv", "gemm"}:
         out["group16_v7_status"] = "unsupported_operator"
+        out["group16_v7_adversarial_scope_status"] = "D_excluded"
+        out["group16_v7_adversarial_scope_note"] = "operator not supported by current FLOOD RTL model"
         return out
 
     k = fint(row.get("group16_v5_k"))
@@ -74,8 +106,11 @@ def estimate(row: dict[str, str]) -> dict[str, Any]:
         status = "projection_from_k3_group16_v7"
     else:
         out["group16_v7_status"] = "unsupported_kernel"
+        out["group16_v7_adversarial_scope_status"] = "D_excluded"
+        out["group16_v7_adversarial_scope_note"] = "kernel not supported by current group16 v7 simulator"
         return out
 
+    scope_status, scope_note = adversarial_scope_status(row, k, cin, spatial_points)
     total = spatial_points * per_spatial
     baseline = fnum(row.get("pytorchsim_cycles"))
     group4 = fnum(row.get("rtl_bringup_total_cycles"))
@@ -93,9 +128,29 @@ def estimate(row: dict[str, str]) -> dict[str, Any]:
             "group16_v7_vs_group4_bringup_ratio": round(total / group4, 6) if group4 else "",
             "group16_v7_rule_status": rule,
             "group16_v7_status": status,
+            "group16_v7_adversarial_scope_status": scope_status,
+            "group16_v7_adversarial_scope_note": scope_note,
             "group16_v7_note": "RTL-calibrated projection; full workload RTL validation not claimed",
         }
     )
+    return out
+
+
+def summarize_by_scope(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        status = str(row.get("group16_v7_adversarial_scope_status") or row.get("group16_v7_status") or "unknown")
+        groups.setdefault(status, []).append(row)
+    out: list[dict[str, Any]] = []
+    for status, items in sorted(groups.items()):
+        out.append(
+            {
+                "group16_v7_adversarial_scope_status": status,
+                "num_rows": len(items),
+                "pytorchsim_cycles": round(sum(fnum(r.get("pytorchsim_cycles")) for r in items), 4),
+                "group16_v7_cycles": round(sum(fnum(r.get("group16_v7_total_cycles")) for r in items), 4),
+            }
+        )
     return out
 
 
@@ -128,7 +183,7 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
-def write_readme(path: Path, summary: list[dict[str, Any]]) -> None:
+def write_readme(path: Path, summary: list[dict[str, Any]], scope_summary: list[dict[str, Any]]) -> None:
     with path.open("w", encoding="utf-8") as fh:
         fh.write("# FLOOD group16 v7 workload 投影\n\n")
         fh.write("## 范围\n\n")
@@ -156,6 +211,14 @@ def write_readme(path: Path, summary: list[dict[str, Any]]) -> None:
             "k3 v7 已有小规模 fitting/holdout RTL-clean 证据，但 workload 的大空间点数和大 Cin 仍是外推。"
             "论文中应标注为 RTL-calibrated projection。\n"
         )
+        fh.write("\n## 对抗性审查分级\n\n")
+        fh.write("| scope status | rows | PyTorchSim cycles | group16 v7 cycles |\n")
+        fh.write("|---|---:|---:|---:|\n")
+        for row in scope_summary:
+            fh.write(
+                f"| {row['group16_v7_adversarial_scope_status']} | {row['num_rows']} | "
+                f"{row['pytorchsim_cycles']} | {row['group16_v7_cycles']} |\n"
+            )
 
 
 def main() -> None:
@@ -166,10 +229,12 @@ def main() -> None:
 
     rows = [estimate(row) for row in csv.DictReader(open(args.input, newline="", encoding="utf-8"))]
     summary = summarize(rows)
+    scope_summary = summarize_by_scope(rows)
     out_dir = Path(args.out_dir)
     write_csv(out_dir / "group16_v7_workload_details.csv", rows)
     write_csv(out_dir / "group16_v7_workload_summary.csv", summary)
-    write_readme(out_dir / "README.md", summary)
+    write_csv(out_dir / "group16_v7_workload_scope_summary.csv", scope_summary)
+    write_readme(out_dir / "README.md", summary, scope_summary)
     print(f"wrote group16 v7 workload projection to {out_dir}")
 
 

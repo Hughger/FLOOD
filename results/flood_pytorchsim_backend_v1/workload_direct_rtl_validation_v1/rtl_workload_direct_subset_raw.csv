@@ -1,0 +1,6 @@
+case,dataset,workload_id,k,cout,group_size,group_num,cin_idx_total,spatial_points,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,x_count,cluster_x,router_read_x,router_write_x,output_read_x,feature_lines,feature_hex_chars,log
+wd_trace_gemm_001,synthetic_unet_trace,trace_gemm_001,1,8,16,1,2,1,1,1,0,2,167;56,223,0,0,0,0,0,1024,64,logs/wd_trace_gemm_001.log
+wd_trace_gemm_005,synthetic_unet_trace,trace_gemm_005,1,2,16,1,8,1,1,1,0,8,53;53;53;53;53;53;53;56,427,0,0,0,0,0,4096,64,logs/wd_trace_gemm_005.log
+wd_trace_gemm_002,synthetic_unet_trace,trace_gemm_002,1,8,16,1,8,1,1,1,0,8,167;53;53;53;53;53;53;56,541,0,0,0,0,0,4096,64,logs/wd_trace_gemm_002.log
+wd_trace_conv_013,synthetic_unet_trace,trace_conv_013,1,2,16,1,2,16,2,8,0,32,53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56,1744,0,0,0,0,0,8192,128,logs/wd_trace_conv_013.log
+wd_trace_gemm_014,synthetic_unet_trace,trace_gemm_014,1,2,16,1,2,16,2,8,0,32,53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56,1744,0,0,0,0,0,8192,128,logs/wd_trace_gemm_014.log

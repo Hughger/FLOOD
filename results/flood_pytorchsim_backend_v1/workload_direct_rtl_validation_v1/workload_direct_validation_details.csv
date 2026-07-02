@@ -1,0 +1,7 @@
+case,dataset,workload_id,operator,workmode,k,cout,cin_idx_total,spatial_points,direct_status,direct_total_cycles,projected_group16_v7_cycles,error_percent,x_count,zero_cycles,cycle_list,blocked_reason
+wd_trace_gemm_001,synthetic_unet_trace,trace_gemm_001,gemm,gemm,1,8,2,1,rtl_clean_direct,223.0,223.0,0.0,0,0,167;56,
+wd_trace_gemm_005,synthetic_unet_trace,trace_gemm_005,gemm,gemm,1,2,8,1,rtl_clean_direct,427.0,427.0,0.0,0,0,53;53;53;53;53;53;53;56,
+wd_trace_gemm_002,synthetic_unet_trace,trace_gemm_002,gemm,gemm,1,8,8,1,rtl_clean_direct,541.0,541.0,0.0,0,0,167;53;53;53;53;53;53;56,
+wd_trace_conv_013,synthetic_unet_trace,trace_conv_013,conv,pointwise_conv,1,2,2,16,rtl_clean_direct,1744.0,1744.0,0.0,0,0,53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56,
+wd_trace_gemm_014,synthetic_unet_trace,trace_gemm_014,gemm,gemm,1,2,2,16,rtl_clean_direct,1744.0,1744.0,0.0,0,0,53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56;53;56,
+wd_attn_score_1024_64_1024,workload_v1,attn_score_1024_64_1024,gemm,gemm,1,32,2,64,running_blocked_x_and_zero_cycles,,43456,,436336,25,623;56;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0;53;0,real workload direct RTL run still running at observation time; already invalid as clean sample due Cluster X and repeated 0-cycle runs

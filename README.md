@@ -116,6 +116,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [paper_data_readiness_v1](./results/flood_pytorchsim_backend_v1/paper_data_readiness_v1/README.md) | 论文数据可用性分级：A 级 RTL-clean、B/C 级 projection、D 级 blocked/excluded |
 | [rtl_group16_k3_v7](./results/flood_pytorchsim_backend_v1/rtl_group16_k3_v7/README.md) | 补齐真实 conv 关键的 `k=3/group16` RTL-clean fitting/holdout 证据 |
 | [group16_v7_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/README.md) | 用 k1 v5/v6 与 k3 v7 规则重新生成 workload 级 projection |
+| [workload_direct_rtl_validation_v1](./results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/README.md) | 第一批 workload 行直接 RTL validation：5 个 clean，1 个真实 workload blocked |
 
 重要边界结论：
 
@@ -190,3 +191,11 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - v7 规则：`final_run=147*cout+38`，`nonfinal_run=final_run-3`。
 - 新的 `group16_v7_workload_v1` 已替换旧 k3 低估公式；`workload_v1` conv spatial projection 为 `114,502,512` cycles。
 - 该 workload 仍是 RTL-calibrated projection，不是 full workload RTL validation。
+
+2026-07-02 上午新增 workload 直接 RTL validation v1：
+
+- 第一批直接 RTL 尝试 6 个 workload 行，其中 5 个 synthetic workload 行直接 RTL-clean。
+- 5 个 clean 行与 `group16_v7_workload_v1` projection 完全一致，平均/最大误差均为 `0%`。
+- 当前 clean 覆盖率为 conv/gemm workload candidate 的 `17.2414%`。
+- 真实 workload `attn_score_1024_64_1024` 直跑已观察到 `Cluster_OUT` X、Router X 和大量 0-cycle run，暂列为 blocked。
+- 下一步应定位大 `res_rows=32`/长空间循环下的 Cluster 状态污染，而不是盲目扩大真实 workload 层规模。

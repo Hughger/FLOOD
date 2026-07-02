@@ -1,0 +1,7 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,x_count,cluster_x,router_read_x,router_write_x,output_read_x,feature_lines,feature_hex_chars,log
+m01_k1_c6_g16_rc2_memclear,1,6,16,1,1,2,1,0,2,132;56,188,0,0,0,0,0,512,128,logs/m01_k1_c6_g16_rc2_memclear.log
+m02_k1_c6_g16_rc4_memclear,1,6,16,1,1,4,1,0,4,132;56;56;56,300,420,12,0,12,767,512,256,logs/m02_k1_c6_g16_rc4_memclear.log
+m03_k1_c12_g16_rc2_memclear,1,12,16,1,1,2,1,0,2,246;56,302,0,0,0,0,0,512,128,logs/m03_k1_c12_g16_rc2_memclear.log
+m04_k1_c12_g16_rc4_memclear,1,12,16,1,1,4,1,0,4,246;56;56;56,414,824,24,0,24,1535,512,256,logs/m04_k1_c12_g16_rc4_memclear.log
+m05_k1_c16_g16_rc2_memclear,1,16,16,1,1,2,1,0,2,322;56,378,0,0,0,0,0,512,128,logs/m05_k1_c16_g16_rc2_memclear.log
+m06_k1_c16_g16_rc4_memclear,1,16,16,1,1,4,1,0,4,322;56;56;56,490,1088,32,0,32,2047,512,256,logs/m06_k1_c16_g16_rc4_memclear.log

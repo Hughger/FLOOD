@@ -159,3 +159,10 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - X 首次出现在 `OutRouterPlanePost` 读取 output SRAM 高地址 `513..523` 时；这些地址此前未写入，testbench SRAM memory 未初始化导致读出 X。
 - 使用 memory 初始清零的 SRAM 模型后，同一 case 周期保持 `246;56`，`x_count` 从 `396/419` 降为 `0`。
 - 这说明空间重复路径的下一步应加入明确的 output SRAM 预清零 precondition，并补跑矩阵样本后再纳入论文主数据。
+
+2026-07-02 上午新增 memclear 矩阵补测：
+
+- 补测 `k=1, group_size=16, cin=1, cout=6/12/16, res_cols=2/4`。
+- `res_cols=2` 三个样本全部无 X：`132;56`、`246;56`、`322;56`。
+- `res_cols=4` 三个样本仍有 X，且探针显示 X 已出现在 Cluster 输出，而不是 Router 读未初始化 SRAM。
+- 因此下一版校准应先把 `res_cols=2` 作为可信候选样本，`res_cols>=4` 继续作为 RTL debug 阻塞项。

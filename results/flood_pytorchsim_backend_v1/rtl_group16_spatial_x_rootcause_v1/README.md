@@ -24,6 +24,42 @@
 | xprobe2 | 同上 | `246;56` | 419 | `cluster_x=0, router_read_x=11, router_write_x=12`，Router 读取 output SRAM `513..523` 为 X |
 | memclear_xprobe2 | 同上，SRAM memory 初始清零 | `246;56` | 0 | `cluster_x=0, router_read_x=0, router_write_x=0` |
 
+## memclear 矩阵补测
+
+补测文件：
+
+```text
+memclear_matrix_v1.csv
+```
+
+补测范围：
+
+```text
+k=1
+group_size=16
+cin_idx_total=1
+res_rows=1
+cout=6/12/16
+res_cols=2/4
+```
+
+结果：
+
+| case | cycles | x_count | probe 结论 |
+|---|---:|---:|---|
+| `cout=6, res_cols=2` | `132;56` | 0 | 清零后无 X |
+| `cout=12, res_cols=2` | `246;56` | 0 | 清零后无 X |
+| `cout=16, res_cols=2` | `322;56` | 0 | 清零后无 X |
+| `cout=6, res_cols=4` | `132;56;56;56` | 420 | 仍有 X，且 `cluster_x=12` |
+| `cout=12, res_cols=4` | `246;56;56;56` | 824 | 仍有 X，且 `cluster_x=24` |
+| `cout=16, res_cols=4` | `322;56;56;56` | 1088 | 仍有 X，且 `cluster_x=32` |
+
+这说明：
+
+- `res_cols=2` 的 X 可以由 output SRAM 初始清零解决。
+- `res_cols=4` 仍有更深层问题；此时 Router 不再读取 X，但 Cluster 输出已经出现 X。
+- 因此当前可把 `group16/res_cols=2` 作为下一批候选 RTL 校准样本；`group16/res_cols>=4` 仍应列为阻塞项。
+
 ## 对论文数据的影响
 
 这条证据把之前的边界条件从“`group16` 空间重复 RTL 不可信”推进到更具体的说法：
@@ -31,7 +67,8 @@
 ```text
 group16 空间重复路径的计算与周期可以跑通；
 当前 X 来自 output buffer 读未初始化地址；
-在采用明确的 output SRAM 清零 precondition 后，该 case 可得到无 X RTL 周期。
+在采用明确的 output SRAM 清零 precondition 后，res_cols=2 case 可得到无 X RTL 周期；
+res_cols=4 仍需要继续定位 Cluster 内部状态污染。
 ```
 
 但在正式论文中，仍建议谨慎表述：
@@ -42,6 +79,6 @@ group16 空间重复路径的计算与周期可以跑通；
 
 ## 下一步
 
-1. 用 memclear testbench 补跑 `group_size=16` 的空间重复矩阵，例如 `cout=6/12/16`、`res_cols=2/4`。
-2. 比较 memclear 前后周期是否一致，确认清零只影响 X，不改变控制时序。
-3. 将无 X 的空间重复样本加入 v5/v6 校准集，再更新 workload projection。
+1. 将 `res_cols=2` 的无 X 样本加入下一版 v6 校准候选集。
+2. 对 `res_cols=4` 加更细粒度 Cluster 探针，定位是第 3/4 空间列的 feature pingpong、内部累加器还是 NoC 状态污染。
+3. 在 v6 里把 `res_cols=2` 和 `res_cols>=4` 分开建模，避免把未验证区域混入论文主表。

@@ -1,0 +1,2 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,spatial_points,rc,run_count,cycle_list,total_cycles,zero_cycles,x_count,cluster_x,router_read_x,router_write_x,output_read_x,feature_lines,feature_hex_chars,log
+thr_attn_cout27_rr1,1,27,16,1,2,2,1,2,0,4,528;56;53;56,693,0,0,0,0,0,0,1024,128,logs/thr_attn_cout27_rr1.log

@@ -43,16 +43,17 @@ res_rows=32
 
 ## cout 阈值补测
 
-固定 `cin=2, res_cols=2, res_rows=1`，进一步扫描 `cout=28/29/30/32`：
+固定 `cin=2, res_cols=2, res_rows=1`，进一步扫描 `cout=27/28/29/30/32`：
 
 | case | cout | cycles | zero cycles | x_count | cluster_x |
 |---|---:|---|---:|---:|---:|
+| `thr_attn_cout27_rr1` | 27 | `528;56;53;56` | 0 | 0 | 0 |
 | `thr_attn_cout28_rr1` | 28 | `547;56;53;56` | 0 | 0 | 0 |
 | `thr_attn_cout29_rr1` | 29 | `566;56;53;0` | 1 | 0 | 0 |
 | `thr_attn_cout30_rr1` | 30 | `585;56;53;0` | 1 | 0 | 0 |
 | `thr_attn_cout32_rr1_v2` | 32 | `623;56;53;0` | 1 | 0 | 0 |
 
-结论：当前可观测边界收紧到 `cout=29` 附近；`cout=28` 仍 clean，`cout=29/30/32` 会在最后一个 run 出现 0-cycle。
+结论：当前可观测边界稳定在 `cout=28/29` 之间；`cout=27/28` 仍 clean，`cout=29/30/32` 会在最后一个 run 出现 0-cycle。
 
 ## 对 simulator 的影响
 
@@ -67,5 +68,5 @@ k=1/group16/cin>=2/res_cols>=2/cout>=29
 ## 下一步
 
 1. 若要继续修 RTL，应重点检查 `cout>=29` 下第二个 spatial column 的 final Cin run 为什么立即 done。
-2. 建议补 `cout=27` 或改变 `res_cols`，确认 `cout=28/29` 边界是否稳定。
+2. 建议改变 `res_cols` 或 `cin_idx_total`，确认该边界是否只绑定 `res_cols=2, cin=2`。
 3. 论文主表应继续排除 `attn_score_1024_64_1024` 的直接 RTL 数据，只可作为 blocked case 讨论。

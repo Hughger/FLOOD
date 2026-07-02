@@ -1,0 +1,13 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,x_count,log
+g16_c2_ci2_fixed,1,2,16,1,2,1,1,0,2,53;56,109,0,logs/g16_c2_ci2_fixed.log
+g16_c2_ci4_fixed,1,2,16,1,4,1,1,0,4,53;53;53;56,215,0,logs/g16_c2_ci4_fixed.log
+g16_c4_ci2_fixed,1,4,16,1,2,1,1,0,2,91;56,147,0,logs/g16_c4_ci2_fixed.log
+g16_c4_ci4_fixed,1,4,16,1,4,1,1,0,4,91;53;53;56,253,0,logs/g16_c4_ci4_fixed.log
+g16_c6_ci2_fixed,1,6,16,1,2,1,1,0,2,129;56,185,0,logs/g16_c6_ci2_fixed.log
+g16_c6_ci4_fixed,1,6,16,1,4,1,1,0,4,129;53;53;56,291,0,logs/g16_c6_ci4_fixed.log
+g16_c8_ci2_fixed,1,8,16,1,2,1,1,0,2,167;56,223,0,logs/g16_c8_ci2_fixed.log
+g16_c8_ci4_fixed,1,8,16,1,4,1,1,0,4,167;53;53;56,329,0,logs/g16_c8_ci4_fixed.log
+g16_c12_ci2_fixed,1,12,16,1,2,1,1,0,2,243;56,299,0,logs/g16_c12_ci2_fixed.log
+g16_c12_ci4_fixed,1,12,16,1,4,1,1,0,4,243;53;53;56,405,0,logs/g16_c12_ci4_fixed.log
+g16_c16_ci2_fixed,1,16,16,1,2,1,1,0,2,319;56,375,0,logs/g16_c16_ci2_fixed.log
+g16_c16_ci4_fixed,1,16,16,1,4,1,1,0,4,319;53;53;56,481,0,logs/g16_c16_ci4_fixed.log

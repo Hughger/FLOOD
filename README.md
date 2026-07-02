@@ -108,6 +108,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_v4_independent_validation_v1](./results/flood_pytorchsim_backend_v1/rtl_v4_independent_validation_v1/README.md) | 使用未参与 v4 拟合的新 RTL 点验证 v4 外推能力 |
 | [rtl_high_group_repeat_issue_v1](./results/flood_pytorchsim_backend_v1/rtl_high_group_repeat_issue_v1/README.md) | 记录 `group_size=16` 重复执行时后续 run 为 0 的阻塞问题 |
 | [rtl_high_group_repeat_fix_v1](./results/flood_pytorchsim_backend_v1/rtl_high_group_repeat_fix_v1/README.md) | 验证清中断/drain 修复后，高 group 多 Cin 不再出现 0 周期 |
+| [rtl_group16_multicin_v5](./results/flood_pytorchsim_backend_v1/rtl_group16_multicin_v5/README.md) | 基于修复后 RTL 数据建立 `group_size=16` 多 Cin v5 校准项 |
 
 重要边界结论：
 
@@ -127,3 +128,10 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - `group_size=16` 多 Cin 的 0 周期问题已通过 testbench drain-before-clear 策略消除。
 - 修复后 `cin=4` 从 `129;0;0;0` 变成 `129;53;53;56`，且没有 X。
 - `group_size=16` 空间重复仍有大量 X，暂不能作为论文性能数据。
+
+2026-07-02 上午新增 v5 多 Cin 校准：
+
+- 补跑 `group_size=16, cout=2/4/6/8/12/16, cin=2/4` 共 12 个 RTL 点。
+- 所有样本 `x_count=0`，没有 0 周期 run。
+- v5 规则：`first_run=19*cout+15`，`middle_run=53`，`final_run=56`。
+- 在这 12 个有效样本上，v4 平均绝对误差 `65.5448%`，v5 为 `0%`。

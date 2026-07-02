@@ -1,0 +1,13 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,x_count,log,status,v4_predicted_total,v4_error_percent,v5_predicted_total,v5_error_percent
+g16_c2_ci2_fixed,1,2,16,1,2,1,1,0,2,53;56,109,0,logs/g16_c2_ci2_fixed.log,valid,109.0,0.0,109.0,0.0
+g16_c2_ci4_fixed,1,2,16,1,4,1,1,0,4,53;53;53;56,215,0,logs/g16_c2_ci4_fixed.log,valid,215.0,0.0,215.0,0.0
+g16_c4_ci2_fixed,1,4,16,1,2,1,1,0,2,91;56,147,0,logs/g16_c4_ci2_fixed.log,valid,185.0,25.8503,147.0,0.0
+g16_c4_ci4_fixed,1,4,16,1,4,1,1,0,4,91;53;53;56,253,0,logs/g16_c4_ci4_fixed.log,valid,367.0,45.0593,253.0,0.0
+g16_c6_ci2_fixed,1,6,16,1,2,1,1,0,2,129;56,185,0,logs/g16_c6_ci2_fixed.log,valid,261.0,41.0811,185.0,0.0
+g16_c6_ci4_fixed,1,6,16,1,4,1,1,0,4,129;53;53;56,291,0,logs/g16_c6_ci4_fixed.log,valid,519.0,78.3505,291.0,0.0
+g16_c8_ci2_fixed,1,8,16,1,2,1,1,0,2,167;56,223,0,logs/g16_c8_ci2_fixed.log,valid,337.0,51.1211,223.0,0.0
+g16_c8_ci4_fixed,1,8,16,1,4,1,1,0,4,167;53;53;56,329,0,logs/g16_c8_ci4_fixed.log,valid,671.0,103.9514,329.0,0.0
+g16_c12_ci2_fixed,1,12,16,1,2,1,1,0,2,243;56,299,0,logs/g16_c12_ci2_fixed.log,valid,489.0,63.5452,299.0,0.0
+g16_c12_ci4_fixed,1,12,16,1,4,1,1,0,4,243;53;53;56,405,0,logs/g16_c12_ci4_fixed.log,valid,975.0,140.7407,405.0,0.0
+g16_c16_ci2_fixed,1,16,16,1,2,1,1,0,2,319;56,375,0,logs/g16_c16_ci2_fixed.log,valid,641.0,70.9333,375.0,0.0
+g16_c16_ci4_fixed,1,16,16,1,4,1,1,0,4,319;53;53;56,481,0,logs/g16_c16_ci4_fixed.log,valid,1279.0,165.9044,481.0,0.0

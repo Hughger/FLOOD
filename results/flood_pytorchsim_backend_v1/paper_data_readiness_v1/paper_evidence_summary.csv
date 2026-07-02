@@ -1,0 +1,6 @@
+evidence,grade,cases,mean_abs_error_percent,max_abs_error_percent,scope
+group16_multicin_v5_fit,A_RTL_clean_fit,12,0.0,0.0,"k=1, group_size=16, res=1, multi-Cin"
+group16_multicin_v5_holdout,A_RTL_clean_holdout,4,0.0,0.0,"k=1, group_size=16, res=1, multi-Cin independent cout/cin"
+group16_spatial_v6_fit,A_RTL_clean_fit,3,0.0,0.0,"k=1, group_size=16, cin=1, res_cols<=2"
+group16_spatial_v6_holdout,A_RTL_clean_holdout,4,0.0,0.0,"k=1, group_size=16, cin=1, res_cols<=2"
+group16_spatial_v6_blocked,D_blocked_boundary,7,0.0,0.0,res_cols>=3 blocked by Cluster X

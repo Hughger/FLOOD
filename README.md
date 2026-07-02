@@ -113,6 +113,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [group16_v5_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v5_workload_v1/README.md) | 将 v5 多 Cin 规则接入 workload 级 FLOOD calibrated projection |
 | [rtl_group16_spatial_x_rootcause_v1](./results/flood_pytorchsim_backend_v1/rtl_group16_spatial_x_rootcause_v1/README.md) | 定位 `group_size=16` 空间重复 X 的根因，并验证 SRAM memory 清零后 X 消失 |
 | [rtl_group16_spatial_v6](./results/flood_pytorchsim_backend_v1/rtl_group16_spatial_v6/README.md) | 将 `group16/res_cols<=2` 空间重复整理为 v6 RTL-clean 校准/holdout 证据 |
+| [paper_data_readiness_v1](./results/flood_pytorchsim_backend_v1/paper_data_readiness_v1/README.md) | 论文数据可用性分级：A 级 RTL-clean、B/C 级 projection、D 级 blocked/excluded |
 
 重要边界结论：
 
@@ -174,3 +175,10 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - fitting：`cout=6/12/16, res_cols=2`，3 个样本全部无 X，v6 误差 `0%`。
 - holdout：`cout=4/8/10/14, res_cols=2`，4 个独立样本全部无 X，v6 误差 `0%`。
 - blocked：`res_cols=3/4` 共 7 个样本仍有 X，探针显示 X 在 Cluster 输出侧产生，暂不纳入论文主性能表。
+
+2026-07-02 上午新增论文数据 readiness 分级：
+
+- A 级 RTL-clean 证据：group16 多 Cin v5 fitting `12` 点、holdout `4` 点；group16 空间 v6 fitting `3` 点、holdout `4` 点，误差均为 `0%`。
+- B 级 workload projection：18 行落在已验证 k1/group16 规则外推范围内。
+- C 级 workload projection：11 行超出当前 group16 clean RTL 边界，主要是 `k=3` 大 Cin conv。
+- D 级 excluded/blocked：softmax 不支持，`res_cols>=3` 空间重复仍有 Cluster X。

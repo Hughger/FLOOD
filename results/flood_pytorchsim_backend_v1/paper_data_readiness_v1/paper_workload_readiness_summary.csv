@@ -1,0 +1,4 @@
+readiness_grade,rows,pytorchsim_cycles,group16_v5_cycles
+B_projection_from_validated_k1_group16_rules,18,122534.0,401246.0
+C_projection_outside_current_group16_rtl_clean_scope,11,700809.0,3509472.0
+D_excluded,2,48189.0,0.0

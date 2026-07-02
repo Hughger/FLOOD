@@ -11,7 +11,7 @@
 - `B_direct_rtl_clean_workload_row`：该 workload 行已经直接 RTL-clean，并且与 projection 一致。
 - `C_projection_*`：有局部 RTL 公式支撑，但该 workload 行没有直接跑通，或空间规模超过已验证边界。
 - `D_direct_rtl_blocked`：该 workload 行直接 RTL 尝试已经观察到 X/0-cycle 阻塞。
-- `D_excluded/D_blocked_boundary`：不支持或已知 RTL 阻塞边界，不能进论文主性能表。
+- `D_excluded/D_blocked_boundary/D_observed_*`：不支持或已知 RTL 阻塞边界，不能进论文主性能表。
 
 ## RTL 证据汇总
 
@@ -32,9 +32,10 @@
 | B_direct_rtl_clean_workload_row | 5 | 4319.0 | 4679.0 |
 | C_projection_large_k3_extent_unvalidated | 11 | 700809.0 | 116271232.0 |
 | C_projection_large_spatial_extent_unvalidated | 6 | 51350.0 | 254400.0 |
-| C_projection_small_extent_not_directly_run | 6 | 53795.0 | 98711.0 |
+| C_projection_small_extent_not_directly_run | 5 | 17399.0 | 49735.0 |
 | D_direct_rtl_blocked | 1 | 13070.0 | 43456.0 |
 | D_excluded | 2 | 48189.0 | 0.0 |
+| D_observed_high_cout_multicin_boundary | 1 | 36396.0 | 48976.0 |
 
 ## 论文使用建议
 

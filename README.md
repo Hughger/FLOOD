@@ -183,8 +183,8 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 2026-07-02 上午新增论文数据 readiness 分级：
 
 - A 级 RTL-clean 证据：group16 多 Cin v5 fitting `12` 点、holdout `4` 点；group16 空间 v6 fitting `3` 点、holdout `4` 点；group16 k3 v7 fitting `5` 点、holdout `4` 点，误差均为 `0%`。
-- B 级 workload projection：18 行落在已验证 k1/group16 规则外推范围内，11 行落在已验证 k3/group16 规则外推范围内。
-- D 级 excluded/blocked：softmax 不支持，`res_cols>=3` 空间重复仍有 Cluster X。
+- B 级只保留 exact direct-clean workload 行；其余未直跑或大范围外推统一降为 C 级 projection。
+- D 级 excluded/blocked：softmax 不支持、真实 `attn_score_1024_64_1024` direct RTL blocked、以及高 `cout` 多 Cin 空间边界风险。
 
 2026-07-02 上午新增 k3 v7 与 v7 workload：
 
@@ -205,5 +205,12 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 
 - 修复 readiness 过度乐观问题：只有 exact direct-clean workload 行保留 B 级，其他大范围 projection 降为 C 级，真实 blocked 行标为 D 级。
 - `group16_v7_workload_details.csv` 新增 `group16_v7_adversarial_scope_status` 和 `group16_v7_adversarial_scope_note`。
-- 新增 `group16_v7_workload_scope_summary.csv`，显示 B direct-clean 5 行、C projection 23 行、D blocked/excluded 3 行。
+- 新增 `group16_v7_workload_scope_summary.csv`，显示 B direct-clean 5 行、C projection 22 行、D blocked/excluded/boundary 4 行。
 - 修复 direct validation 文档中过期的“仍在运行”表述，改为已观察 blocked 并停止无效长跑。
+
+2026-07-02 新增 `attn_score` 阈值对抗审查：
+
+- 新增 [attn_score_threshold_review_v1](./results/flood_pytorchsim_backend_v1/attn_score_threshold_review_v1/README.md)，专门缩小真实 workload `attn_score_1024_64_1024` blocked 的触发边界。
+- 固定 `cout=32, cin=2, res_cols=2` 时，`res_rows=1` 已出现 0-cycle：`623;56;53;0`，说明问题不是单纯由大 `res_rows=32` 引起。
+- 固定 `cin=2, res_cols=2, res_rows=1` 时，`cout=16/24/28` clean，`cout=30/32` 出现 0-cycle。
+- simulator/readiness 新增保守边界：`k=1/group16/cin>=2/res_cols>=2/cout>=30` 标为 D 级风险，不能作为论文主性能表数据。

@@ -70,6 +70,11 @@ def workload_grade(row: dict[str, str]) -> tuple[str, str]:
             "this exact workload row was directly RTL-clean and matched v7 projection"
         )
 
+    if k == 1 and cin >= 2 and spatial_points >= 2 and fint(row.get("group16_v5_cout")) >= 30:
+        return "D_observed_high_cout_multicin_boundary", (
+            "adversarial scan found cout=30/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1"
+        )
+
     if k == 1 and workmode in {"gemm", "pointwise_conv"} and cin >= 1:
         if spatial_points > 16:
             return "C_projection_large_spatial_extent_unvalidated", (
@@ -207,7 +212,7 @@ def write_readme(path: Path, evidence: list[dict[str, Any]], workload_summary: l
         fh.write("- `B_direct_rtl_clean_workload_row`：该 workload 行已经直接 RTL-clean，并且与 projection 一致。\n")
         fh.write("- `C_projection_*`：有局部 RTL 公式支撑，但该 workload 行没有直接跑通，或空间规模超过已验证边界。\n")
         fh.write("- `D_direct_rtl_blocked`：该 workload 行直接 RTL 尝试已经观察到 X/0-cycle 阻塞。\n")
-        fh.write("- `D_excluded/D_blocked_boundary`：不支持或已知 RTL 阻塞边界，不能进论文主性能表。\n\n")
+        fh.write("- `D_excluded/D_blocked_boundary/D_observed_*`：不支持或已知 RTL 阻塞边界，不能进论文主性能表。\n\n")
         fh.write("## RTL 证据汇总\n\n")
         fh.write("| evidence | grade | cases | mean abs err % | max abs err % | scope |\n")
         fh.write("|---|---|---:|---:|---:|---|\n")

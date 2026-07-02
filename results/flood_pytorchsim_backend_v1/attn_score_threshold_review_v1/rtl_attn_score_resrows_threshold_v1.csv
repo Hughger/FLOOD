@@ -1,0 +1,4 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,spatial_points,rc,run_count,cycle_list,total_cycles,zero_cycles,x_count,cluster_x,router_read_x,router_write_x,output_read_x,feature_lines,feature_hex_chars,log
+thr_attn_score_rr1,1,32,16,1,2,2,1,2,0,4,623;56;53;0,732,1,0,0,0,0,0,1024,128,logs/thr_attn_score_rr1.log
+thr_attn_score_rr2,1,32,16,1,2,2,2,4,0,8,623;56;53;0;53;0;53;0,838,3,0,0,0,0,0,2048,128,logs/thr_attn_score_rr2.log
+thr_attn_score_rr4,1,32,16,1,2,2,4,8,0,16,623;56;53;0;53;0;53;0;53;0;53;0;53;0;53;0,1050,7,0,0,0,0,0,4096,128,logs/thr_attn_score_rr4.log

@@ -7,7 +7,7 @@ workload_v1,attn_score_1024_64_1024,gemm,gemm,1,32,2,64,13070.0,43456.0,D_direct
 workload_v1,attn_softmax_1024_1024,softmax,,,,,,43587.0,,D_excluded,operator_not_supported_by_current_flood_rtl_model
 workload_v1,vae_dec_conv_64_256_128,conv,spatial_conv,3,4,72,256,47318.0,11483904.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
 workload_v1,dit_qkv_256_768_768,gemm,gemm,1,24,24,16,10941.0,27088.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
-workload_v1,dit_mlp_256_768_3072,gemm,gemm,1,96,24,16,36396.0,48976.0,D_observed_high_cout_multicin_boundary,adversarial scan found cout=30/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1
+workload_v1,dit_mlp_256_768_3072,gemm,gemm,1,96,24,16,36396.0,48976.0,D_observed_high_cout_multicin_boundary,adversarial scan found cout=29/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1
 workload_v1,dit_softmax_256_256,softmax,,,,,,4602.0,,D_excluded,operator_not_supported_by_current_flood_rtl_model
 synthetic_unet_trace,trace_gemm_001,gemm,gemm,1,8,2,1,623.0,223.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
 synthetic_unet_trace,trace_gemm_002,gemm,gemm,1,8,8,1,1101.0,541.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection

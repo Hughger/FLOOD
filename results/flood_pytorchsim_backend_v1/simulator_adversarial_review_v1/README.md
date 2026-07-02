@@ -19,7 +19,7 @@
 | R2 | simulator 输出缺少可信度标签 | high | `group16_v7_workload_details.csv` 只有 projection 结果，单独查看时容易误读为同等级可信 | 新增 `group16_v7_adversarial_scope_status` 和 `group16_v7_adversarial_scope_note`，并生成 `group16_v7_workload_scope_summary.csv` |
 | R3 | blocked 状态文档过期 | medium | direct validation 文档曾写“真实 workload 长跑仍在运行”，但后续进程已停止 | 将状态改为 `observed_blocked_x_and_zero_cycles`，说明已在记录阻塞证据后停止 |
 | R4 | unsupported operator 不够醒目 | medium | softmax 在 scope summary 中显示为 `unsupported_operator`，不够明确 | 改为 `D_excluded`，防止进入论文主表 |
-| R5 | blocked 根因边界不够细 | high | 原先把 `attn_score` blocked 主要描述为大 `res_rows=32`，但扫描发现 `res_rows=1` 已出现 0-cycle，补测进一步显示 `cout=28` clean、`cout=30/32` blocked | 新增 `attn_score_threshold_review_v1`，并在 simulator scope 中加入 `cout>=30` 高 cout/multi-Cin 边界保护 |
+| R5 | blocked 根因边界不够细 | high | 原先把 `attn_score` blocked 主要描述为大 `res_rows=32`，但扫描发现 `res_rows=1` 已出现 0-cycle，补测进一步显示 `cout=28` clean、`cout=29/30/32` blocked | 新增 `attn_score_threshold_review_v1`，并在 simulator scope 中加入 `cout>=29` 高 cout/multi-Cin 边界保护 |
 
 ## 修复后的关键分级
 
@@ -63,7 +63,7 @@ The real workload GEMM result is only slow but otherwise valid.
 
 ## 下一步审查建议
 
-1. 对 `attn_score_1024_64_1024` 做进一步缩小实验：固定 `cin=2, res_cols=2, res_rows=1`，补 `cout=29`，确认边界是 `29/30` 还是只在偶数 cout 矩阵下出现。
+1. 对 `attn_score_1024_64_1024` 做进一步缩小实验：固定 `cin=2, res_cols=2, res_rows=1`，补 `cout=27` 或改变 `res_cols`，确认 `cout=28/29` 边界是否稳定。
 2. 将 simulator 的 C 级 projection 继续细分为“可用作趋势图”和“只能放附录”的两类。
 3. 在论文图表生成脚本中强制读取 `adversarial_scope_status`，禁止 D 级样本进入主图。
 
@@ -73,5 +73,5 @@ The real workload GEMM result is only slow but otherwise valid.
 
 - `cout=32, cin=2, res_cols=2` 在 `res_rows=1` 就出现最后一个 run 为 0。
 - `cout=16/24/28, cin=2, res_cols=2, res_rows=1` 均 clean。
-- `cout=30/32, cin=2, res_cols=2, res_rows=1` 出现最后一个 run 为 0。
-- 因此当前 blocked 边界更接近 `cout>=30` 的高 `cout` 控制路径，而不是单纯大 `res_rows`。
+- `cout=29/30/32, cin=2, res_cols=2, res_rows=1` 出现最后一个 run 为 0。
+- 因此当前 blocked 边界更接近 `cout>=29` 的高 `cout` 控制路径，而不是单纯大 `res_rows`。

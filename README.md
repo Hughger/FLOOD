@@ -110,6 +110,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_high_group_repeat_fix_v1](./results/flood_pytorchsim_backend_v1/rtl_high_group_repeat_fix_v1/README.md) | 验证清中断/drain 修复后，高 group 多 Cin 不再出现 0 周期 |
 | [rtl_group16_multicin_v5](./results/flood_pytorchsim_backend_v1/rtl_group16_multicin_v5/README.md) | 基于修复后 RTL 数据建立 `group_size=16` 多 Cin v5 校准项 |
 | [rtl_group16_v5_holdout_v1](./results/flood_pytorchsim_backend_v1/rtl_group16_v5_holdout_v1/README.md) | 使用未参与 v5 拟合的新 RTL 点验证 v5 外推能力 |
+| [group16_v5_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v5_workload_v1/README.md) | 将 v5 多 Cin 规则接入 workload 级 FLOOD calibrated projection |
 
 重要边界结论：
 
@@ -142,3 +143,10 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 - 新跑 `cout=10/14, cin=3/5` 共 4 个未参与拟合的 RTL 点。
 - 所有样本 `x_count=0`，没有 0 周期 run。
 - 在这 4 个 holdout 样本上，v4 平均绝对误差 `135.5928%`，v5 为 `0%`。
+
+2026-07-02 上午新增 v5 workload 投影：
+
+- 新增脚本 `flood_local/apply_group16_multicin_v5_workload.py`，把 v5 高 group 多 Cin 规则应用到 workload 表。
+- `workload_v1` 的 conv 空间卷积：group16 v5 投影为 `3,197,712` cycles，group4 bring-up 投影为 `42,600,432` cycles，二者比例为 `0.075063`。
+- `workload_v1` 的 gemm：group16 v5 投影为 `294,880` cycles，group4 bring-up 投影为 `1,051,808` cycles，二者比例为 `0.280355`。
+- 该结果仍应标注为 `RTL-calibrated projection`，不是完整 workload RTL validation；`k=3/group16` 与空间重复路径还需要继续做 RTL 验证。

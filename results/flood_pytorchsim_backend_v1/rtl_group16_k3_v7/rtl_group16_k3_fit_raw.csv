@@ -1,0 +1,6 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,rc,run_count,cycle_list,total_cycles,x_count,cluster_x,router_read_x,router_write_x,output_read_x,feature_lines,feature_hex_chars,log
+k3_c2_g16_ci1,3,2,16,1,1,1,1,0,1,332,332,0,0,0,0,0,512,64,logs/k3_c2_g16_ci1.log
+k3_c4_g16_ci1,3,4,16,1,1,1,1,0,1,626,626,0,0,0,0,0,512,64,logs/k3_c4_g16_ci1.log
+k3_c6_g16_ci1,3,6,16,1,1,1,1,0,1,920,920,0,0,0,0,0,512,64,logs/k3_c6_g16_ci1.log
+k3_c2_g16_ci2,3,2,16,1,2,1,1,0,2,329;332,661,0,0,0,0,0,1024,64,logs/k3_c2_g16_ci2.log
+k3_c4_g16_ci2,3,4,16,1,2,1,1,0,2,623;626,1249,0,0,0,0,0,1024,64,logs/k3_c4_g16_ci2.log

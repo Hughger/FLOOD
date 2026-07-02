@@ -114,6 +114,8 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [rtl_group16_spatial_x_rootcause_v1](./results/flood_pytorchsim_backend_v1/rtl_group16_spatial_x_rootcause_v1/README.md) | 定位 `group_size=16` 空间重复 X 的根因，并验证 SRAM memory 清零后 X 消失 |
 | [rtl_group16_spatial_v6](./results/flood_pytorchsim_backend_v1/rtl_group16_spatial_v6/README.md) | 将 `group16/res_cols<=2` 空间重复整理为 v6 RTL-clean 校准/holdout 证据 |
 | [paper_data_readiness_v1](./results/flood_pytorchsim_backend_v1/paper_data_readiness_v1/README.md) | 论文数据可用性分级：A 级 RTL-clean、B/C 级 projection、D 级 blocked/excluded |
+| [rtl_group16_k3_v7](./results/flood_pytorchsim_backend_v1/rtl_group16_k3_v7/README.md) | 补齐真实 conv 关键的 `k=3/group16` RTL-clean fitting/holdout 证据 |
+| [group16_v7_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/README.md) | 用 k1 v5/v6 与 k3 v7 规则重新生成 workload 级 projection |
 
 重要边界结论：
 
@@ -178,7 +180,13 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 
 2026-07-02 上午新增论文数据 readiness 分级：
 
-- A 级 RTL-clean 证据：group16 多 Cin v5 fitting `12` 点、holdout `4` 点；group16 空间 v6 fitting `3` 点、holdout `4` 点，误差均为 `0%`。
-- B 级 workload projection：18 行落在已验证 k1/group16 规则外推范围内。
-- C 级 workload projection：11 行超出当前 group16 clean RTL 边界，主要是 `k=3` 大 Cin conv。
+- A 级 RTL-clean 证据：group16 多 Cin v5 fitting `12` 点、holdout `4` 点；group16 空间 v6 fitting `3` 点、holdout `4` 点；group16 k3 v7 fitting `5` 点、holdout `4` 点，误差均为 `0%`。
+- B 级 workload projection：18 行落在已验证 k1/group16 规则外推范围内，11 行落在已验证 k3/group16 规则外推范围内。
 - D 级 excluded/blocked：softmax 不支持，`res_cols>=3` 空间重复仍有 Cluster X。
+
+2026-07-02 上午新增 k3 v7 与 v7 workload：
+
+- `k=3/group_size=16/res=1` 已完成 5 个 fitting 样本和 4 个 holdout 样本，全部无 X，公式误差 `0%`。
+- v7 规则：`final_run=147*cout+38`，`nonfinal_run=final_run-3`。
+- 新的 `group16_v7_workload_v1` 已替换旧 k3 低估公式；`workload_v1` conv spatial projection 为 `114,502,512` cycles。
+- 该 workload 仍是 RTL-calibrated projection，不是 full workload RTL validation。

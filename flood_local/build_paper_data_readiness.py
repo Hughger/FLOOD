@@ -50,8 +50,8 @@ def workload_grade(row: dict[str, str]) -> tuple[str, str]:
             "uses v5 multi-Cin rule; workload-level spatial/m-block repetition remains calibrated projection"
         )
     if k == 3:
-        return "C_projection_outside_current_group16_rtl_clean_scope", (
-            "k3/group16 large-Cin conv is not yet directly RTL-clean validated"
+        return "B_projection_from_validated_k3_group16_rules", (
+            "uses v7 k3/group16 rule; large workload spatial/multi-Cin extent remains calibrated projection"
         )
     return "C_projection_requires_more_rtl", "falls outside current A/B evidence boundary"
 
@@ -71,7 +71,7 @@ def build_workload_readiness(rows: list[dict[str, str]]) -> list[dict[str, Any]]
                 "cin_idx_total": row.get("group16_v5_cin_idx_total"),
                 "spatial_points": row.get("group16_v5_spatial_points"),
                 "pytorchsim_cycles": row.get("pytorchsim_cycles"),
-                "group16_v5_cycles": row.get("group16_v5_total_cycles"),
+                "group16_v7_cycles": row.get("group16_v7_total_cycles") or row.get("group16_v5_total_cycles"),
                 "readiness_grade": grade,
                 "readiness_reason": reason,
             }
@@ -83,6 +83,7 @@ def evidence_rows(
     multicin_summary: list[dict[str, str]],
     multicin_holdout_summary: list[dict[str, str]],
     spatial_summary: list[dict[str, str]],
+    k3_summary: list[dict[str, str]],
 ) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     if multicin_summary:
@@ -127,6 +128,18 @@ def evidence_rows(
                 "scope": "k=1, group_size=16, cin=1, res_cols<=2" if split != "blocked" else "res_cols>=3 blocked by Cluster X",
             }
         )
+    for row in k3_summary:
+        split = row["split"]
+        out.append(
+            {
+                "evidence": f"group16_k3_v7_{split}",
+                "grade": "A_RTL_clean_fit" if split == "fit" else "A_RTL_clean_holdout",
+                "cases": row.get("rtl_clean_cases"),
+                "mean_abs_error_percent": row.get("v7_mean_abs_error_percent"),
+                "max_abs_error_percent": row.get("v7_max_abs_error_percent"),
+                "scope": "k=3, group_size=16, res=1, cin up to holdout 3",
+            }
+        )
     return out
 
 
@@ -141,7 +154,7 @@ def summarize_workload(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "readiness_grade": grade,
                 "rows": len(items),
                 "pytorchsim_cycles": round(sum(fnum(row["pytorchsim_cycles"]) for row in items), 4),
-                "group16_v5_cycles": round(sum(fnum(row["group16_v5_cycles"]) for row in items), 4),
+                "group16_v7_cycles": round(sum(fnum(row["group16_v7_cycles"]) for row in items), 4),
             }
         )
     return out
@@ -159,6 +172,7 @@ def write_readme(path: Path, evidence: list[dict[str, Any]], workload_summary: l
         fh.write("- `A_RTL_clean_fit`：直接 RTL 样本，无 X/无 0 周期，用于拟合规则。\n")
         fh.write("- `A_RTL_clean_holdout`：未参与拟合的直接 RTL 样本，无 X/无 0 周期，用于独立验证。\n")
         fh.write("- `B_projection_from_validated_k1_group16_rules`：workload 行使用已验证 k1/group16 规则外推。\n")
+        fh.write("- `B_projection_from_validated_k3_group16_rules`：workload 行使用已验证 k3/group16 规则外推。\n")
         fh.write("- `C_projection_outside_current_group16_rtl_clean_scope`：workload 行超出当前 clean RTL 边界，只能作为 calibrated projection。\n")
         fh.write("- `D_excluded/D_blocked_boundary`：不支持或已知 RTL 阻塞边界，不能进论文主性能表。\n\n")
         fh.write("## RTL 证据汇总\n\n")
@@ -170,11 +184,11 @@ def write_readme(path: Path, evidence: list[dict[str, Any]], workload_summary: l
                 f"{row['mean_abs_error_percent']} | {row['max_abs_error_percent']} | {row['scope']} |\n"
             )
         fh.write("\n## workload readiness 汇总\n\n")
-        fh.write("| grade | rows | PyTorchSim cycles | group16 v5 cycles |\n")
+        fh.write("| grade | rows | PyTorchSim cycles | group16 v7 cycles |\n")
         fh.write("|---|---:|---:|---:|\n")
         for row in workload_summary:
             fh.write(
-                f"| {row['readiness_grade']} | {row['rows']} | {row['pytorchsim_cycles']} | {row['group16_v5_cycles']} |\n"
+                f"| {row['readiness_grade']} | {row['rows']} | {row['pytorchsim_cycles']} | {row['group16_v7_cycles']} |\n"
             )
         fh.write("\n## 论文使用建议\n\n")
         fh.write(
@@ -190,6 +204,7 @@ def main() -> None:
     parser.add_argument("--multicin-summary", required=True)
     parser.add_argument("--multicin-holdout-summary", required=True)
     parser.add_argument("--spatial-summary", required=True)
+    parser.add_argument("--k3-summary", required=True)
     parser.add_argument("--out-dir", required=True)
     args = parser.parse_args()
 
@@ -198,6 +213,7 @@ def main() -> None:
         read_csv(args.multicin_summary),
         read_csv(args.multicin_holdout_summary),
         read_csv(args.spatial_summary),
+        read_csv(args.k3_summary),
     )
     workload_summary = summarize_workload(workload)
 

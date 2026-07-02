@@ -1,0 +1,3 @@
+split,total_cases,rtl_clean_cases,blocked_cases,v7_mean_abs_error_percent,v7_max_abs_error_percent
+fit,5,5,0,0.0,0.0
+holdout,4,4,0,0.0,0.0

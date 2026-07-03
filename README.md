@@ -118,6 +118,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [group16_v7_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/README.md) | 用 k1 v5/v6 与 k3 v7 规则重新生成 workload 级 projection |
 | [workload_direct_rtl_validation_v1](./results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/README.md) | 第一批 workload 行直接 RTL validation：5 个 clean，1 个真实 workload blocked |
 | [simulator_adversarial_review_v1](./results/flood_pytorchsim_backend_v1/simulator_adversarial_review_v1/README.md) | 对 simulator/readiness/direct validation 做对抗性审查，修复过度外推和状态标注问题 |
+| [paper_progress_audit_v1](./results/flood_pytorchsim_backend_v1/paper_progress_audit_v1/README.md) | 按 HPCA 测试方案 E1-E9 审查当前完成度、百分比、证据和下一阶段 gate |
 
 重要边界结论：
 

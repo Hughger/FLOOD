@@ -6,10 +6,10 @@
 
 ## 总结
 
-- direct attempted cases: 6
-- direct clean cases: 5
-- direct blocked cases: 1
-- clean row coverage among conv/gemm workload candidates: 17.2414%
+- direct attempted cases: 8
+- direct clean cases: 6
+- direct blocked cases: 2
+- clean row coverage among conv/gemm workload candidates: 20.6897%
 - clean direct-vs-projection mean abs error: 0.0%
 - clean direct-vs-projection max abs error: 0.0%
 
@@ -22,12 +22,14 @@
 | `wd_trace_gemm_002` | synthetic_unet_trace | `trace_gemm_002` | rtl_clean_direct | 541.0 | 541.0 | 0.0 | 0 | 0 |
 | `wd_trace_conv_013` | synthetic_unet_trace | `trace_conv_013` | rtl_clean_direct | 1744.0 | 1744.0 | 0.0 | 0 | 0 |
 | `wd_trace_gemm_014` | synthetic_unet_trace | `trace_gemm_014` | rtl_clean_direct | 1744.0 | 1744.0 | 0.0 | 0 | 0 |
+| `wd_trace_gemm_015` | synthetic_unet_trace | `trace_gemm_015` | rtl_clean_direct | 2010.0 | 2010.0 | 0.0 | 0 | 0 |
 | `wd_attn_score_1024_64_1024` | workload_v1 | `attn_score_1024_64_1024` | observed_blocked_x_and_zero_cycles |  | 43456 |  | 436336 | 25 |
+| `wd_trace_conv_018` | synthetic_unet_trace | `trace_conv_018` | observed_blocked_x_with_matching_cycles |  | 3440 |  | 1136 | 0 |
 
 ## 阻塞结论
 
-真实 workload `attn_score_1024_64_1024` 的直接 RTL 尝试已观察到 `Cluster_OUT` X、Router X 和大量 0-cycle run，因此不能作为 clean direct RTL 样本；该无效长跑已在记录阻塞证据后停止。这说明完整 workload RTL validation 的下一步不是继续盲目扩大层规模，而是定位大 `res_rows`/长空间循环下的 Cluster 状态污染。
+直接 RTL 尝试已经观察到两类阻塞：`attn_score_1024_64_1024` 在大空间循环下出现 `Cluster_OUT` X、Router X 和大量 0-cycle run；`trace_conv_018` 的周期数匹配投影，但 XPROBE2 显示 Cluster/Router/Output 侧存在 X 污染。这些样本不能作为 clean direct RTL 样本；完整 workload RTL validation 的下一步应定位状态清零、输出 SRAM/Router 写读有效性和长空间循环下的 Cluster 状态污染。
 
 ## 论文使用建议
 
-这批数据可作为“direct RTL validation 已开始覆盖 workload 子集”的证据。5 个 synthetic workload 行已直接 RTL-clean 且与 v7 projection 完全一致；真实 workload 行目前应列为 blocked，不进入主性能表。
+这批数据可作为“direct RTL validation 已开始覆盖 workload 子集”的证据。clean synthetic workload 行可进入支撑证据；blocked 行必须单独列为 RTL debug 边界，不进入主性能表。

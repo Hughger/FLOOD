@@ -1,2 +1,2 @@
 direct_attempted_cases,direct_clean_cases,direct_blocked_cases,workload_candidate_rows_total,direct_clean_row_coverage_percent,direct_clean_mean_abs_error_percent,direct_clean_max_abs_error_percent,blocked_reason_summary
-6,5,1,29,17.2414,0.0,0.0,real workload attn_score has Cluster_OUT X and repeated 0-cycle runs at large res_rows=32
+8,6,2,29,20.6897,0.0,0.0,blocked cases have Cluster/Router/Output X or repeated 0-cycle behavior and are excluded from clean evidence

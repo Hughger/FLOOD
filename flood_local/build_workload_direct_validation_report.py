@@ -108,7 +108,7 @@ def summarize(details: list[dict[str, Any]], workload_rows: list[dict[str, str]]
             "direct_clean_row_coverage_percent": round(len(clean) / len(total_candidates) * 100.0, 4) if total_candidates else 0.0,
             "direct_clean_mean_abs_error_percent": round(sum(clean_error) / len(clean_error), 4) if clean_error else 0.0,
             "direct_clean_max_abs_error_percent": round(max(clean_error), 4) if clean_error else 0.0,
-            "blocked_reason_summary": "real workload attn_score has Cluster_OUT X and repeated 0-cycle runs at large res_rows=32",
+            "blocked_reason_summary": "blocked cases have Cluster/Router/Output X or repeated 0-cycle behavior and are excluded from clean evidence",
         }
     ]
 
@@ -139,15 +139,16 @@ def write_readme(path: Path, details: list[dict[str, Any]], summary: dict[str, A
             )
         fh.write("\n## 阻塞结论\n\n")
         fh.write(
-            "真实 workload `attn_score_1024_64_1024` 的直接 RTL 尝试已观察到 `Cluster_OUT` X、"
-            "Router X 和大量 0-cycle run，因此不能作为 clean direct RTL 样本；"
-            "该无效长跑已在记录阻塞证据后停止。"
-            "这说明完整 workload RTL validation 的下一步不是继续盲目扩大层规模，而是定位大 `res_rows`/长空间循环下的 Cluster 状态污染。\n\n"
+            "直接 RTL 尝试已经观察到两类阻塞：`attn_score_1024_64_1024` 在大空间循环下出现 "
+            "`Cluster_OUT` X、Router X 和大量 0-cycle run；`trace_conv_018` 的周期数匹配投影，"
+            "但 XPROBE2 显示 Cluster/Router/Output 侧存在 X 污染。"
+            "这些样本不能作为 clean direct RTL 样本；完整 workload RTL validation 的下一步应定位状态清零、"
+            "输出 SRAM/Router 写读有效性和长空间循环下的 Cluster 状态污染。\n\n"
         )
         fh.write("## 论文使用建议\n\n")
         fh.write(
             "这批数据可作为“direct RTL validation 已开始覆盖 workload 子集”的证据。"
-            "5 个 synthetic workload 行已直接 RTL-clean 且与 v7 projection 完全一致；真实 workload 行目前应列为 blocked，不进入主性能表。\n"
+            "clean synthetic workload 行可进入支撑证据；blocked 行必须单独列为 RTL debug 边界，不进入主性能表。\n"
         )
 
 

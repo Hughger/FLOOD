@@ -19,10 +19,12 @@ DIRECT_CLEAN_WORKLOAD_IDS = {
     "trace_gemm_002",
     "trace_conv_013",
     "trace_gemm_014",
+    "trace_gemm_015",
 }
 
 DIRECT_BLOCKED_WORKLOAD_IDS = {
     "attn_score_1024_64_1024",
+    "trace_conv_018",
 }
 
 
@@ -60,6 +62,29 @@ def k1_per_spatial(cout: int, cin: int) -> tuple[float, str, str]:
     return sum(cycles), ";".join(str(round(x, 4)) for x in cycles), "k1_group16_multicin_v5"
 
 
+def k1_total(cout: int, cin: int, spatial_points: int) -> tuple[float, float, str, str]:
+    """Return workload total with spatial reuse observed in direct RTL rows.
+
+    The first spatial block pays the Cout-dependent startup cost. Later spatial
+    blocks reuse the same lower-cost nonfinal/final sequence. This is invisible
+    for cout=2, which is why the earlier per-spatial multiplier passed small
+    direct-clean rows but overestimated wider Cout workload rows.
+    """
+    spatial_points = max(1, spatial_points)
+    if cin <= 1:
+        first = 56.0 + 19.0 * max(0, cout - 2)
+        repeat = 56.0
+        total = first + max(0, spatial_points - 1) * repeat
+        desc = f"first_spatial={round(first, 4)};repeat_spatial={round(repeat, 4)};spatial_points={spatial_points}"
+        return total, total / spatial_points, desc, "k1_group16_spatial_reuse_v8"
+
+    first = (19.0 * cout + 15.0) + 53.0 * max(0, cin - 2) + 56.0
+    repeat = 53.0 * max(0, cin - 1) + 56.0
+    total = first + max(0, spatial_points - 1) * repeat
+    desc = f"first_spatial={round(first, 4)};repeat_spatial={round(repeat, 4)};spatial_points={spatial_points}"
+    return total, total / spatial_points, desc, "k1_group16_spatial_reuse_v8"
+
+
 def k3_per_spatial(cout: int, cin: int) -> tuple[float, str, str]:
     final = 147.0 * cout + 38.0
     nonfinal = final - 3.0
@@ -73,7 +98,7 @@ def adversarial_scope_status(row: dict[str, str], k: int, cin: int, spatial_poin
     if wid in DIRECT_CLEAN_WORKLOAD_IDS:
         return "B_direct_rtl_clean_workload_row", "exact workload row directly RTL-clean; projection matched direct RTL"
     if wid in DIRECT_BLOCKED_WORKLOAD_IDS:
-        return "D_direct_rtl_blocked", "direct RTL attempt observed Cluster_OUT X, Router X, and repeated 0-cycle runs"
+        return "D_direct_rtl_blocked", "direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence"
     if k == 1 and cin >= 2 and spatial_points >= 2 and fint(row.get("group16_v5_cout")) >= 29:
         return "D_observed_high_cout_multicin_boundary", (
             "adversarial scan found cout=29/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1"
@@ -103,10 +128,11 @@ def estimate(row: dict[str, str]) -> dict[str, Any]:
     cin = fint(row.get("group16_v5_cin_idx_total"))
     spatial_points = fint(row.get("group16_v5_spatial_points"))
     if k == 1:
-        per_spatial, cycle_list, rule = k1_per_spatial(cout, cin)
+        total, per_spatial, cycle_list, rule = k1_total(cout, cin, spatial_points)
         status = "projection_from_k1_group16_v5_v6"
     elif k == 3:
         per_spatial, cycle_list, rule = k3_per_spatial(cout, cin)
+        total = spatial_points * per_spatial
         status = "projection_from_k3_group16_v7"
     else:
         out["group16_v7_status"] = "unsupported_kernel"
@@ -115,7 +141,6 @@ def estimate(row: dict[str, str]) -> dict[str, Any]:
         return out
 
     scope_status, scope_note = adversarial_scope_status(row, k, cin, spatial_points)
-    total = spatial_points * per_spatial
     baseline = fnum(row.get("pytorchsim_cycles"))
     group4 = fnum(row.get("rtl_bringup_total_cycles"))
     out.update(
@@ -197,9 +222,10 @@ def write_readme(path: Path, summary: list[dict[str, Any]], scope_summary: list[
         )
         fh.write("## 规则\n\n")
         fh.write("```text\n")
-        fh.write("k=1: v5 multi-Cin rule\n")
+        fh.write("k=1: v8 spatial-reuse rule derived from direct workload RTL rows\n")
         fh.write("k=3: final_run=147*cout+38; nonfinal_run=final_run-3\n")
-        fh.write("total = spatial_points * per_spatial_cycles\n")
+        fh.write("k=1 total = first_spatial + (spatial_points-1)*repeat_spatial\n")
+        fh.write("k=3 total = spatial_points * per_spatial_cycles\n")
         fh.write("```\n\n")
         fh.write("## 汇总\n\n")
         fh.write("| dataset | op | workmode | rows | PyTorchSim cycles | group4 cycles | group16 v7 cycles | speedup_vs_pytorchsim | vs_group4 |\n")

@@ -42,10 +42,12 @@ DIRECT_CLEAN_WORKLOAD_IDS = {
     "trace_gemm_002",
     "trace_conv_013",
     "trace_gemm_014",
+    "trace_gemm_015",
 }
 
 DIRECT_BLOCKED_WORKLOAD_IDS = {
     "attn_score_1024_64_1024",
+    "trace_conv_018",
 }
 
 
@@ -62,7 +64,7 @@ def workload_grade(row: dict[str, str]) -> tuple[str, str]:
 
     if wid in DIRECT_BLOCKED_WORKLOAD_IDS:
         return "D_direct_rtl_blocked", (
-            "direct RTL attempt observed Cluster_OUT X, Router X, and repeated 0-cycle runs"
+            "direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence"
         )
 
     if wid in DIRECT_CLEAN_WORKLOAD_IDS:

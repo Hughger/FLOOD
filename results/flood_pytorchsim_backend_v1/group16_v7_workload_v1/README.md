@@ -7,9 +7,10 @@
 ## 规则
 
 ```text
-k=1: v5 multi-Cin rule
+k=1: v8 spatial-reuse rule derived from direct workload RTL rows
 k=3: final_run=147*cout+38; nonfinal_run=final_run-3
-total = spatial_points * per_spatial_cycles
+k=1 total = first_spatial + (spatial_points-1)*repeat_spatial
+k=3 total = spatial_points * per_spatial_cycles
 ```
 
 ## 汇总
@@ -18,9 +19,9 @@ total = spatial_points * per_spatial_cycles
 |---|---|---|---:|---:|---:|---:|---:|---:|
 | synthetic_unet_trace | conv | pointwise_conv | 4 | 6442.0 | 22080.0 | 25920.0 | 0.248534 | 1.173913 |
 | synthetic_unet_trace | conv | spatial_conv | 7 | 35075.0 | 704144.0 | 1768720.0 | 0.019831 | 2.511873 |
-| synthetic_unet_trace | gemm | gemm | 10 | 20875.0 | 80054.0 | 80446.0 | 0.259491 | 1.004897 |
+| synthetic_unet_trace | gemm | gemm | 10 | 20875.0 | 80054.0 | 59698.0 | 0.349677 | 0.745722 |
 | workload_v1 | conv | spatial_conv | 4 | 665734.0 | 42600432.0 | 114502512.0 | 0.005814 | 2.687825 |
-| workload_v1 | gemm | gemm | 4 | 95217.0 | 1051808.0 | 294880.0 | 0.322901 | 0.280355 |
+| workload_v1 | gemm | gemm | 4 | 95217.0 | 1051808.0 | 187150.0 | 0.508774 | 0.177932 |
 
 ## 使用边界
 
@@ -30,10 +31,10 @@ k3 v7 已有小规模 fitting/holdout RTL-clean 证据，但 workload 的大空�
 
 | scope status | rows | PyTorchSim cycles | group16 v7 cycles |
 |---|---:|---:|---:|
-| B_direct_rtl_clean_workload_row | 5 | 4319.0 | 4679.0 |
+| B_direct_rtl_clean_workload_row | 6 | 6450.0 | 6689.0 |
 | C_projection_large_k3_extent_unvalidated | 11 | 700809.0 | 116271232.0 |
-| C_projection_large_spatial_extent_unvalidated | 6 | 51350.0 | 254400.0 |
-| C_projection_small_extent_not_directly_run | 5 | 17399.0 | 49735.0 |
-| D_direct_rtl_blocked | 1 | 13070.0 | 43456.0 |
+| C_projection_large_spatial_extent_unvalidated | 6 | 51350.0 | 198882.0 |
+| C_projection_small_extent_not_directly_run | 3 | 14148.0 | 34025.0 |
+| D_direct_rtl_blocked | 2 | 14190.0 | 10986.0 |
 | D_excluded | 2 | 48189.0 | 0.0 |
-| D_observed_high_cout_multicin_boundary | 1 | 36396.0 | 48976.0 |
+| D_observed_high_cout_multicin_boundary | 1 | 36396.0 | 22186.0 |

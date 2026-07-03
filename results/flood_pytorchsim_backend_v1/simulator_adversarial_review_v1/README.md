@@ -20,17 +20,18 @@
 | R3 | blocked 状态文档过期 | medium | direct validation 文档曾写“真实 workload 长跑仍在运行”，但后续进程已停止 | 将状态改为 `observed_blocked_x_and_zero_cycles`，说明已在记录阻塞证据后停止 |
 | R4 | unsupported operator 不够醒目 | medium | softmax 在 scope summary 中显示为 `unsupported_operator`，不够明确 | 改为 `D_excluded`，防止进入论文主表 |
 | R5 | blocked 根因边界不够细 | high | 原先把 `attn_score` blocked 主要描述为大 `res_rows=32`，但扫描发现 `res_rows=1` 已出现 0-cycle；补测进一步显示 `cout=27/28` clean、`cout=29/30/32` blocked，`res_cols=1` clean、`res_cols>=2` blocked，`cin=1` clean、`cin>=2` blocked，group4/8 也未形成 clean 对照 | 新增 `attn_score_threshold_review_v1`，并在 simulator scope 中加入 `cout>=29, cin>=2, res_cols>=2` 高 cout/multi-Cin 边界保护 |
+| R6 | k1 空间投影高估宽 Cout 行 | high | `trace_gemm_015` 直接 RTL clean，实测 2010 cycles；旧模型预测 6000 cycles，因为把首个空间块的 Cout 启动开销重复乘到所有空间块 | 将 k1 workload 公式升级为 v8 spatial-reuse：`total=first_spatial+(spatial_points-1)*repeat_spatial`；新增 `trace_gemm_015` clean 证据和 `trace_conv_018` blocked-X 证据 |
 
 ## 修复后的关键分级
 
 来自 `group16_v7_workload_scope_summary.csv`：
 
 ```text
-B_direct_rtl_clean_workload_row: 5 rows
+B_direct_rtl_clean_workload_row: 6 rows
 C_projection_large_k3_extent_unvalidated: 11 rows
 C_projection_large_spatial_extent_unvalidated: 6 rows
-C_projection_small_extent_not_directly_run: 5 rows
-D_direct_rtl_blocked: 1 row
+C_projection_small_extent_not_directly_run: 3 rows
+D_direct_rtl_blocked: 2 rows
 D_excluded: 2 rows
 D_observed_high_cout_multicin_boundary: 1 row
 ```
@@ -38,9 +39,9 @@ D_observed_high_cout_multicin_boundary: 1 row
 来自 `paper_data_readiness_v1`：
 
 ```text
-B 级 direct-clean workload 行仅 5 个。
-C 级 projection 行共 22 个。
-D 级 blocked/excluded/boundary 行共 4 个。
+B 级 direct-clean workload 行仅 6 个。
+C 级 projection 行共 20 个。
+D 级 blocked/excluded/boundary 行共 5 个。
 ```
 
 ## 当前可用于论文的严谨表述
@@ -48,9 +49,9 @@ D 级 blocked/excluded/boundary 行共 4 个。
 可以说：
 
 ```text
-We directly validated a small workload subset on RTL and observed exact agreement with the calibrated simulator.
+We directly validated a small workload subset on RTL and observed exact agreement with the calibrated simulator after applying the k1 spatial-reuse correction.
 For larger workload rows, the simulator reports RTL-calibrated projections with explicit scope labels.
-One real workload GEMM row was directly attempted and blocked by Cluster-output X and repeated zero-cycle runs.
+Blocked direct attempts are reported separately when Cluster/Router/Output X or repeated zero-cycle behavior appears.
 ```
 
 不应说：
@@ -79,3 +80,10 @@ The real workload GEMM result is only slow but otherwise valid.
 - `cout=29, cin=2, res_cols=2, res_rows=1` 下，`group_size=4/8` 没有 done interrupt，并出现 Cluster 侧异常摘要；因此不能用小 group 作为 clean 替代证据。
 - consolidated boundary matrix 汇总 16 个阈值 case：6 个 clean、7 个 zero-cycle/no-X、1 个 zero-cycle/X、2 个 no-done。
 - 因此当前 blocked 边界更接近 `cout>=29, cin>=2, res_cols>=2` 的高 `cout` 多 Cin 多列控制路径，而不是单纯大 `res_rows`；group 维度还需要 RTL 状态机解释。
+
+## v3 k1 空间复用更新
+
+- `trace_gemm_015` 直接 RTL clean：32 个 done interrupt，cycle list 为 `319;56;(53;56)*15`，总计 2010，XPROBE2 全 0。
+- 旧模型把 `319;56` 作为每个空间块的固定开销，预测 6000，属于过度保守但会扭曲论文性能趋势的高估。
+- 新 v8 规则把第一个空间块和后续空间块分开：首块为 `first_spatial`，后续为空间复用后的 `repeat_spatial`。
+- `trace_conv_018` 在周期上匹配 v8/旧公式总计 3440，但 Cluster/Router/Output 出现 X，因此被列为 D 级 blocked，而不是 clean 证据。

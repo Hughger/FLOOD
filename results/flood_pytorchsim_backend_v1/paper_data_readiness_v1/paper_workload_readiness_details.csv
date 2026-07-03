@@ -2,12 +2,12 @@ dataset,id,operator,workmode,k,cout,cin_idx_total,spatial_points,pytorchsim_cycl
 workload_v1,unet_conv_64_320_320,conv,spatial_conv,3,10,90,256,187707.0,34675968.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
 workload_v1,unet_conv_32_640_640,conv,spatial_conv,3,20,180,64,136456.0,34272192.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
 workload_v1,unet_conv_16_1280_1280,conv,spatial_conv,3,40,360,16,294253.0,34070448.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
-workload_v1,attn_qkv_4096_320_320,gemm,gemm,1,10,10,256,34810.0,175360.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
-workload_v1,attn_score_1024_64_1024,gemm,gemm,1,32,2,64,13070.0,43456.0,D_direct_rtl_blocked,"direct RTL attempt observed Cluster_OUT X, Router X, and repeated 0-cycle runs"
+workload_v1,attn_qkv_4096_320_320,gemm,gemm,1,10,10,256,34810.0,136600.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
+workload_v1,attn_score_1024_64_1024,gemm,gemm,1,32,2,64,13070.0,7546.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
 workload_v1,attn_softmax_1024_1024,softmax,,,,,,43587.0,,D_excluded,operator_not_supported_by_current_flood_rtl_model
 workload_v1,vae_dec_conv_64_256_128,conv,spatial_conv,3,4,72,256,47318.0,11483904.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
-workload_v1,dit_qkv_256_768_768,gemm,gemm,1,24,24,16,10941.0,27088.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
-workload_v1,dit_mlp_256_768_3072,gemm,gemm,1,96,24,16,36396.0,48976.0,D_observed_high_cout_multicin_boundary,adversarial scan found cout=29/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1
+workload_v1,dit_qkv_256_768_768,gemm,gemm,1,24,24,16,10941.0,20818.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
+workload_v1,dit_mlp_256_768_3072,gemm,gemm,1,96,24,16,36396.0,22186.0,D_observed_high_cout_multicin_boundary,adversarial scan found cout=29/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1
 workload_v1,dit_softmax_256_256,softmax,,,,,,4602.0,,D_excluded,operator_not_supported_by_current_flood_rtl_model
 synthetic_unet_trace,trace_gemm_001,gemm,gemm,1,8,2,1,623.0,223.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
 synthetic_unet_trace,trace_gemm_002,gemm,gemm,1,8,8,1,1101.0,541.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
@@ -17,16 +17,16 @@ synthetic_unet_trace,trace_gemm_005,gemm,gemm,1,2,8,1,656.0,427.0,B_direct_rtl_c
 synthetic_unet_trace,trace_conv_006,conv,pointwise_conv,1,2,2,64,2117.0,6976.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
 synthetic_unet_trace,trace_gemm_007,gemm,gemm,1,2,2,64,1804.0,6976.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
 synthetic_unet_trace,trace_gemm_008,gemm,gemm,1,2,24,5,1694.0,6375.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
-synthetic_unet_trace,trace_gemm_009,gemm,gemm,1,16,2,64,6802.0,24000.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
+synthetic_unet_trace,trace_gemm_009,gemm,gemm,1,16,2,64,6802.0,7242.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
 synthetic_unet_trace,trace_gemm_010,gemm,gemm,1,2,8,64,3611.0,27328.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
 synthetic_unet_trace,trace_conv_011,conv,spatial_conv,3,2,18,16,2745.0,94800.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
 synthetic_unet_trace,trace_conv_012,conv,spatial_conv,3,2,18,16,2292.0,94800.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
 synthetic_unet_trace,trace_conv_013,conv,pointwise_conv,1,2,2,16,999.0,1744.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
 synthetic_unet_trace,trace_gemm_014,gemm,gemm,1,2,2,16,940.0,1744.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
-synthetic_unet_trace,trace_gemm_015,gemm,gemm,1,16,2,16,2131.0,6000.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
+synthetic_unet_trace,trace_gemm_015,gemm,gemm,1,16,2,16,2131.0,2010.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
 synthetic_unet_trace,trace_gemm_016,gemm,gemm,1,2,8,16,1513.0,6832.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
 synthetic_unet_trace,trace_conv_017,conv,spatial_conv,3,2,36,16,2877.0,189552.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
-synthetic_unet_trace,trace_conv_018,conv,pointwise_conv,1,2,4,16,1120.0,3440.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
+synthetic_unet_trace,trace_conv_018,conv,pointwise_conv,1,2,4,16,1120.0,3440.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
 synthetic_unet_trace,trace_conv_019,conv,spatial_conv,3,2,36,64,8001.0,758208.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
 synthetic_unet_trace,trace_conv_020,conv,pointwise_conv,1,2,4,64,2206.0,13760.0,C_projection_large_spatial_extent_unvalidated,"uses k1/group16 rule, but direct RTL validation showed large spatial extent can fail"
 synthetic_unet_trace,trace_conv_021,conv,spatial_conv,3,1,18,64,6246.0,209856.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"

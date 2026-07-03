@@ -1,0 +1,4 @@
+id,model,stage,operator,shape_args,pytorchsim_cycles,latency_us,notes
+sd_unet_conv_001,SD_UNet,down,conv,"1 64 64 320 320 3 1 1",187707,,"example conv row"
+dit_b4_qkv_001,DiT_B4,attention,gemm,"1024 768 2304",36396,,"example qkv row"
+dit_b4_softmax_001,DiT_B4,attention,softmax,"1024",13070,,"example softmax row"

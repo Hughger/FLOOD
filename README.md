@@ -25,6 +25,7 @@ workload 级 FLOOD calibrated projection
 | 文件 | 说明 |
 |---|---|
 | [FLOOD_PyTorchSim_工作整理.md](./FLOOD_PyTorchSim_%E5%B7%A5%E4%BD%9C%E6%95%B4%E7%90%86.md) | 当前工作流、产出、结论和下一步计划总览 |
+| [week1_undergrad_tasks](./week1_undergrad_tasks/README.md) | 第一周给本科生的任务包：分工、CSV 格式、检查方法和交付要求 |
 | [PyTorchSim_服务器使用说明_任务1_2.md](./PyTorchSim_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E_%E4%BB%BB%E5%8A%A11_2.md) | 给任务 1/2 负责人的服务器运行、CSV 输出和日志记录说明 |
 | [team_templates](./team_templates/README.md) | 团队 workload CSV 模板、运行记录模板和自动检查脚本 |
 | [中文产出索引.md](./results/flood_pytorchsim_backend_v1/%E4%B8%AD%E6%96%87%E4%BA%A7%E5%87%BA%E7%B4%A2%E5%BC%95.md) | 结果目录索引 |
@@ -118,7 +119,6 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [group16_v7_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/README.md) | 用 k1 v5/v6 与 k3 v7 规则重新生成 workload 级 projection |
 | [workload_direct_rtl_validation_v1](./results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/README.md) | 第一批 workload 行直接 RTL validation：5 个 clean，1 个真实 workload blocked |
 | [simulator_adversarial_review_v1](./results/flood_pytorchsim_backend_v1/simulator_adversarial_review_v1/README.md) | 对 simulator/readiness/direct validation 做对抗性审查，修复过度外推和状态标注问题 |
-| [paper_progress_audit_v1](./results/flood_pytorchsim_backend_v1/paper_progress_audit_v1/README.md) | 按 HPCA 测试方案 E1-E9 审查当前完成度、百分比、证据和下一阶段 gate |
 
 重要边界结论：
 

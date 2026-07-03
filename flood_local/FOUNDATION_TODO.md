@@ -39,7 +39,7 @@ validated workload CSV
 | `map_workload_to_flood_shape.py` | workload.csv | FLOOD mapping candidate | 已有部分逻辑，可复用 |
 | `apply_group16_v7_workload.py` | FLOOD workload details | projection + scope status | 已有 |
 | `build_paper_data_readiness.py` | projection + RTL summary | readiness package | 已有 |
-| `select_rtl_validation_subset.py` | readiness details | RTL 抽样清单 | 待写 |
+| `select_rtl_validation_subset.py` | readiness details | RTL 抽样清单 | 已有 |
 
 ## 已有底座脚本用法
 
@@ -54,6 +54,14 @@ python flood_local/merge_week1_workloads.py week1_submit/*/workload.csv --out re
 ```bash
 python flood_local/check_required_cycles.py results/flood_pytorchsim_backend_v1/week1_batch_v1/merged_workload.csv --report results/flood_pytorchsim_backend_v1/week1_batch_v1/cycles_check_report.md
 ```
+
+生成 direct RTL validation 抽样候选：
+
+```bash
+python flood_local/select_rtl_validation_subset.py --input results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/group16_v7_workload_details.csv --out results/flood_pytorchsim_backend_v1/week1_batch_v1/rtl_validation_candidates.csv --readme results/flood_pytorchsim_backend_v1/week1_batch_v1/README.md --max-rows 12
+```
+
+默认会排除已知 D 级 blocked/excluded 样本，并把过大的真实 workload 标成 `heavy_diagnostic`，避免第一批 Icarus RTL 抽样被超大层拖住。
 
 ## RTL 抽样原则
 

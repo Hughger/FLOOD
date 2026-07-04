@@ -27,10 +27,12 @@ powershell -ExecutionPolicy Bypass -File flood_local\run_hpca_experiment_tables.
 - `E7_ablation_proxy.csv`
 - `E8_diffusion_family.csv`
 - `E9_baseline_fairness.csv`
+- `table_audit.csv`
 
 ## Rule
 
 Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.
+Use `table_audit.csv` after each run to see which tables still contain MISSING/proxy values.
 
 ## Current proxy tables
 

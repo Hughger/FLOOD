@@ -125,6 +125,17 @@ def build_e1(main_rows: list[dict[str, str]], appendix_rows: list[dict[str, str]
 def build_e6(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for row in details:
+        compute = fnum(row.get("rtl_compute_cycles"))
+        weight_load = fnum(row.get("rtl_weight_load_cycles"))
+        act_load = fnum(row.get("rtl_activation_load_cycles"))
+        output_store = fnum(row.get("rtl_output_store_cycles"))
+        noc_reduce = fnum(row.get("rtl_noc_reduce_cycles"))
+        shift_add = fnum(row.get("rtl_shift_add_cycles"))
+        sram_joint = fnum(row.get("rtl_joint_sram_cycles"))
+        rtl_total = fnum(row.get("group16_v7_total_cycles") or row.get("rtl_total_cycles"))
+        memory_cycles = weight_load + act_load + output_store
+        dram_reads = fnum(row.get("dram_reads"))
+        dram_writes = fnum(row.get("dram_writes"))
         rows.append(
             {
                 "model": model_name(row),
@@ -137,9 +148,22 @@ def build_e6(details: list[dict[str, str]]) -> list[dict[str, Any]]:
                 "buffer_usage": "MISSING",
                 "stall_cycles": "MISSING",
                 "utilization_pytorchsim_systolic_pct": row.get("avg_systolic_util_pct", "MISSING"),
+                "utilization_vector_pct": row.get("avg_vector_util_pct", "MISSING"),
                 "dram_read_count": row.get("dram_reads", "MISSING"),
                 "dram_write_count": row.get("dram_writes", "MISSING"),
-                "data_source": "PyTorchSim counters + FLOOD projection labels",
+                "dram_total_count": round(dram_reads + dram_writes, 4),
+                "compute_cycles": round(compute, 4),
+                "memory_load_store_cycles": round(memory_cycles, 4),
+                "weight_load_cycles": round(weight_load, 4),
+                "activation_load_cycles": round(act_load, 4),
+                "output_store_cycles": round(output_store, 4),
+                "noc_reduce_cycles": round(noc_reduce, 4),
+                "shift_add_cycles": round(shift_add, 4),
+                "joint_sram_cycles": round(sram_joint, 4),
+                "compute_cycle_percent": round(compute / rtl_total * 100.0, 4) if rtl_total else "MISSING",
+                "memory_cycle_percent": round(memory_cycles / rtl_total * 100.0, 4) if rtl_total else "MISSING",
+                "reduction_cycle_percent": round(noc_reduce / rtl_total * 100.0, 4) if rtl_total else "MISSING",
+                "data_source": "PyTorchSim counters + FLOOD RTL-aware cycle decomposition",
                 "readiness": row.get("group16_v7_adversarial_scope_status", ""),
                 "missing_reason": "buffer occupancy/stall cycles require simulator counter export",
             }
@@ -503,6 +527,26 @@ def missing_table(experiment: str, rows: list[dict[str, str]]) -> list[dict[str,
     ]
 
 
+def write_audit(out_dir: Path) -> None:
+    rows: list[dict[str, Any]] = []
+    for csv_path in sorted(out_dir.glob("E*.csv")):
+        text = csv_path.read_text(encoding="utf-8")
+        with csv_path.open(newline="", encoding="utf-8") as fh:
+            data_rows = list(csv.DictReader(fh))
+        missing_count = text.count("MISSING")
+        proxy_count = text.lower().count("proxy")
+        rows.append(
+            {
+                "table": csv_path.name,
+                "data_rows": len(data_rows),
+                "missing_cells_or_tokens": missing_count,
+                "proxy_tokens": proxy_count,
+                "paper_ready_status": "needs_measured_runner" if missing_count or proxy_count else "table_complete",
+            }
+        )
+    write_csv(out_dir / "table_audit.csv", rows)
+
+
 def write_readme(out_dir: Path) -> None:
     with (out_dir / "README.md").open("w", encoding="utf-8") as fh:
         fh.write("# HPCA experiment tables v1\n\n")
@@ -529,8 +573,10 @@ def write_readme(out_dir: Path) -> None:
             "E9_baseline_fairness.csv",
         ]:
             fh.write(f"- `{name}`\n")
+        fh.write("- `table_audit.csv`\n")
         fh.write("\n## Rule\n\n")
         fh.write("Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.\n")
+        fh.write("Use `table_audit.csv` after each run to see which tables still contain MISSING/proxy values.\n")
         fh.write("\n## Current proxy tables\n\n")
         fh.write("- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.\n")
         fh.write("- `E3_quantization_proxy.csv` estimates latency and peak-memory scaling from bit width. Quality metrics remain MISSING until the quantization quality runner is integrated.\n")
@@ -582,6 +628,7 @@ def main() -> None:
     write_csv(out_dir / "E7_ablation_proxy.csv", build_e7_ablation(details))
     write_csv(out_dir / "E8_diffusion_family.csv", build_e8(all_readiness))
     write_csv(out_dir / "E9_baseline_fairness.csv", build_e9())
+    write_audit(out_dir)
     write_readme(out_dir)
     print(f"wrote HPCA experiment tables to {out_dir}")
 

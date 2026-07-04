@@ -2,7 +2,7 @@ table,data_rows,missing_cells_or_tokens,proxy_tokens,paper_ready_status
 E1_end_to_end_main_results.csv,19,68,0,needs_measured_runner
 E2_sparsity_proxy.csv,174,0,604,needs_measured_runner
 E3_quantization_proxy.csv,15,75,33,needs_measured_runner
-E4_outlier_proxy.csv,15,45,38,needs_measured_runner
+E4_outlier_proxy.csv,15,54,38,needs_measured_runner
 E5_softmax_proxy.csv,28,84,87,needs_measured_runner
 E6_dataflow_storage.csv,31,99,6,needs_measured_runner
 E7_ablation_proxy.csv,9,17,33,needs_measured_runner

@@ -33,6 +33,7 @@ powershell -ExecutionPolicy Bypass -File flood_local\run_hpca_experiment_tables.
 
 Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.
 Use `table_audit.csv` after each run to see which tables still contain MISSING/proxy values.
+E3/E4/E5 quality proxy fields come from `numerical_quality_microbench_v1/quant_outlier_softmax_quality.csv`, a deterministic synthetic tensor microbenchmark.
 
 ## Current proxy tables
 

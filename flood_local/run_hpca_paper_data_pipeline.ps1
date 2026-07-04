@@ -33,9 +33,13 @@ if (-not (Test-Path $Python)) {
   --gate-dir results\flood_pytorchsim_backend_v1\hpca_submission_gate_v1 `
   --out results\flood_pytorchsim_backend_v1\hpca_table_summary_v1\README.md
 
+& $Python flood_local\build_numerical_quality_microbench.py `
+  --out-dir results\flood_pytorchsim_backend_v1\numerical_quality_microbench_v1
+
 & $Python flood_local\build_hpca_experiment_tables.py `
   --gate-dir results\flood_pytorchsim_backend_v1\hpca_submission_gate_v1 `
   --workload-details results\flood_pytorchsim_backend_v1\group16_v7_workload_v1\group16_v7_workload_details.csv `
+  --quality-microbench results\flood_pytorchsim_backend_v1\numerical_quality_microbench_v1\quant_outlier_softmax_quality.csv `
   --out-dir $OutDir
 
 Write-Host "HPCA paper data pipeline complete. Tables written to $OutDir"

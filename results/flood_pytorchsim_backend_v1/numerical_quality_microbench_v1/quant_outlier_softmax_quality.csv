@@ -1,0 +1,37 @@
+experiment,config,vector_length,mse,max_abs_error,cosine_similarity,source
+E3_quantization,INT8 all,4096,6.0867e-05,0.0135599539,0.9999692152,deterministic synthetic tensor microbench
+E3_quantization,INT4 all,4096,0.027055868,0.2830455269,0.9866482719,deterministic synthetic tensor microbench
+E3_quantization,30% INT4 mixed,4096,0.0056763435,0.2375164713,0.997197939,deterministic synthetic tensor microbench
+E3_quantization,sensitivity-based mixed,4096,0.005401637,0.2315149326,0.9972552996,deterministic synthetic tensor microbench
+E4_outlier,INT8 truncation,4096,8.36865e-05,0.0157500198,0.9999579363,deterministic synthetic tensor microbench
+E4_outlier,+ outlier bypass 0.1%,4096,8.36276e-05,0.0157500198,0.9999579671,deterministic synthetic tensor microbench
+E4_outlier,+ outlier bypass 0.5%,4096,8.33026e-05,0.0157500198,0.999958133,deterministic synthetic tensor microbench
+E4_outlier,+ outlier bypass 1.0%,4096,8.28852e-05,0.0157500198,0.9999583482,deterministic synthetic tensor microbench
+E5_softmax,FP32 reference softmax,32,0.0,0.0,1.0,deterministic synthetic tensor microbench
+E5_softmax,INT8 LUT softmax proxy,32,2.9304e-08,0.000481502274,0.9999941062,deterministic synthetic tensor microbench
+E5_softmax,piecewise-linear softmax proxy,32,0.000865328441,0.113757639986,0.822807674,deterministic synthetic tensor microbench
+E5_softmax,online/streaming softmax proxy,32,2.4e-10,5.2586442e-05,0.9999999551,deterministic synthetic tensor microbench
+E5_softmax,FP32 reference softmax,64,0.0,0.0,1.0,deterministic synthetic tensor microbench
+E5_softmax,INT8 LUT softmax proxy,64,9.835e-09,0.00042219901,0.9999918062,deterministic synthetic tensor microbench
+E5_softmax,piecewise-linear softmax proxy,64,0.000196970885,0.063898029205,0.8333487868,deterministic synthetic tensor microbench
+E5_softmax,online/streaming softmax proxy,64,5.1e-11,3.7757973e-05,0.9999999582,deterministic synthetic tensor microbench
+E5_softmax,FP32 reference softmax,128,0.0,0.0,1.0,deterministic synthetic tensor microbench
+E5_softmax,INT8 LUT softmax proxy,128,4.887e-09,0.000321623597,0.9999861872,deterministic synthetic tensor microbench
+E5_softmax,piecewise-linear softmax proxy,128,6.6008607e-05,0.048696062532,0.8069416408,deterministic synthetic tensor microbench
+E5_softmax,online/streaming softmax proxy,128,1.6e-11,2.0979534e-05,0.9999999551,deterministic synthetic tensor microbench
+E5_softmax,FP32 reference softmax,256,0.0,0.0,1.0,deterministic synthetic tensor microbench
+E5_softmax,INT8 LUT softmax proxy,256,1.234e-09,0.000247794906,0.9999854003,deterministic synthetic tensor microbench
+E5_softmax,piecewise-linear softmax proxy,256,1.5963114e-05,0.036277422602,0.8047586784,deterministic synthetic tensor microbench
+E5_softmax,online/streaming softmax proxy,256,3e-12,1.1187691e-05,0.9999999687,deterministic synthetic tensor microbench
+E5_softmax,FP32 reference softmax,512,0.0,0.0,1.0,deterministic synthetic tensor microbench
+E5_softmax,INT8 LUT softmax proxy,512,6.2e-10,0.00020824434,0.9999723534,deterministic synthetic tensor microbench
+E5_softmax,piecewise-linear softmax proxy,512,4.324855e-06,0.035934828152,0.7986888968,deterministic synthetic tensor microbench
+E5_softmax,online/streaming softmax proxy,512,1e-12,8.681496e-06,0.9999999675,deterministic synthetic tensor microbench
+E5_softmax,FP32 reference softmax,1024,0.0,0.0,1.0,deterministic synthetic tensor microbench
+E5_softmax,INT8 LUT softmax proxy,1024,1.26e-10,0.000121610981,0.9999739845,deterministic synthetic tensor microbench
+E5_softmax,piecewise-linear softmax proxy,1024,7.78651e-07,0.012374562118,0.8381002134,deterministic synthetic tensor microbench
+E5_softmax,online/streaming softmax proxy,1024,0.0,7.425109e-06,0.9999999556,deterministic synthetic tensor microbench
+E5_softmax,FP32 reference softmax,2048,0.0,0.0,1.0,deterministic synthetic tensor microbench
+E5_softmax,INT8 LUT softmax proxy,2048,3.5e-11,6.6540939e-05,0.9999711675,deterministic synthetic tensor microbench
+E5_softmax,piecewise-linear softmax proxy,2048,1.96526e-07,0.004974210915,0.8317361193,deterministic synthetic tensor microbench
+E5_softmax,online/streaming softmax proxy,2048,0.0,2.484114e-06,0.9999999578,deterministic synthetic tensor microbench

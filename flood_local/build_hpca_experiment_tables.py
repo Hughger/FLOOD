@@ -338,7 +338,16 @@ def build_e7_ablation(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     return rows
 
 
-def build_e3_quantization(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+def quality_lookup(rows: list[dict[str, str]]) -> dict[tuple[str, str, str], dict[str, str]]:
+    return {(row.get("experiment", ""), row.get("config", ""), row.get("vector_length", "")): row for row in rows}
+
+
+def quality_by_config(quality: dict[tuple[str, str, str], dict[str, str]], experiment: str, config: str) -> dict[str, str]:
+    matches = [row for (exp, cfg, _), row in quality.items() if exp == experiment and cfg == config]
+    return matches[0] if matches else {}
+
+
+def build_e3_quantization(details: list[dict[str, str]], quality: dict[tuple[str, str, str], dict[str, str]]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     configs = [
         ("FP16", 16.0, 1.00, "reference"),
@@ -355,6 +364,7 @@ def build_e3_quantization(details: list[dict[str, str]]) -> list[dict[str, Any]]
         base_cycles = sum(fnum(row.get("group16_v7_total_cycles")) for row in items)
         base_mem = sum(fnum(row.get("rtl_padded_macs") or row.get("rtl_useful_macs")) for row in items) * 2.0
         for config, bits, latency_scale, source in configs:
+            q = quality_by_config(quality, "E3_quantization", config)
             latency = base_cycles * latency_scale
             peak_mem = base_mem * bits / 16.0
             rows.append(
@@ -364,19 +374,22 @@ def build_e3_quantization(details: list[dict[str, str]]) -> list[dict[str, Any]]
                     "throughput_rows_per_s": round(1_000_000.0 / latency_us(latency), 6) if latency else "MISSING",
                     "peak_memory_proxy_bytes": round(peak_mem, 4),
                     "latency_cycles": round(latency, 4),
+                    "quality_mse": q.get("mse", "MISSING" if config != "FP16" else 0.0),
+                    "quality_max_abs_error": q.get("max_abs_error", "MISSING" if config != "FP16" else 0.0),
+                    "quality_cosine_similarity": q.get("cosine_similarity", "MISSING" if config != "FP16" else 1.0),
                     "fid": "MISSING",
                     "psnr": "MISSING",
                     "ssim": "MISSING",
                     "lpips": "MISSING",
                     "clip_score": "MISSING",
-                    "data_source": f"{source} quantization scaling from workload cycles/MACs",
-                    "missing_reason": "replace proxy latency/memory and fill quality metrics with quantization runner outputs",
+                    "data_source": f"{source} quantization scaling from workload cycles/MACs + numerical microbench",
+                    "missing_reason": "replace proxy latency/memory and synthetic tensor quality with model-level quantization runner outputs",
                 }
             )
     return rows
 
 
-def build_e4_outlier(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+def build_e4_outlier(details: list[dict[str, str]], quality: dict[tuple[str, str, str], dict[str, str]]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     configs = [
         ("INT8 truncation", 0.0, 0.0, 0.0, 0.0),
@@ -392,25 +405,29 @@ def build_e4_outlier(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     for model, items in sorted(groups.items()):
         base_cycles = sum(fnum(row.get("group16_v7_total_cycles")) for row in items)
         for config, ratio, area_overhead, power_overhead, cycle_overhead in configs:
+            q = quality_by_config(quality, "E4_outlier", config)
             rows.append(
                 {
                     "model": model,
                     "config": config,
                     "outlier_ratio": round(ratio, 6),
+                    "quality_mse": q.get("mse", "MISSING"),
+                    "quality_max_abs_error": q.get("max_abs_error", "MISSING"),
+                    "quality_cosine_similarity": q.get("cosine_similarity", "MISSING"),
                     "psnr": "MISSING",
                     "ssim": "MISSING",
                     "lpips": "MISSING",
                     "extra_area_percent": round(area_overhead * 100.0, 4),
                     "extra_power_percent": round(power_overhead * 100.0, 4),
                     "extra_cycles": round(base_cycles * cycle_overhead, 4),
-                    "data_source": "outlier bypass proxy from configured outlier ratio",
-                    "missing_reason": "replace proxy with measured outlier ratio and quality recovery",
+                    "data_source": "outlier bypass proxy from configured outlier ratio + numerical microbench",
+                    "missing_reason": "replace proxy with measured outlier ratio and model-level quality recovery",
                 }
             )
     return rows
 
 
-def build_e5_softmax(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+def build_e5_softmax(details: list[dict[str, str]], quality: dict[tuple[str, str, str], dict[str, str]]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     lengths = sorted(
         {
@@ -431,6 +448,7 @@ def build_e5_softmax(details: list[dict[str, str]]) -> list[dict[str, Any]]:
         base_cycles = length * 12.0 + 96.0
         for config, latency_scale, approx_error, source in configs:
             cycles = base_cycles * latency_scale
+            q = quality.get(("E5_softmax", config, str(length)), {})
             rows.append(
                 {
                     "model": "DiT / attention proxy" if length >= 256 else "attention microbenchmark",
@@ -440,11 +458,14 @@ def build_e5_softmax(details: list[dict[str, str]]) -> list[dict[str, Any]]:
                     "latency_us": round(latency_us(cycles), 6),
                     "speedup_vs_fp32_reference": round(base_cycles / cycles, 6) if cycles else "MISSING",
                     "approximation_error_proxy": round(approx_error, 6),
+                    "quality_mse": q.get("mse", "MISSING"),
+                    "quality_max_abs_error": q.get("max_abs_error", "MISSING"),
+                    "quality_cosine_similarity": q.get("cosine_similarity", "MISSING"),
                     "accuracy_drop": "MISSING",
                     "area": "MISSING",
                     "power": "MISSING",
-                    "data_source": f"{source} softmax micro-model from vector length",
-                    "missing_reason": "replace proxy latency/error with RTL or numerical softmax runner outputs before final paper claims",
+                    "data_source": f"{source} softmax micro-model from vector length + numerical microbench",
+                    "missing_reason": "replace proxy latency/error and synthetic tensor quality with RTL/model-level softmax runner outputs",
                 }
             )
     return rows
@@ -577,6 +598,7 @@ def write_readme(out_dir: Path) -> None:
         fh.write("\n## Rule\n\n")
         fh.write("Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.\n")
         fh.write("Use `table_audit.csv` after each run to see which tables still contain MISSING/proxy values.\n")
+        fh.write("E3/E4/E5 quality proxy fields come from `numerical_quality_microbench_v1/quant_outlier_softmax_quality.csv`, a deterministic synthetic tensor microbenchmark.\n")
         fh.write("\n## Current proxy tables\n\n")
         fh.write("- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.\n")
         fh.write("- `E3_quantization_proxy.csv` estimates latency and peak-memory scaling from bit width. Quality metrics remain MISSING until the quantization quality runner is integrated.\n")
@@ -593,6 +615,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--gate-dir", required=True)
     parser.add_argument("--workload-details", required=True)
+    parser.add_argument("--quality-microbench")
     parser.add_argument("--out-dir", required=True)
     args = parser.parse_args()
 
@@ -602,6 +625,8 @@ def main() -> None:
     blocked_rows = read_csv(gate / "blocked_or_excluded_rows.csv")
     all_readiness = main_rows + appendix_rows + blocked_rows
     details = read_csv(Path(args.workload_details))
+    quality_rows = read_csv(Path(args.quality_microbench)) if args.quality_microbench else []
+    quality = quality_lookup(quality_rows)
 
     out_dir = Path(args.out_dir)
     stale = out_dir / "E2_sparsity_missing.csv"
@@ -612,15 +637,15 @@ def main() -> None:
     stale_e3 = out_dir / "E3_quantization_missing.csv"
     if stale_e3.exists():
         stale_e3.unlink()
-    write_csv(out_dir / "E3_quantization_proxy.csv", build_e3_quantization(details))
+    write_csv(out_dir / "E3_quantization_proxy.csv", build_e3_quantization(details, quality))
     stale_e4 = out_dir / "E4_outlier_missing.csv"
     if stale_e4.exists():
         stale_e4.unlink()
-    write_csv(out_dir / "E4_outlier_proxy.csv", build_e4_outlier(details))
+    write_csv(out_dir / "E4_outlier_proxy.csv", build_e4_outlier(details, quality))
     stale_e5 = out_dir / "E5_softmax_missing.csv"
     if stale_e5.exists():
         stale_e5.unlink()
-    write_csv(out_dir / "E5_softmax_proxy.csv", build_e5_softmax(details))
+    write_csv(out_dir / "E5_softmax_proxy.csv", build_e5_softmax(details, quality))
     write_csv(out_dir / "E6_dataflow_storage.csv", build_e6(details))
     stale_e7 = out_dir / "E7_ablation_missing.csv"
     if stale_e7.exists():

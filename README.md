@@ -32,6 +32,7 @@ workload 级 FLOOD calibrated projection
 | [rtl_bringup_calibration_v3](./results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3/README.md) | 最新 RTL bring-up 校准报告 |
 | [rtl_bringup_workload_v1](./results/flood_pytorchsim_backend_v1/rtl_bringup_workload_v1/README.md) | workload 级 RTL 校准外推结果 |
 | [hpca_submission_gate_v1](./results/flood_pytorchsim_backend_v1/hpca_submission_gate_v1/README.md) | HPCA 论文数据门禁：主表只允许 direct RTL-clean，C/D 分离 |
+| [k3_projection_gate_v1](./results/flood_pytorchsim_backend_v1/k3_projection_gate_v1/README.md) | 剩余 k3 projection 门禁：只允许 appendix/projection，不进主性能表 |
 | [README_mid_validation.md](./results/flood_pytorchsim_backend_v1/rtl_calibration_results/README_mid_validation.md) | 中等规模 RTL 验证说明 |
 
 ## 仓库内容
@@ -120,7 +121,9 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [group16_v7_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/README.md) | 用 k1 v5/v6 与 k3 v7 规则重新生成 workload 级 projection |
 | [workload_direct_rtl_validation_v1](./results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/README.md) | workload 行直接 RTL validation：6 个 clean，4 个 direct blocked |
 | [spatial_multicin_x_boundary_v1](./results/flood_pytorchsim_backend_v1/spatial_multicin_x_boundary_v1/README.md) | 记录 multi-Cin 空间重复下 cycle match 但 XPROBE 失败的边界 |
+| [large_spatial_x_boundary_v1](./results/flood_pytorchsim_backend_v1/large_spatial_x_boundary_v1/README.md) | 记录 large spatial k1 行 cycle match 但 XPROBE 失败的边界 |
 | [hpca_submission_gate_v1](./results/flood_pytorchsim_backend_v1/hpca_submission_gate_v1/README.md) | 自动拆分 HPCA 主表、appendix projection 与 blocked/excluded 行 |
+| [k3_projection_gate_v1](./results/flood_pytorchsim_backend_v1/k3_projection_gate_v1/README.md) | 剩余 k3 workload projection 的证据范围和 appendix 限制 |
 | [simulator_adversarial_review_v1](./results/flood_pytorchsim_backend_v1/simulator_adversarial_review_v1/README.md) | 对 simulator/readiness/direct validation 做对抗性审查，修复过度外推和状态标注问题 |
 
 重要边界结论：

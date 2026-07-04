@@ -3,7 +3,7 @@ unet_conv_64_320_320,workload_v1,1 64 64 320 320 3 1 1,10,90,256,187707.0,346759
 unet_conv_32_640_640,workload_v1,1 32 32 640 640 3 1 1,20,180,64,136456.0,34272192.0,appendix_projection_cin_or_cout_extrapolation,cin/cout exceed current k3 direct-clean fit/holdout envelope
 unet_conv_16_1280_1280,workload_v1,1 16 16 1280 1280 3 1 1,40,360,16,294253.0,34070448.0,appendix_projection_cin_or_cout_extrapolation,cin/cout exceed current k3 direct-clean fit/holdout envelope
 vae_dec_conv_64_256_128,workload_v1,1 64 64 256 128 3 1 1,4,72,256,47318.0,11483904.0,appendix_projection_cin_or_cout_extrapolation,cin/cout exceed current k3 direct-clean fit/holdout envelope
-trace_conv_003,synthetic_unet_trace,1 32 32 4 64 3 1 1,2,2,64,6118.0,42304.0,appendix_projection_spatial_extrapolation,cout/cin are inside k3 evidence envelope but spatial repetition is not direct-clean
+trace_conv_003,synthetic_unet_trace,1 32 32 4 64 3 1 1,2,2,64,6118.0,42304.0,appendix_projection_large_spatial_after_spatial2_clean,"cout/cin match k3 spatial probes, but workload spatial exceeds direct-clean spatial=2 evidence"
 trace_conv_004,synthetic_unet_trace,1 32 32 64 64 3 1 1,2,18,64,6796.0,379200.0,appendix_projection_cin_or_cout_extrapolation,cin/cout exceed current k3 direct-clean fit/holdout envelope
 trace_conv_011,synthetic_unet_trace,1 32 32 64 64 3 2 1,2,18,16,2745.0,94800.0,appendix_projection_cin_or_cout_extrapolation,cin/cout exceed current k3 direct-clean fit/holdout envelope
 trace_conv_012,synthetic_unet_trace,1 16 16 64 64 3 1 1,2,18,16,2292.0,94800.0,appendix_projection_cin_or_cout_extrapolation,cin/cout exceed current k3 direct-clean fit/holdout envelope

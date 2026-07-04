@@ -42,9 +42,12 @@ def classify(row: dict[str, str]) -> dict[str, Any]:
     elif cin <= 3 and cout <= 6 and spatial == 1:
         status = "within_direct_rtl_clean_k3_envelope"
         reason = "covered by current k3 fit/holdout envelope"
+    elif cin == 2 and cout == 2 and spatial > 2:
+        status = "appendix_projection_large_spatial_after_spatial2_clean"
+        reason = "cout/cin match k3 spatial probes, but workload spatial exceeds direct-clean spatial=2 evidence"
     elif cin <= 3 and cout <= 6:
         status = "appendix_projection_spatial_extrapolation"
-        reason = "cout/cin are inside k3 evidence envelope but spatial repetition is not direct-clean"
+        reason = "cout/cin are inside k3 evidence envelope but workload spatial exceeds current direct-clean range"
     else:
         status = "appendix_projection_cin_or_cout_extrapolation"
         reason = "cin/cout exceed current k3 direct-clean fit/holdout envelope"
@@ -72,7 +75,7 @@ def write_readme(path: Path, rows: list[dict[str, Any]]) -> None:
         fh.write("## Purpose\n\n")
         fh.write(
             "This gate documents the remaining k3 projection rows after fast credibility tightening. "
-            "Current RTL-clean k3 evidence covers res=1, cin<=3, cout<=6. "
+            "Current RTL-clean k3 evidence covers res=1, cin<=3, cout<=6, plus two cout=2/cin=2 spatial=2 probes. "
             "Workload k3 rows outside that envelope stay in appendix/projection, not the HPCA main table.\n\n"
         )
         fh.write("## Counts\n\n")

@@ -2,12 +2,12 @@
 
 ## Purpose
 
-This gate documents the remaining k3 projection rows after fast credibility tightening. Current RTL-clean k3 evidence covers res=1, cin<=3, cout<=6. Workload k3 rows outside that envelope stay in appendix/projection, not the HPCA main table.
+This gate documents the remaining k3 projection rows after fast credibility tightening. Current RTL-clean k3 evidence covers res=1, cin<=3, cout<=6, plus two cout=2/cin=2 spatial=2 probes. Workload k3 rows outside that envelope stay in appendix/projection, not the HPCA main table.
 
 ## Counts
 
 - appendix_projection_cin_or_cout_extrapolation: 10
-- appendix_projection_spatial_extrapolation: 1
+- appendix_projection_large_spatial_after_spatial2_clean: 1
 
 ## Rule
 

@@ -238,6 +238,44 @@ def build_e7_ablation(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     return rows
 
 
+def build_e3_quantization(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    configs = [
+        ("FP16", 16.0, 1.00, "reference"),
+        ("INT8 all", 8.0, 0.62, "proxy"),
+        ("INT4 all", 4.0, 0.38, "proxy"),
+        ("30% INT4 mixed", 6.8, 0.52, "proxy"),
+        ("sensitivity-based mixed", 7.2, 0.50, "proxy"),
+    ]
+    groups: dict[str, list[dict[str, str]]] = {}
+    for row in details:
+        if row.get("operator") in {"conv", "gemm"}:
+            groups.setdefault(model_name(row), []).append(row)
+    for model, items in sorted(groups.items()):
+        base_cycles = sum(fnum(row.get("group16_v7_total_cycles")) for row in items)
+        base_mem = sum(fnum(row.get("rtl_padded_macs") or row.get("rtl_useful_macs")) for row in items) * 2.0
+        for config, bits, latency_scale, source in configs:
+            latency = base_cycles * latency_scale
+            peak_mem = base_mem * bits / 16.0
+            rows.append(
+                {
+                    "model": model,
+                    "precision_config": config,
+                    "throughput_rows_per_s": round(1_000_000.0 / latency_us(latency), 6) if latency else "MISSING",
+                    "peak_memory_proxy_bytes": round(peak_mem, 4),
+                    "latency_cycles": round(latency, 4),
+                    "fid": "MISSING",
+                    "psnr": "MISSING",
+                    "ssim": "MISSING",
+                    "lpips": "MISSING",
+                    "clip_score": "MISSING",
+                    "data_source": f"{source} quantization scaling from workload cycles/MACs",
+                    "missing_reason": "replace proxy latency/memory and fill quality metrics with quantization runner outputs",
+                }
+            )
+    return rows
+
+
 def build_e8(rows_in: list[dict[str, str]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str, str], list[dict[str, str]]] = {}
     for row in rows_in:
@@ -332,7 +370,7 @@ def write_readme(out_dir: Path) -> None:
         for name in [
             "E1_end_to_end_main_results.csv",
             "E2_sparsity_proxy.csv",
-            "E3_quantization_missing.csv",
+            "E3_quantization_proxy.csv",
             "E4_outlier_missing.csv",
             "E5_softmax_missing.csv",
             "E6_dataflow_storage.csv",
@@ -345,6 +383,7 @@ def write_readme(out_dir: Path) -> None:
         fh.write("Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.\n")
         fh.write("\n## Current proxy tables\n\n")
         fh.write("- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.\n")
+        fh.write("- `E3_quantization_proxy.csv` estimates latency and peak-memory scaling from bit width. Quality metrics remain MISSING until the quantization quality runner is integrated.\n")
         fh.write("- `E7_ablation_proxy.csv` reuses the E2 proxy to produce Base/+zero skipping/+adder pruning/+GCSE rows. Quant/outlier/softmax/dataflow/full-system rows remain MISSING until their runners are integrated.\n")
         fh.write("\n## How others should use it\n\n")
         fh.write("1. Update the upstream workload CSVs or run new experiments.\n")
@@ -372,10 +411,10 @@ def main() -> None:
         stale.unlink()
     write_csv(out_dir / "E1_end_to_end_main_results.csv", build_e1(main_rows, appendix_rows))
     write_csv(out_dir / "E2_sparsity_proxy.csv", sparsity_rows(details))
-    write_csv(
-        out_dir / "E3_quantization_missing.csv",
-        missing_table("E3", [("quality_quant_runner", "FID/PSNR/SSIM/LPIPS/CLIP and memory/latency", "quality runner not integrated")]),
-    )
+    stale_e3 = out_dir / "E3_quantization_missing.csv"
+    if stale_e3.exists():
+        stale_e3.unlink()
+    write_csv(out_dir / "E3_quantization_proxy.csv", build_e3_quantization(details))
     write_csv(
         out_dir / "E4_outlier_missing.csv",
         missing_table("E4", [("outlier_bypass_runner", "outlier ratio, quality recovery, extra cycles/area/power", "outlier path not enabled")]),

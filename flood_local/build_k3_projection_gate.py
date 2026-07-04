@@ -75,7 +75,7 @@ def write_readme(path: Path, rows: list[dict[str, Any]]) -> None:
         fh.write("## Purpose\n\n")
         fh.write(
             "This gate documents the remaining k3 projection rows after fast credibility tightening. "
-            "Current RTL-clean k3 evidence covers res=1, cin<=3, cout<=6, plus two cout=2/cin=2 spatial=2 probes. "
+            "Current RTL-clean k3 evidence covers res=1, cin<=3, cout<=6, plus cout=2/cin=2 spatial=2 and spatial=4 probes. "
             "Workload k3 rows outside that envelope stay in appendix/projection, not the HPCA main table.\n\n"
         )
         fh.write("## Counts\n\n")

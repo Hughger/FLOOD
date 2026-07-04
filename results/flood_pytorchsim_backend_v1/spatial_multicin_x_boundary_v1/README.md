@@ -9,7 +9,9 @@
 - `cin=2, spatial=16` 已有直接 workload clean 样本，XPROBE 全 0。
 - `cin=3, spatial=16` 的边界探针 48 次 run 全部完成，cycle count 为 2592，符合模型预期，但 XPROBE 显示 Cluster/Router/Output 侧 X。
 - `cin=4` 与 `cin=8` 的真实 workload 行也都出现 cycle match 但 XPROBE blocked。
+- `trace_gemm_008` 说明小空间 `spatial=5` 但很深 Cin 的行同样会出现 cycle match 但 XPROBE blocked。
 - 因此当前 `k=1, cin>=3, spatial_points>=16` 不应进入论文主性能表，应作为 D 级 RTL debug 边界。
+  对 `cin=24`，即使 `spatial_points=5` 也已经观察到 D 级阻塞。
 
 ## 论文使用规则
 

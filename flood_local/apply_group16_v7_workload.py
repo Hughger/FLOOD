@@ -25,6 +25,7 @@ DIRECT_CLEAN_WORKLOAD_IDS = {
 DIRECT_BLOCKED_WORKLOAD_IDS = {
     "attn_score_1024_64_1024",
     "trace_conv_018",
+    "trace_gemm_008",
     "trace_gemm_016",
 }
 

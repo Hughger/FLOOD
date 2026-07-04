@@ -23,6 +23,7 @@
 | R6 | k1 空间投影高估宽 Cout 行 | high | `trace_gemm_015` 直接 RTL clean，实测 2010 cycles；旧模型预测 6000 cycles，因为把首个空间块的 Cout 启动开销重复乘到所有空间块 | 将 k1 workload 公式升级为 v8 spatial-reuse：`total=first_spatial+(spatial_points-1)*repeat_spatial`；新增 `trace_gemm_015` clean 证据和 `trace_conv_018` blocked-X 证据 |
 | R7 | 周期匹配仍可能掩盖无效输出 | high | `trace_gemm_016` 直接 RTL 与 v8 预测同为 6832 cycles，但 XPROBE2 显示 Cluster/Router/Output 均有 X 污染 | 保留周期模型，将 `trace_gemm_016` 降为 D 级 blocked；后续论文数据必须同时要求 cycle match 和 XPROBE clean |
 | R8 | multi-Cin 空间边界过宽 | high | `cout=2, cin=3, res_cols=2, res_rows=8` 边界探针 48 次 run 全部完成且周期匹配 2592，但 XPROBE2 显示 Cluster/Router/Output X | 新增 `spatial_multicin_x_boundary_v1`，并将 `k=1, cin>=3, spatial_points>=16` 降为 D 级边界，除非后续有直接 clean 反证 |
+| R9 | 小空间不能保证高 Cin 有效 | high | `trace_gemm_008` 为 `cin=24, spatial=5`，120 次 run 全部完成且周期匹配 6375，但 XPROBE2 仍显示 Cluster/Router/Output X | 将 `trace_gemm_008` 降为 D 级 direct blocked，清除最后一个小规模 C 级 GEMM |
 
 ## 修复后的关键分级
 
@@ -32,8 +33,7 @@
 B_direct_rtl_clean_workload_row: 6 rows
 C_projection_large_k3_extent_unvalidated: 11 rows
 C_projection_large_spatial_extent_unvalidated: 3 rows
-C_projection_small_extent_not_directly_run: 1 row
-D_direct_rtl_blocked: 3 rows
+D_direct_rtl_blocked: 4 rows
 D_observed_multicin_spatial_x_boundary: 5 rows
 D_excluded: 2 rows
 ```
@@ -42,8 +42,8 @@ D_excluded: 2 rows
 
 ```text
 B 级 direct-clean workload 行仅 6 个。
-C 级 projection 行共 15 个。
-D 级 blocked/excluded/boundary 行共 10 个。
+C 级 projection 行共 14 个。
+D 级 blocked/excluded/boundary 行共 11 个。
 ```
 
 ## 当前可用于论文的严谨表述

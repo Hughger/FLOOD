@@ -1,0 +1,2 @@
+experiment,status,required_runner,output_expected,note
+E3,MISSING,quality_quant_runner,FID/PSNR/SSIM/LPIPS/CLIP and memory/latency,quality runner not integrated

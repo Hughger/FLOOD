@@ -1,0 +1,2 @@
+experiment,status,required_runner,output_expected,note
+E4,MISSING,outlier_bypass_runner,"outlier ratio, quality recovery, extra cycles/area/power",outlier path not enabled

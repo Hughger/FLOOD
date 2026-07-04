@@ -33,6 +33,7 @@ workload 级 FLOOD calibrated projection
 | [rtl_bringup_workload_v1](./results/flood_pytorchsim_backend_v1/rtl_bringup_workload_v1/README.md) | workload 级 RTL 校准外推结果 |
 | [hpca_submission_gate_v1](./results/flood_pytorchsim_backend_v1/hpca_submission_gate_v1/README.md) | HPCA 论文数据门禁：主表只允许 direct RTL-clean，C/D 分离 |
 | [hpca_table_summary_v1](./results/flood_pytorchsim_backend_v1/hpca_table_summary_v1/README.md) | HPCA 主表/appendix 表自动摘要与论文表述边界 |
+| [hpca_experiment_tables_v1](./results/flood_pytorchsim_backend_v1/hpca_experiment_tables_v1/README.md) | 一键流水线生成测试方案 E1-E9 论文数据表 |
 | [hpca_test_plan_execution_v1](./results/flood_pytorchsim_backend_v1/hpca_test_plan_execution_v1/README.md) | 对照 HPCA 测试方案的执行状态、缺口和最快补强路线 |
 | [k3_projection_gate_v1](./results/flood_pytorchsim_backend_v1/k3_projection_gate_v1/README.md) | 剩余 k3 projection 门禁：只允许 appendix/projection，不进主性能表 |
 | [k3_spatial_probe_v1](./results/flood_pytorchsim_backend_v1/k3_spatial_probe_v1/README.md) | k3 spatial=2 横向/纵向 RTL-clean 探针，用于增强 appendix projection 证据 |
@@ -128,6 +129,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [large_spatial_x_boundary_v1](./results/flood_pytorchsim_backend_v1/large_spatial_x_boundary_v1/README.md) | 记录 large spatial k1 行 cycle match 但 XPROBE 失败的边界 |
 | [hpca_submission_gate_v1](./results/flood_pytorchsim_backend_v1/hpca_submission_gate_v1/README.md) | 自动拆分 HPCA 主表、appendix projection 与 blocked/excluded 行 |
 | [hpca_table_summary_v1](./results/flood_pytorchsim_backend_v1/hpca_table_summary_v1/README.md) | 自动生成可写入论文的主表和 appendix 表述边界 |
+| [hpca_experiment_tables_v1](./results/flood_pytorchsim_backend_v1/hpca_experiment_tables_v1/README.md) | 从 gate/workload 自动生成 E1-E9 测试方案表格 |
 | [hpca_test_plan_execution_v1](./results/flood_pytorchsim_backend_v1/hpca_test_plan_execution_v1/README.md) | 测试方案逐项执行状态和下一步补强路线 |
 | [k3_projection_gate_v1](./results/flood_pytorchsim_backend_v1/k3_projection_gate_v1/README.md) | 剩余 k3 workload projection 的证据范围和 appendix 限制 |
 | [k3_spatial_probe_v1](./results/flood_pytorchsim_backend_v1/k3_spatial_probe_v1/README.md) | k3 小空间重复 clean 证据，补强 k3 projection 的支撑范围 |

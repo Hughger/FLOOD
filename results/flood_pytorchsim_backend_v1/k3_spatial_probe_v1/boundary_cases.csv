@@ -2,3 +2,4 @@ case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,spatial_points,
 k3_boundary_c2_ci2_rc2_rr1,3,2,16,1,2,2,1,2,4,329;332;329;332,1322,0,0,0,0,0,rtl_clean_spatial_probe,logs/k3_boundary_c2_ci2_rc2_rr1.log,k3 cout=2 cin=2 horizontal spatial repeat clean
 k3_boundary_c2_ci2_rc1_rr2,3,2,16,1,2,1,2,2,4,329;332;329;332,1322,0,0,0,0,0,rtl_clean_spatial_probe,logs/k3_boundary_c2_ci2_rc1_rr2.log,k3 cout=2 cin=2 vertical spatial repeat clean
 k3_boundary_c2_ci2_rc2_rr2,3,2,16,1,2,2,2,4,8,329;332;329;332;329;332;329;332,2644,0,0,0,0,0,rtl_clean_spatial_probe,logs/k3_boundary_c2_ci2_rc2_rr2.log,k3 cout=2 cin=2 spatial=4 clean
+k3_boundary_c2_ci2_rc2_rr4,3,2,16,1,2,2,4,8,16,329;332;329;332;329;332;329;332;329;332;329;332;329;332;329;332,5288,0,0,0,0,0,rtl_clean_spatial_probe,logs/k3_boundary_c2_ci2_rc2_rr4.log,k3 cout=2 cin=2 spatial=8 clean

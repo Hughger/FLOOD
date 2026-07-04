@@ -24,7 +24,7 @@
 
 ## 下一步最快补强路线
 
-1. **k3 spatial probe 扩展**：优先跑 `k=3, cout=2, cin=2, spatial=8`，若 clean，可把 k3 appendix 的空间外推链从 1/2/4 推到 8。
+1. **k3 spatial probe 扩展**：`k=3, cout=2, cin=2, spatial=8` 已 clean；下一步若继续补强，可跑 `spatial=16` 或直接选择最小 k3 workload 行做 direct RTL 尝试。
 2. **Softmax 处理策略**：若短期不实现 RTL softmax，论文中必须明确 Softmax excluded；若要支撑 DiT 完整性，需要单独 softmax 近似/向量单元测试。
 3. **稀疏机制最小闭环**：先做 PyTorchSim 或脚本级 sparsity sweep，生成 skipped MAC ratio / projected cycle reduction，不混入 direct RTL 主表。
 4. **能耗/面积闭环**：补 FLOOD 配置、频率、SRAM/DRAM 访问假设和 per-cycle 能耗来源，否则 HPCA 的 energy/power 表不能成立。

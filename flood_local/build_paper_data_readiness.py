@@ -48,6 +48,7 @@ DIRECT_CLEAN_WORKLOAD_IDS = {
 DIRECT_BLOCKED_WORKLOAD_IDS = {
     "attn_score_1024_64_1024",
     "trace_conv_018",
+    "trace_gemm_007",
     "trace_gemm_008",
     "trace_gemm_016",
 }
@@ -77,6 +78,11 @@ def workload_grade(row: dict[str, str]) -> tuple[str, str]:
     if k == 1 and cin >= 3 and spatial_points >= 16:
         return "D_observed_multicin_spatial_x_boundary", (
             "boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X"
+        )
+
+    if k == 1 and cin >= 2 and spatial_points >= 64:
+        return "D_observed_large_spatial_x_boundary", (
+            "direct probe found cout=2/cin=2/spatial=64 completes with matching cycles but Cluster/Router/Output X"
         )
 
     if k == 1 and cin >= 2 and spatial_points >= 2 and fint(row.get("group16_v5_cout")) >= 29:

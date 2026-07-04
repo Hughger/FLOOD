@@ -31,9 +31,9 @@
 |---|---:|---:|---:|
 | B_direct_rtl_clean_workload_row | 6 | 6450.0 | 6689.0 |
 | C_projection_large_k3_extent_unvalidated | 11 | 700809.0 | 116271232.0 |
-| C_projection_large_spatial_extent_unvalidated | 3 | 10723.0 | 21194.0 |
-| D_direct_rtl_blocked | 4 | 17397.0 | 24193.0 |
+| D_direct_rtl_blocked | 5 | 19201.0 | 31169.0 |
 | D_excluded | 2 | 48189.0 | 0.0 |
+| D_observed_large_spatial_x_boundary | 2 | 8919.0 | 14218.0 |
 | D_observed_multicin_spatial_x_boundary | 5 | 87964.0 | 220692.0 |
 
 ## 论文使用建议

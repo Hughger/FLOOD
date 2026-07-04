@@ -4,8 +4,8 @@
 
 - status: PASS
 - main table rows: 6
-- appendix projection rows: 14
-- blocked/excluded rows: 11
+- appendix projection rows: 11
+- blocked/excluded rows: 14
 
 ## Main-table rule
 

@@ -1,0 +1,3 @@
+case,k,cout,group_size,group_num,cin_idx_total,res_cols,res_rows,spatial_points,run_count,total_cycles,x_count,cluster_x,router_read_x,router_write_x,output_read_x,status,source_log,note
+clean_reference_trace_gemm_014,1,2,16,1,2,2,8,16,32,1744,0,0,0,0,0,rtl_clean_direct,logs/wd_trace_gemm_014.log,cin=2 spatial=16 is direct clean
+blocked_trace_gemm_007_spatial64,1,2,16,1,2,2,32,64,128,6976,4400,256,127,256,8319,blocked_x_with_matching_cycles,logs/wd_trace_gemm_007.log,cin=2 spatial=64 matches cycles but output validity fails

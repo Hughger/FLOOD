@@ -6,9 +6,9 @@
 
 ## 总结
 
-- direct attempted cases: 10
+- direct attempted cases: 11
 - direct clean cases: 6
-- direct blocked cases: 4
+- direct blocked cases: 5
 - clean row coverage among conv/gemm workload candidates: 20.6897%
 - clean direct-vs-projection mean abs error: 0.0%
 - clean direct-vs-projection max abs error: 0.0%
@@ -27,6 +27,7 @@
 | `wd_trace_conv_018` | synthetic_unet_trace | `trace_conv_018` | observed_blocked_x_with_matching_cycles |  | 3440 |  | 1136 | 0 |
 | `wd_trace_gemm_016` | synthetic_unet_trace | `trace_gemm_016` | observed_blocked_x_with_matching_cycles |  | 6832 |  | 1264 | 0 |
 | `wd_trace_gemm_008` | synthetic_unet_trace | `trace_gemm_008` | observed_blocked_x_with_matching_cycles |  | 6375 |  | 578 | 0 |
+| `wd_trace_gemm_007` | synthetic_unet_trace | `trace_gemm_007` | observed_blocked_x_with_matching_cycles |  | 6976 |  | 4400 | 0 |
 
 ## 阻塞结论
 

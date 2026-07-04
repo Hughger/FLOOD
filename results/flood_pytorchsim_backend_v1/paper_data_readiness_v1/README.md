@@ -32,8 +32,8 @@
 | B_direct_rtl_clean_workload_row | 6 | 6450.0 | 6689.0 |
 | C_projection_large_k3_extent_unvalidated | 11 | 700809.0 | 116271232.0 |
 | C_projection_large_spatial_extent_unvalidated | 6 | 51350.0 | 198882.0 |
-| C_projection_small_extent_not_directly_run | 3 | 14148.0 | 34025.0 |
-| D_direct_rtl_blocked | 2 | 14190.0 | 10986.0 |
+| C_projection_small_extent_not_directly_run | 2 | 12635.0 | 27193.0 |
+| D_direct_rtl_blocked | 3 | 15703.0 | 17818.0 |
 | D_excluded | 2 | 48189.0 | 0.0 |
 | D_observed_high_cout_multicin_boundary | 1 | 36396.0 | 22186.0 |
 

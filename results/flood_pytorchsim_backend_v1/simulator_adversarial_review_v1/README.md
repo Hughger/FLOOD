@@ -21,6 +21,7 @@
 | R4 | unsupported operator 不够醒目 | medium | softmax 在 scope summary 中显示为 `unsupported_operator`，不够明确 | 改为 `D_excluded`，防止进入论文主表 |
 | R5 | blocked 根因边界不够细 | high | 原先把 `attn_score` blocked 主要描述为大 `res_rows=32`，但扫描发现 `res_rows=1` 已出现 0-cycle；补测进一步显示 `cout=27/28` clean、`cout=29/30/32` blocked，`res_cols=1` clean、`res_cols>=2` blocked，`cin=1` clean、`cin>=2` blocked，group4/8 也未形成 clean 对照 | 新增 `attn_score_threshold_review_v1`，并在 simulator scope 中加入 `cout>=29, cin>=2, res_cols>=2` 高 cout/multi-Cin 边界保护 |
 | R6 | k1 空间投影高估宽 Cout 行 | high | `trace_gemm_015` 直接 RTL clean，实测 2010 cycles；旧模型预测 6000 cycles，因为把首个空间块的 Cout 启动开销重复乘到所有空间块 | 将 k1 workload 公式升级为 v8 spatial-reuse：`total=first_spatial+(spatial_points-1)*repeat_spatial`；新增 `trace_gemm_015` clean 证据和 `trace_conv_018` blocked-X 证据 |
+| R7 | 周期匹配仍可能掩盖无效输出 | high | `trace_gemm_016` 直接 RTL 与 v8 预测同为 6832 cycles，但 XPROBE2 显示 Cluster/Router/Output 均有 X 污染 | 保留周期模型，将 `trace_gemm_016` 降为 D 级 blocked；后续论文数据必须同时要求 cycle match 和 XPROBE clean |
 
 ## 修复后的关键分级
 
@@ -30,8 +31,8 @@
 B_direct_rtl_clean_workload_row: 6 rows
 C_projection_large_k3_extent_unvalidated: 11 rows
 C_projection_large_spatial_extent_unvalidated: 6 rows
-C_projection_small_extent_not_directly_run: 3 rows
-D_direct_rtl_blocked: 2 rows
+C_projection_small_extent_not_directly_run: 2 rows
+D_direct_rtl_blocked: 3 rows
 D_excluded: 2 rows
 D_observed_high_cout_multicin_boundary: 1 row
 ```
@@ -40,8 +41,8 @@ D_observed_high_cout_multicin_boundary: 1 row
 
 ```text
 B 级 direct-clean workload 行仅 6 个。
-C 级 projection 行共 20 个。
-D 级 blocked/excluded/boundary 行共 5 个。
+C 级 projection 行共 19 个。
+D 级 blocked/excluded/boundary 行共 6 个。
 ```
 
 ## 当前可用于论文的严谨表述
@@ -87,3 +88,4 @@ The real workload GEMM result is only slow but otherwise valid.
 - 旧模型把 `319;56` 作为每个空间块的固定开销，预测 6000，属于过度保守但会扭曲论文性能趋势的高估。
 - 新 v8 规则把第一个空间块和后续空间块分开：首块为 `first_spatial`，后续为空间复用后的 `repeat_spatial`。
 - `trace_conv_018` 在周期上匹配 v8/旧公式总计 3440，但 Cluster/Router/Output 出现 X，因此被列为 D 级 blocked，而不是 clean 证据。
+- `trace_gemm_016` 进一步证明：即使 cycle count 与 v8 完全一致，也不能自动视为论文可用数据；XPROBE clean 是进入 B 级的硬门槛。

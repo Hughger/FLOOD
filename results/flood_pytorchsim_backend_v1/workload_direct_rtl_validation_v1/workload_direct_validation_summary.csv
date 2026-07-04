@@ -1,2 +1,2 @@
 direct_attempted_cases,direct_clean_cases,direct_blocked_cases,workload_candidate_rows_total,direct_clean_row_coverage_percent,direct_clean_mean_abs_error_percent,direct_clean_max_abs_error_percent,blocked_reason_summary
-8,6,2,29,20.6897,0.0,0.0,blocked cases have Cluster/Router/Output X or repeated 0-cycle behavior and are excluded from clean evidence
+9,6,3,29,20.6897,0.0,0.0,blocked cases have Cluster/Router/Output X or repeated 0-cycle behavior and are excluded from clean evidence

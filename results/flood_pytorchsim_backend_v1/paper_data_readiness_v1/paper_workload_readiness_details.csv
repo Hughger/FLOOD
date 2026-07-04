@@ -24,7 +24,7 @@ synthetic_unet_trace,trace_conv_012,conv,spatial_conv,3,2,18,16,2292.0,94800.0,C
 synthetic_unet_trace,trace_conv_013,conv,pointwise_conv,1,2,2,16,999.0,1744.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
 synthetic_unet_trace,trace_gemm_014,gemm,gemm,1,2,2,16,940.0,1744.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
 synthetic_unet_trace,trace_gemm_015,gemm,gemm,1,16,2,16,2131.0,2010.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
-synthetic_unet_trace,trace_gemm_016,gemm,gemm,1,2,8,16,1513.0,6832.0,C_projection_small_extent_not_directly_run,uses validated k1/group16 rule but this exact row was not directly RTL-run
+synthetic_unet_trace,trace_gemm_016,gemm,gemm,1,2,8,16,1513.0,6832.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
 synthetic_unet_trace,trace_conv_017,conv,spatial_conv,3,2,36,16,2877.0,189552.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"
 synthetic_unet_trace,trace_conv_018,conv,pointwise_conv,1,2,4,16,1120.0,3440.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
 synthetic_unet_trace,trace_conv_019,conv,spatial_conv,3,2,36,64,8001.0,758208.0,C_projection_large_k3_extent_unvalidated,"uses k3/group16 v7 rule, but workload extent exceeds direct RTL-clean holdout range"

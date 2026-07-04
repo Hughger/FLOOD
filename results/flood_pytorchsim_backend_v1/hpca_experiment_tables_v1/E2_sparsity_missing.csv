@@ -1,3 +1,0 @@
-experiment,status,required_runner,output_expected,note
-E2,MISSING,sparsity_sweep_runner,"activation/weight sparsity, skipped MAC %, cycle/energy reduction",not produced by current dense PyTorchSim/FLOOD gate
-E2,MISSING,gcse_group_sparsity_runner,group sparsity and bitmap overhead,GCSE data not available in current outputs

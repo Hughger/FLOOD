@@ -19,7 +19,7 @@ powershell -ExecutionPolicy Bypass -File flood_local\run_hpca_experiment_tables.
 ## Generated tables
 
 - `E1_end_to_end_main_results.csv`
-- `E2_sparsity_missing.csv`
+- `E2_sparsity_proxy.csv`
 - `E3_quantization_missing.csv`
 - `E4_outlier_missing.csv`
 - `E5_softmax_missing.csv`
@@ -31,6 +31,10 @@ powershell -ExecutionPolicy Bypass -File flood_local\run_hpca_experiment_tables.
 ## Rule
 
 Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.
+
+## Current proxy tables
+
+- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.
 
 ## How others should use it
 

@@ -147,6 +147,49 @@ def build_e6(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     return rows
 
 
+def sparsity_rows(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    scenarios = [
+        ("no skipping", 0.0, 0.0, 0.0),
+        ("zero skipping 25% act", 0.25, 0.0, 0.0),
+        ("zero skipping 50% act", 0.50, 0.0, 0.0),
+        ("zero skipping 25% act + 25% wt", 0.25, 0.25, 0.0),
+        ("+ adder pruning proxy", 0.50, 0.0, 0.10),
+        ("+ GCSE group sparsity proxy", 0.50, 0.25, 0.20),
+    ]
+    for row in details:
+        if row.get("operator") not in {"conv", "gemm"}:
+            continue
+        base_cycles = fnum(row.get("pytorchsim_cycles"))
+        flood_cycles = fnum(row.get("group16_v7_total_cycles"))
+        macs = fnum(row.get("rtl_useful_macs") or row.get("rtl_padded_macs"))
+        for name, act_sp, wt_sp, extra_skip in scenarios:
+            combined_skip = 1.0 - (1.0 - act_sp) * (1.0 - wt_sp)
+            skipped_mac = min(0.95, combined_skip + extra_skip)
+            projected_cycles = flood_cycles * (1.0 - skipped_mac)
+            rows.append(
+                {
+                    "model": model_name(row),
+                    "layer_or_workload": row.get("id"),
+                    "operator": row.get("operator"),
+                    "config": name,
+                    "activation_sparsity": round(act_sp, 4),
+                    "weight_sparsity": round(wt_sp, 4),
+                    "skipped_mac_percent": round(skipped_mac * 100.0, 4),
+                    "useful_macs": round(macs, 4),
+                    "baseline_cycles": round(flood_cycles, 4),
+                    "projected_sparse_cycles": round(projected_cycles, 4),
+                    "cycle_reduction_percent": round(skipped_mac * 100.0, 4) if flood_cycles else "MISSING",
+                    "energy_reduction_percent": round(skipped_mac * 100.0, 4) if flood_cycles else "MISSING",
+                    "utilization_note": "proxy assumes skipped MACs translate linearly to cycle/energy reduction",
+                    "data_source": "synthetic sparsity proxy from workload MAC/cycle table",
+                    "readiness": row.get("group16_v7_adversarial_scope_status", ""),
+                    "missing_reason": "replace proxy sparsity with measured activation/weight sparsity for final paper values",
+                }
+            )
+    return rows
+
+
 def build_e8(rows_in: list[dict[str, str]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str, str], list[dict[str, str]]] = {}
     for row in rows_in:
@@ -240,7 +283,7 @@ def write_readme(out_dir: Path) -> None:
         fh.write("## Generated tables\n\n")
         for name in [
             "E1_end_to_end_main_results.csv",
-            "E2_sparsity_missing.csv",
+            "E2_sparsity_proxy.csv",
             "E3_quantization_missing.csv",
             "E4_outlier_missing.csv",
             "E5_softmax_missing.csv",
@@ -252,6 +295,8 @@ def write_readme(out_dir: Path) -> None:
             fh.write(f"- `{name}`\n")
         fh.write("\n## Rule\n\n")
         fh.write("Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.\n")
+        fh.write("\n## Current proxy tables\n\n")
+        fh.write("- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.\n")
         fh.write("\n## How others should use it\n\n")
         fh.write("1. Update the upstream workload CSVs or run new experiments.\n")
         fh.write("2. Run `flood_local/run_hpca_paper_data_pipeline.ps1`.\n")
@@ -273,17 +318,11 @@ def main() -> None:
     details = read_csv(Path(args.workload_details))
 
     out_dir = Path(args.out_dir)
+    stale = out_dir / "E2_sparsity_missing.csv"
+    if stale.exists():
+        stale.unlink()
     write_csv(out_dir / "E1_end_to_end_main_results.csv", build_e1(main_rows, appendix_rows))
-    write_csv(
-        out_dir / "E2_sparsity_missing.csv",
-        missing_table(
-            "E2",
-            [
-                ("sparsity_sweep_runner", "activation/weight sparsity, skipped MAC %, cycle/energy reduction", "not produced by current dense PyTorchSim/FLOOD gate"),
-                ("gcse_group_sparsity_runner", "group sparsity and bitmap overhead", "GCSE data not available in current outputs"),
-            ],
-        ),
-    )
+    write_csv(out_dir / "E2_sparsity_proxy.csv", sparsity_rows(details))
     write_csv(
         out_dir / "E3_quantization_missing.csv",
         missing_table("E3", [("quality_quant_runner", "FID/PSNR/SSIM/LPIPS/CLIP and memory/latency", "quality runner not integrated")]),

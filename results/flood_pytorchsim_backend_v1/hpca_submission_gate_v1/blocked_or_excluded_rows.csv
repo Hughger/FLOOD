@@ -1,0 +1,12 @@
+dataset,id,operator,workmode,k,cout,cin_idx_total,spatial_points,pytorchsim_cycles,group16_v7_cycles,readiness_grade,readiness_reason
+workload_v1,attn_qkv_4096_320_320,gemm,gemm,1,10,10,256,34810.0,136600.0,D_observed_multicin_spatial_x_boundary,boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X
+workload_v1,attn_score_1024_64_1024,gemm,gemm,1,32,2,64,13070.0,7546.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
+workload_v1,attn_softmax_1024_1024,softmax,,,,,,43587.0,,D_excluded,operator_not_supported_by_current_flood_rtl_model
+workload_v1,dit_qkv_256_768_768,gemm,gemm,1,24,24,16,10941.0,20818.0,D_observed_multicin_spatial_x_boundary,boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X
+workload_v1,dit_mlp_256_768_3072,gemm,gemm,1,96,24,16,36396.0,22186.0,D_observed_multicin_spatial_x_boundary,boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X
+workload_v1,dit_softmax_256_256,softmax,,,,,,4602.0,,D_excluded,operator_not_supported_by_current_flood_rtl_model
+synthetic_unet_trace,trace_gemm_008,gemm,gemm,1,2,24,5,1694.0,6375.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
+synthetic_unet_trace,trace_gemm_010,gemm,gemm,1,2,8,64,3611.0,27328.0,D_observed_multicin_spatial_x_boundary,boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X
+synthetic_unet_trace,trace_gemm_016,gemm,gemm,1,2,8,16,1513.0,6832.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
+synthetic_unet_trace,trace_conv_018,conv,pointwise_conv,1,2,4,16,1120.0,3440.0,D_direct_rtl_blocked,direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence
+synthetic_unet_trace,trace_conv_020,conv,pointwise_conv,1,2,4,64,2206.0,13760.0,D_observed_multicin_spatial_x_boundary,boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X

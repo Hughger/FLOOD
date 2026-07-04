@@ -31,6 +31,7 @@ workload 级 FLOOD calibrated projection
 | [中文产出索引.md](./results/flood_pytorchsim_backend_v1/%E4%B8%AD%E6%96%87%E4%BA%A7%E5%87%BA%E7%B4%A2%E5%BC%95.md) | 结果目录索引 |
 | [rtl_bringup_calibration_v3](./results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3/README.md) | 最新 RTL bring-up 校准报告 |
 | [rtl_bringup_workload_v1](./results/flood_pytorchsim_backend_v1/rtl_bringup_workload_v1/README.md) | workload 级 RTL 校准外推结果 |
+| [hpca_submission_gate_v1](./results/flood_pytorchsim_backend_v1/hpca_submission_gate_v1/README.md) | HPCA 论文数据门禁：主表只允许 direct RTL-clean，C/D 分离 |
 | [README_mid_validation.md](./results/flood_pytorchsim_backend_v1/rtl_calibration_results/README_mid_validation.md) | 中等规模 RTL 验证说明 |
 
 ## 仓库内容
@@ -117,7 +118,9 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [paper_data_readiness_v1](./results/flood_pytorchsim_backend_v1/paper_data_readiness_v1/README.md) | 论文数据可用性分级：A 级 RTL-clean、B/C 级 projection、D 级 blocked/excluded |
 | [rtl_group16_k3_v7](./results/flood_pytorchsim_backend_v1/rtl_group16_k3_v7/README.md) | 补齐真实 conv 关键的 `k=3/group16` RTL-clean fitting/holdout 证据 |
 | [group16_v7_workload_v1](./results/flood_pytorchsim_backend_v1/group16_v7_workload_v1/README.md) | 用 k1 v5/v6 与 k3 v7 规则重新生成 workload 级 projection |
-| [workload_direct_rtl_validation_v1](./results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/README.md) | 第一批 workload 行直接 RTL validation：5 个 clean，1 个真实 workload blocked |
+| [workload_direct_rtl_validation_v1](./results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/README.md) | workload 行直接 RTL validation：6 个 clean，4 个 direct blocked |
+| [spatial_multicin_x_boundary_v1](./results/flood_pytorchsim_backend_v1/spatial_multicin_x_boundary_v1/README.md) | 记录 multi-Cin 空间重复下 cycle match 但 XPROBE 失败的边界 |
+| [hpca_submission_gate_v1](./results/flood_pytorchsim_backend_v1/hpca_submission_gate_v1/README.md) | 自动拆分 HPCA 主表、appendix projection 与 blocked/excluded 行 |
 | [simulator_adversarial_review_v1](./results/flood_pytorchsim_backend_v1/simulator_adversarial_review_v1/README.md) | 对 simulator/readiness/direct validation 做对抗性审查，修复过度外推和状态标注问题 |
 
 重要边界结论：

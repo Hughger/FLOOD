@@ -1,0 +1,7 @@
+dataset,id,operator,workmode,k,cout,cin_idx_total,spatial_points,pytorchsim_cycles,group16_v7_cycles,readiness_grade,readiness_reason
+synthetic_unet_trace,trace_gemm_001,gemm,gemm,1,8,2,1,623.0,223.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
+synthetic_unet_trace,trace_gemm_002,gemm,gemm,1,8,8,1,1101.0,541.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
+synthetic_unet_trace,trace_gemm_005,gemm,gemm,1,2,8,1,656.0,427.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
+synthetic_unet_trace,trace_conv_013,conv,pointwise_conv,1,2,2,16,999.0,1744.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
+synthetic_unet_trace,trace_gemm_014,gemm,gemm,1,2,2,16,940.0,1744.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection
+synthetic_unet_trace,trace_gemm_015,gemm,gemm,1,16,2,16,2131.0,2010.0,B_direct_rtl_clean_workload_row,this exact workload row was directly RTL-clean and matched v7 projection

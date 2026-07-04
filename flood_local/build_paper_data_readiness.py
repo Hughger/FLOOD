@@ -73,6 +73,11 @@ def workload_grade(row: dict[str, str]) -> tuple[str, str]:
             "this exact workload row was directly RTL-clean and matched v7 projection"
         )
 
+    if k == 1 and cin >= 3 and spatial_points >= 16:
+        return "D_observed_multicin_spatial_x_boundary", (
+            "boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X"
+        )
+
     if k == 1 and cin >= 2 and spatial_points >= 2 and fint(row.get("group16_v5_cout")) >= 29:
         return "D_observed_high_cout_multicin_boundary", (
             "adversarial scan found cout=29/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1"

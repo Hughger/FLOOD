@@ -100,6 +100,10 @@ def adversarial_scope_status(row: dict[str, str], k: int, cin: int, spatial_poin
         return "B_direct_rtl_clean_workload_row", "exact workload row directly RTL-clean; projection matched direct RTL"
     if wid in DIRECT_BLOCKED_WORKLOAD_IDS:
         return "D_direct_rtl_blocked", "direct RTL attempt observed Cluster/Router/Output X; invalid as clean workload evidence"
+    if k == 1 and cin >= 3 and spatial_points >= 16:
+        return "D_observed_multicin_spatial_x_boundary", (
+            "boundary probe found cout=2/cin=3/spatial=16 completes with matching cycles but Cluster/Router/Output X"
+        )
     if k == 1 and cin >= 2 and spatial_points >= 2 and fint(row.get("group16_v5_cout")) >= 29:
         return "D_observed_high_cout_multicin_boundary", (
             "adversarial scan found cout=29/cin=2/res_cols=2 reaches 0-cycle boundary even at res_rows=1"

@@ -1,2 +1,0 @@
-experiment,status,required_runner,output_expected,note
-E5,MISSING,softmax_runner,"vector length, latency, approximation error, area/power",softmax currently D_excluded

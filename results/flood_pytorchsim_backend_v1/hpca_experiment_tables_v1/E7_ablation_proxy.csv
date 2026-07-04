@@ -3,8 +3,8 @@ Base,116544000.0,proxy 0.0% reduction,proxy,MISSING,MISSING,synthetic sparsity p
 + zero skipping,58272000.0,proxy 50.0% reduction,proxy,MISSING,MISSING,synthetic sparsity proxy from workload MAC/cycle table,replace proxy with measured mechanism runner for final paper values
 + adder pruning,46617600.0,proxy 60.0% reduction,proxy,MISSING,MISSING,synthetic sparsity proxy from workload MAC/cycle table,replace proxy with measured mechanism runner for final paper values
 + GCSE,20395200.0,proxy 82.5% reduction,proxy,MISSING,MISSING,synthetic sparsity proxy from workload MAC/cycle table,replace proxy with measured mechanism runner for final paper values
-+ INT8/INT4 mixed,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
-+ outlier bypass,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
-+ Softmax,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
-+ FLOOD/PLANE dataflow,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
-Full FLOOD,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
++ INT8/INT4 mixed,60602880.0,proxy 58.0% bit-width storage reduction,proxy,proxy,MISSING,E3 mixed-precision proxy,replace proxy with quantized workload runner and quality metrics before final paper values
++ outlier bypass,117126720.0,proxy 1.0% power overhead,proxy,MISSING,MISSING,E4 0.5% outlier-bypass proxy,replace proxy with measured outlier ratio and quality recovery
++ Softmax,13843.2,MISSING,proxy,MISSING,MISSING,E5 online/streaming softmax proxy,replace proxy with RTL/numerical softmax runner before final paper values
++ FLOOD/PLANE dataflow,116544000.0,MISSING,proxy,PyTorchSim counter-derived in E6,MISSING,current FLOOD RTL-aware group16 mapping,replace proxy with exported buffer/stall/dataflow counters for final paper values
+Full FLOOD,10672374.72,proxy composite,proxy,proxy,MISSING,composite of E2/E3/E4/E5 proxies,only a table-production placeholder; final paper requires measured integrated runner

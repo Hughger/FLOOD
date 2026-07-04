@@ -192,19 +192,95 @@ def sparsity_rows(details: list[dict[str, str]]) -> list[dict[str, Any]]:
 
 def build_e7_ablation(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     sparse = sparsity_rows(details)
+    conv_gemm = [row for row in details if row.get("operator") in {"conv", "gemm"}]
+    base_flood_cycles = sum(fnum(row.get("group16_v7_total_cycles")) for row in conv_gemm)
+    softmax_proxy_cycles = sum(length * 12.0 + 96.0 for length in [32, 64, 128, 256, 512, 1024, 2048]) * 0.28
     configs = [
         ("Base", "no skipping"),
         ("+ zero skipping", "zero skipping 50% act"),
         ("+ adder pruning", "+ adder pruning proxy"),
         ("+ GCSE", "+ GCSE group sparsity proxy"),
-        ("+ INT8/INT4 mixed", None),
-        ("+ outlier bypass", None),
-        ("+ Softmax", None),
-        ("+ FLOOD/PLANE dataflow", None),
-        ("Full FLOOD", None),
+        ("+ INT8/INT4 mixed", "quant proxy"),
+        ("+ outlier bypass", "outlier proxy"),
+        ("+ Softmax", "softmax proxy"),
+        ("+ FLOOD/PLANE dataflow", "dataflow proxy"),
+        ("Full FLOOD", "full proxy"),
     ]
     rows: list[dict[str, Any]] = []
     for label, source_config in configs:
+        if source_config == "quant proxy":
+            latency = base_flood_cycles * 0.52
+            rows.append(
+                {
+                    "config": label,
+                    "latency_cycles": round(latency, 4),
+                    "energy": "proxy 58.0% bit-width storage reduction",
+                    "utilization": "proxy",
+                    "memory_traffic": "proxy",
+                    "quality_drop": "MISSING",
+                    "data_source": "E3 mixed-precision proxy",
+                    "missing_reason": "replace proxy with quantized workload runner and quality metrics before final paper values",
+                }
+            )
+            continue
+        if source_config == "outlier proxy":
+            latency = base_flood_cycles * 1.005
+            rows.append(
+                {
+                    "config": label,
+                    "latency_cycles": round(latency, 4),
+                    "energy": "proxy 1.0% power overhead",
+                    "utilization": "proxy",
+                    "memory_traffic": "MISSING",
+                    "quality_drop": "MISSING",
+                    "data_source": "E4 0.5% outlier-bypass proxy",
+                    "missing_reason": "replace proxy with measured outlier ratio and quality recovery",
+                }
+            )
+            continue
+        if source_config == "softmax proxy":
+            rows.append(
+                {
+                    "config": label,
+                    "latency_cycles": round(softmax_proxy_cycles, 4),
+                    "energy": "MISSING",
+                    "utilization": "proxy",
+                    "memory_traffic": "MISSING",
+                    "quality_drop": "MISSING",
+                    "data_source": "E5 online/streaming softmax proxy",
+                    "missing_reason": "replace proxy with RTL/numerical softmax runner before final paper values",
+                }
+            )
+            continue
+        if source_config == "dataflow proxy":
+            rows.append(
+                {
+                    "config": label,
+                    "latency_cycles": round(base_flood_cycles, 4),
+                    "energy": "MISSING",
+                    "utilization": "proxy",
+                    "memory_traffic": "PyTorchSim counter-derived in E6",
+                    "quality_drop": "MISSING",
+                    "data_source": "current FLOOD RTL-aware group16 mapping",
+                    "missing_reason": "replace proxy with exported buffer/stall/dataflow counters for final paper values",
+                }
+            )
+            continue
+        if source_config == "full proxy":
+            latency = base_flood_cycles * 0.175 * 0.52 * 1.005 + softmax_proxy_cycles
+            rows.append(
+                {
+                    "config": label,
+                    "latency_cycles": round(latency, 4),
+                    "energy": "proxy composite",
+                    "utilization": "proxy",
+                    "memory_traffic": "proxy",
+                    "quality_drop": "MISSING",
+                    "data_source": "composite of E2/E3/E4/E5 proxies",
+                    "missing_reason": "only a table-production placeholder; final paper requires measured integrated runner",
+                }
+            )
+            continue
         if source_config is None:
             rows.append(
                 {
@@ -310,6 +386,46 @@ def build_e4_outlier(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     return rows
 
 
+def build_e5_softmax(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    lengths = sorted(
+        {
+            int(fnum(row.get("N") or row.get("seq_len") or 0))
+            for row in details
+            if row.get("operator") in {"softmax", "attention", "matmul"} and fnum(row.get("N") or row.get("seq_len") or 0) > 0
+        }
+    )
+    if not lengths:
+        lengths = [32, 64, 128, 256, 512, 1024, 2048]
+    configs = [
+        ("FP32 reference softmax", 1.00, 0.00, "reference"),
+        ("INT8 LUT softmax proxy", 0.42, 0.02, "proxy"),
+        ("piecewise-linear softmax proxy", 0.35, 0.04, "proxy"),
+        ("online/streaming softmax proxy", 0.28, 0.01, "proxy"),
+    ]
+    for length in lengths:
+        base_cycles = length * 12.0 + 96.0
+        for config, latency_scale, approx_error, source in configs:
+            cycles = base_cycles * latency_scale
+            rows.append(
+                {
+                    "model": "DiT / attention proxy" if length >= 256 else "attention microbenchmark",
+                    "vector_length": length,
+                    "implementation": config,
+                    "latency_cycles": round(cycles, 4),
+                    "latency_us": round(latency_us(cycles), 6),
+                    "speedup_vs_fp32_reference": round(base_cycles / cycles, 6) if cycles else "MISSING",
+                    "approximation_error_proxy": round(approx_error, 6),
+                    "accuracy_drop": "MISSING",
+                    "area": "MISSING",
+                    "power": "MISSING",
+                    "data_source": f"{source} softmax micro-model from vector length",
+                    "missing_reason": "replace proxy latency/error with RTL or numerical softmax runner outputs before final paper claims",
+                }
+            )
+    return rows
+
+
 def build_e8(rows_in: list[dict[str, str]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str, str], list[dict[str, str]]] = {}
     for row in rows_in:
@@ -351,8 +467,8 @@ def build_e9() -> list[dict[str, Any]]:
             "bandwidth": "from PyTorchSim per-row counters when available",
             "sparsity_support": "not enabled in current generated tables",
             "dataflow": "FLOOD RTL-aware mapping",
-            "softmax": "excluded in current gate",
-            "outlier": "not enabled in current generated tables",
+            "softmax": "E5 proxy table generated; RTL/numerical runner pending",
+            "outlier": "E4 proxy table generated; measured outlier runner pending",
             "mapping": "group16 k1/k3 calibrated projection + direct RTL-clean gate",
             "data_source": "repo scripts and readiness gates",
         },
@@ -406,7 +522,7 @@ def write_readme(out_dir: Path) -> None:
             "E2_sparsity_proxy.csv",
             "E3_quantization_proxy.csv",
             "E4_outlier_proxy.csv",
-            "E5_softmax_missing.csv",
+            "E5_softmax_proxy.csv",
             "E6_dataflow_storage.csv",
             "E7_ablation_proxy.csv",
             "E8_diffusion_family.csv",
@@ -419,7 +535,8 @@ def write_readme(out_dir: Path) -> None:
         fh.write("- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.\n")
         fh.write("- `E3_quantization_proxy.csv` estimates latency and peak-memory scaling from bit width. Quality metrics remain MISSING until the quantization quality runner is integrated.\n")
         fh.write("- `E4_outlier_proxy.csv` estimates outlier bypass overhead from configured outlier ratios. Quality recovery remains MISSING until outlier quality experiments are integrated.\n")
-        fh.write("- `E7_ablation_proxy.csv` reuses the E2 proxy to produce Base/+zero skipping/+adder pruning/+GCSE rows. Quant/outlier/softmax/dataflow/full-system rows remain MISSING until their runners are integrated.\n")
+        fh.write("- `E5_softmax_proxy.csv` estimates softmax latency and approximation error from vector length. It must be replaced by an RTL/numerical softmax runner for final paper claims.\n")
+        fh.write("- `E7_ablation_proxy.csv` reuses E2/E3/E4/E5 proxies and current dataflow labels to produce a complete ablation-table skeleton. Final paper values require measured integrated runners.\n")
         fh.write("\n## How others should use it\n\n")
         fh.write("1. Update the upstream workload CSVs or run new experiments.\n")
         fh.write("2. Run `flood_local/run_hpca_paper_data_pipeline.ps1`.\n")
@@ -454,10 +571,10 @@ def main() -> None:
     if stale_e4.exists():
         stale_e4.unlink()
     write_csv(out_dir / "E4_outlier_proxy.csv", build_e4_outlier(details))
-    write_csv(
-        out_dir / "E5_softmax_missing.csv",
-        missing_table("E5", [("softmax_runner", "vector length, latency, approximation error, area/power", "softmax currently D_excluded")]),
-    )
+    stale_e5 = out_dir / "E5_softmax_missing.csv"
+    if stale_e5.exists():
+        stale_e5.unlink()
+    write_csv(out_dir / "E5_softmax_proxy.csv", build_e5_softmax(details))
     write_csv(out_dir / "E6_dataflow_storage.csv", build_e6(details))
     stale_e7 = out_dir / "E7_ablation_missing.csv"
     if stale_e7.exists():

@@ -36,6 +36,7 @@ workload 级 FLOOD calibrated projection
 | [hpca_test_plan_execution_v1](./results/flood_pytorchsim_backend_v1/hpca_test_plan_execution_v1/README.md) | 对照 HPCA 测试方案的执行状态、缺口和最快补强路线 |
 | [k3_projection_gate_v1](./results/flood_pytorchsim_backend_v1/k3_projection_gate_v1/README.md) | 剩余 k3 projection 门禁：只允许 appendix/projection，不进主性能表 |
 | [k3_spatial_probe_v1](./results/flood_pytorchsim_backend_v1/k3_spatial_probe_v1/README.md) | k3 spatial=2 横向/纵向 RTL-clean 探针，用于增强 appendix projection 证据 |
+| [next_rtl_probe_queue_v1](./results/flood_pytorchsim_backend_v1/next_rtl_probe_queue_v1/README.md) | 下一批最短 RTL 探针队列，按信息量/耗时排序 |
 | [README_mid_validation.md](./results/flood_pytorchsim_backend_v1/rtl_calibration_results/README_mid_validation.md) | 中等规模 RTL 验证说明 |
 
 ## 仓库内容
@@ -130,6 +131,7 @@ results/flood_pytorchsim_backend_v1/rtl_bringup_calibration_v3
 | [hpca_test_plan_execution_v1](./results/flood_pytorchsim_backend_v1/hpca_test_plan_execution_v1/README.md) | 测试方案逐项执行状态和下一步补强路线 |
 | [k3_projection_gate_v1](./results/flood_pytorchsim_backend_v1/k3_projection_gate_v1/README.md) | 剩余 k3 workload projection 的证据范围和 appendix 限制 |
 | [k3_spatial_probe_v1](./results/flood_pytorchsim_backend_v1/k3_spatial_probe_v1/README.md) | k3 小空间重复 clean 证据，补强 k3 projection 的支撑范围 |
+| [next_rtl_probe_queue_v1](./results/flood_pytorchsim_backend_v1/next_rtl_probe_queue_v1/README.md) | 后续最短 RTL 探针执行顺序 |
 | [simulator_adversarial_review_v1](./results/flood_pytorchsim_backend_v1/simulator_adversarial_review_v1/README.md) | 对 simulator/readiness/direct validation 做对抗性审查，修复过度外推和状态标注问题 |
 
 重要边界结论：

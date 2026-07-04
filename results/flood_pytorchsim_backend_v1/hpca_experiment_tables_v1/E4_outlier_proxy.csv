@@ -1,0 +1,16 @@
+model,config,outlier_ratio,psnr,ssim,lpips,extra_area_percent,extra_power_percent,extra_cycles,data_source,missing_reason
+DiT / attention proxy,INT8 truncation,0.0,MISSING,MISSING,MISSING,0.0,0.0,0.0,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+DiT / attention proxy,+ outlier bypass 0.1%,0.001,MISSING,MISSING,MISSING,0.5,0.3,187.15,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+DiT / attention proxy,+ outlier bypass 0.5%,0.005,MISSING,MISSING,MISSING,2.0,1.0,935.75,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+DiT / attention proxy,+ outlier bypass 1.0%,0.01,MISSING,MISSING,MISSING,4.0,2.0,1871.5,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+DiT / attention proxy,wide-MAC baseline proxy,1.0,MISSING,MISSING,MISSING,25.0,18.0,0.0,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD UNet / synthetic UNet trace,INT8 truncation,0.0,MISSING,MISSING,MISSING,0.0,0.0,0.0,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD UNet / synthetic UNet trace,+ outlier bypass 0.1%,0.001,MISSING,MISSING,MISSING,0.5,0.3,104872.946,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD UNet / synthetic UNet trace,+ outlier bypass 0.5%,0.005,MISSING,MISSING,MISSING,2.0,1.0,524364.73,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD UNet / synthetic UNet trace,+ outlier bypass 1.0%,0.01,MISSING,MISSING,MISSING,4.0,2.0,1048729.46,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD UNet / synthetic UNet trace,wide-MAC baseline proxy,1.0,MISSING,MISSING,MISSING,25.0,18.0,0.0,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD VAE,INT8 truncation,0.0,MISSING,MISSING,MISSING,0.0,0.0,0.0,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD VAE,+ outlier bypass 0.1%,0.001,MISSING,MISSING,MISSING,0.5,0.3,11483.904,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD VAE,+ outlier bypass 0.5%,0.005,MISSING,MISSING,MISSING,2.0,1.0,57419.52,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD VAE,+ outlier bypass 1.0%,0.01,MISSING,MISSING,MISSING,4.0,2.0,114839.04,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery
+SD VAE,wide-MAC baseline proxy,1.0,MISSING,MISSING,MISSING,25.0,18.0,0.0,outlier bypass proxy from configured outlier ratio,replace proxy with measured outlier ratio and quality recovery

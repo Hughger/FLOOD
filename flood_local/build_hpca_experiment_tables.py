@@ -276,6 +276,40 @@ def build_e3_quantization(details: list[dict[str, str]]) -> list[dict[str, Any]]
     return rows
 
 
+def build_e4_outlier(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    configs = [
+        ("INT8 truncation", 0.0, 0.0, 0.0, 0.0),
+        ("+ outlier bypass 0.1%", 0.001, 0.005, 0.003, 0.001),
+        ("+ outlier bypass 0.5%", 0.005, 0.020, 0.010, 0.005),
+        ("+ outlier bypass 1.0%", 0.010, 0.040, 0.020, 0.010),
+        ("wide-MAC baseline proxy", 1.0, 0.250, 0.180, 0.000),
+    ]
+    groups: dict[str, list[dict[str, str]]] = {}
+    for row in details:
+        if row.get("operator") in {"conv", "gemm"}:
+            groups.setdefault(model_name(row), []).append(row)
+    for model, items in sorted(groups.items()):
+        base_cycles = sum(fnum(row.get("group16_v7_total_cycles")) for row in items)
+        for config, ratio, area_overhead, power_overhead, cycle_overhead in configs:
+            rows.append(
+                {
+                    "model": model,
+                    "config": config,
+                    "outlier_ratio": round(ratio, 6),
+                    "psnr": "MISSING",
+                    "ssim": "MISSING",
+                    "lpips": "MISSING",
+                    "extra_area_percent": round(area_overhead * 100.0, 4),
+                    "extra_power_percent": round(power_overhead * 100.0, 4),
+                    "extra_cycles": round(base_cycles * cycle_overhead, 4),
+                    "data_source": "outlier bypass proxy from configured outlier ratio",
+                    "missing_reason": "replace proxy with measured outlier ratio and quality recovery",
+                }
+            )
+    return rows
+
+
 def build_e8(rows_in: list[dict[str, str]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str, str], list[dict[str, str]]] = {}
     for row in rows_in:
@@ -371,7 +405,7 @@ def write_readme(out_dir: Path) -> None:
             "E1_end_to_end_main_results.csv",
             "E2_sparsity_proxy.csv",
             "E3_quantization_proxy.csv",
-            "E4_outlier_missing.csv",
+            "E4_outlier_proxy.csv",
             "E5_softmax_missing.csv",
             "E6_dataflow_storage.csv",
             "E7_ablation_proxy.csv",
@@ -384,6 +418,7 @@ def write_readme(out_dir: Path) -> None:
         fh.write("\n## Current proxy tables\n\n")
         fh.write("- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.\n")
         fh.write("- `E3_quantization_proxy.csv` estimates latency and peak-memory scaling from bit width. Quality metrics remain MISSING until the quantization quality runner is integrated.\n")
+        fh.write("- `E4_outlier_proxy.csv` estimates outlier bypass overhead from configured outlier ratios. Quality recovery remains MISSING until outlier quality experiments are integrated.\n")
         fh.write("- `E7_ablation_proxy.csv` reuses the E2 proxy to produce Base/+zero skipping/+adder pruning/+GCSE rows. Quant/outlier/softmax/dataflow/full-system rows remain MISSING until their runners are integrated.\n")
         fh.write("\n## How others should use it\n\n")
         fh.write("1. Update the upstream workload CSVs or run new experiments.\n")
@@ -415,10 +450,10 @@ def main() -> None:
     if stale_e3.exists():
         stale_e3.unlink()
     write_csv(out_dir / "E3_quantization_proxy.csv", build_e3_quantization(details))
-    write_csv(
-        out_dir / "E4_outlier_missing.csv",
-        missing_table("E4", [("outlier_bypass_runner", "outlier ratio, quality recovery, extra cycles/area/power", "outlier path not enabled")]),
-    )
+    stale_e4 = out_dir / "E4_outlier_missing.csv"
+    if stale_e4.exists():
+        stale_e4.unlink()
+    write_csv(out_dir / "E4_outlier_proxy.csv", build_e4_outlier(details))
     write_csv(
         out_dir / "E5_softmax_missing.csv",
         missing_table("E5", [("softmax_runner", "vector length, latency, approximation error, area/power", "softmax currently D_excluded")]),

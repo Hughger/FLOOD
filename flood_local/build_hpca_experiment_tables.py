@@ -190,6 +190,54 @@ def sparsity_rows(details: list[dict[str, str]]) -> list[dict[str, Any]]:
     return rows
 
 
+def build_e7_ablation(details: list[dict[str, str]]) -> list[dict[str, Any]]:
+    sparse = sparsity_rows(details)
+    configs = [
+        ("Base", "no skipping"),
+        ("+ zero skipping", "zero skipping 50% act"),
+        ("+ adder pruning", "+ adder pruning proxy"),
+        ("+ GCSE", "+ GCSE group sparsity proxy"),
+        ("+ INT8/INT4 mixed", None),
+        ("+ outlier bypass", None),
+        ("+ Softmax", None),
+        ("+ FLOOD/PLANE dataflow", None),
+        ("Full FLOOD", None),
+    ]
+    rows: list[dict[str, Any]] = []
+    for label, source_config in configs:
+        if source_config is None:
+            rows.append(
+                {
+                    "config": label,
+                    "latency_cycles": "MISSING",
+                    "energy": "MISSING",
+                    "utilization": "MISSING",
+                    "memory_traffic": "MISSING",
+                    "quality_drop": "MISSING",
+                    "data_source": "not generated yet",
+                    "missing_reason": "requires quant/outlier/softmax/dataflow/full-system runner",
+                }
+            )
+            continue
+        items = [row for row in sparse if row["config"] == source_config]
+        baseline = sum(fnum(row["baseline_cycles"]) for row in items)
+        latency = sum(fnum(row["projected_sparse_cycles"]) for row in items)
+        reduction = (1.0 - latency / baseline) * 100.0 if baseline else 0.0
+        rows.append(
+            {
+                "config": label,
+                "latency_cycles": round(latency, 4),
+                "energy": f"proxy {round(reduction, 4)}% reduction",
+                "utilization": "proxy",
+                "memory_traffic": "MISSING",
+                "quality_drop": "MISSING",
+                "data_source": "synthetic sparsity proxy from workload MAC/cycle table",
+                "missing_reason": "replace proxy with measured mechanism runner for final paper values",
+            }
+        )
+    return rows
+
+
 def build_e8(rows_in: list[dict[str, str]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str, str], list[dict[str, str]]] = {}
     for row in rows_in:
@@ -288,7 +336,7 @@ def write_readme(out_dir: Path) -> None:
             "E4_outlier_missing.csv",
             "E5_softmax_missing.csv",
             "E6_dataflow_storage.csv",
-            "E7_ablation_missing.csv",
+            "E7_ablation_proxy.csv",
             "E8_diffusion_family.csv",
             "E9_baseline_fairness.csv",
         ]:
@@ -297,6 +345,7 @@ def write_readme(out_dir: Path) -> None:
         fh.write("Values are generated only when the current toolchain has the data. Unknown paper metrics are marked MISSING rather than guessed.\n")
         fh.write("\n## Current proxy tables\n\n")
         fh.write("- `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.\n")
+        fh.write("- `E7_ablation_proxy.csv` reuses the E2 proxy to produce Base/+zero skipping/+adder pruning/+GCSE rows. Quant/outlier/softmax/dataflow/full-system rows remain MISSING until their runners are integrated.\n")
         fh.write("\n## How others should use it\n\n")
         fh.write("1. Update the upstream workload CSVs or run new experiments.\n")
         fh.write("2. Run `flood_local/run_hpca_paper_data_pipeline.ps1`.\n")
@@ -336,10 +385,10 @@ def main() -> None:
         missing_table("E5", [("softmax_runner", "vector length, latency, approximation error, area/power", "softmax currently D_excluded")]),
     )
     write_csv(out_dir / "E6_dataflow_storage.csv", build_e6(details))
-    write_csv(
-        out_dir / "E7_ablation_missing.csv",
-        missing_table("E7", [("system_ablation_runner", "Base/+sparse/+quant/+outlier/+softmax/+dataflow/Full metrics", "mechanism runners not integrated")]),
-    )
+    stale_e7 = out_dir / "E7_ablation_missing.csv"
+    if stale_e7.exists():
+        stale_e7.unlink()
+    write_csv(out_dir / "E7_ablation_proxy.csv", build_e7_ablation(details))
     write_csv(out_dir / "E8_diffusion_family.csv", build_e8(all_readiness))
     write_csv(out_dir / "E9_baseline_fairness.csv", build_e9())
     write_readme(out_dir)

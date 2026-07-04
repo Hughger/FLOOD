@@ -24,7 +24,7 @@ powershell -ExecutionPolicy Bypass -File flood_local\run_hpca_experiment_tables.
 - `E4_outlier_missing.csv`
 - `E5_softmax_missing.csv`
 - `E6_dataflow_storage.csv`
-- `E7_ablation_missing.csv`
+- `E7_ablation_proxy.csv`
 - `E8_diffusion_family.csv`
 - `E9_baseline_fairness.csv`
 
@@ -35,6 +35,7 @@ Values are generated only when the current toolchain has the data. Unknown paper
 ## Current proxy tables
 
 - `E2_sparsity_proxy.csv` is generated from synthetic sparsity assumptions and workload MAC/cycle counts. It has the final table schema, but final paper values should replace proxy sparsity with measured activation/weight sparsity.
+- `E7_ablation_proxy.csv` reuses the E2 proxy to produce Base/+zero skipping/+adder pruning/+GCSE rows. Quant/outlier/softmax/dataflow/full-system rows remain MISSING until their runners are integrated.
 
 ## How others should use it
 

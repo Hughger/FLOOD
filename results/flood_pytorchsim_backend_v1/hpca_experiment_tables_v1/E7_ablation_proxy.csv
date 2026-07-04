@@ -1,0 +1,10 @@
+config,latency_cycles,energy,utilization,memory_traffic,quality_drop,data_source,missing_reason
+Base,116544000.0,proxy 0.0% reduction,proxy,MISSING,MISSING,synthetic sparsity proxy from workload MAC/cycle table,replace proxy with measured mechanism runner for final paper values
++ zero skipping,58272000.0,proxy 50.0% reduction,proxy,MISSING,MISSING,synthetic sparsity proxy from workload MAC/cycle table,replace proxy with measured mechanism runner for final paper values
++ adder pruning,46617600.0,proxy 60.0% reduction,proxy,MISSING,MISSING,synthetic sparsity proxy from workload MAC/cycle table,replace proxy with measured mechanism runner for final paper values
++ GCSE,20395200.0,proxy 82.5% reduction,proxy,MISSING,MISSING,synthetic sparsity proxy from workload MAC/cycle table,replace proxy with measured mechanism runner for final paper values
++ INT8/INT4 mixed,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
++ outlier bypass,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
++ Softmax,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
++ FLOOD/PLANE dataflow,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner
+Full FLOOD,MISSING,MISSING,MISSING,MISSING,MISSING,not generated yet,requires quant/outlier/softmax/dataflow/full-system runner

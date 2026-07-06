@@ -152,3 +152,28 @@ smoke 结果：
 - max_abs_system_total_cycle_error: 10
 
 严格结论：现在工具已经具备 system-level 校准回填接口，但还没有真实 full-chip RTL 实测数据。因此 system interval 仍不能作为 HPCA 主性能图依据；只有当真实校准表达到 `measured_rows>0` 且目标范围内 `mismatch_rows=0`，对应 system-level 数据才可以升级为主表候选。
+
+## 2026-07-06 更新：system model 参数化
+
+本轮加入 `--system-model`，把 DMA/config 相关常数从硬编码变成可回填 CSV 参数。
+
+可配置参数：
+- `dma_data_bytes`
+- `dma_maxburst`
+- `dma_fsm_overhead_cycles`
+- `dma_burst_overhead_cycles`
+- `cpu_config_write_cycles`
+- `mac_config_writes`
+- `system_model_status`
+- `system_model_note`
+
+新增输出：
+- `system_model_template.csv`：每个结果目录都会生成，可复制后填写 `calibrated_value`。
+- `hardware_profile.csv`：现在记录 active system model name/status，保证每次结果可追溯。
+
+smoke 验证：
+- 输入：`results/flood_cycle_sim_v1/system_calibration_smoke/system_model_input.csv`
+- 输出报告中 `system_model_name=smoke_loaded_system_model`
+- 原有周期结果保持不变，说明参数文件读取和 provenance 传播正常。
+
+严格结论：现在 simulator 已经具备“实测 full-chip RTL -> 更新 system model CSV -> 重新生成论文候选数据”的闭环接口。但当前 `full_chip_rtl_calibrated_smoke` 只是 smoke 标签，不是真实论文证据。

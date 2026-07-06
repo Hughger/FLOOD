@@ -36,7 +36,8 @@ if (-not $person2) {
 
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\system_calibration_smoke" `
-    --system-calibration "$OutDir\system_calibration_smoke\system_calibration_input.csv"
+    --system-calibration "$OutDir\system_calibration_smoke\system_calibration_input.csv" `
+    --system-model "$OutDir\system_calibration_smoke\system_model_input.csv"
 
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\value_checker_smoke\pass_case" `

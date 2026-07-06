@@ -1,11 +1,14 @@
 parameter,value,unit,source_or_basis,evidence_grade
+system_model_name,default_visible_rtl_interface_model,,active system model for this run,unvalidated_system_projection
 process_node,28nm,,user-provided FLOOD ASIC assumption,assumption_for_all_reported_latency
 frequency,330.0,MHz,user-provided FLOOD ASIC assumption,assumption_for_all_reported_latency
 tile_rows,16,rows,current Base FLOOD MAC datapath model,calibrated_against_direct_rtl_clean_cases
 reduction_block,32,channels,current Base FLOOD MAC datapath model,calibrated_against_direct_rtl_clean_cases
 output_block,32,channels,current Base FLOOD MAC datapath model,calibrated_against_direct_rtl_clean_cases
 data_width,1,bytes,current simulator assumes int8-equivalent traffic for base path,model_assumption
-dma_data_width,8,bytes,dma_top 64-bit AXI path,rtl_interface_observed
-dma_default_maxburst,7,beats,current conservative DMA model,unvalidated_system_projection
-dma_fsm_overhead,4,cycles,current conservative DMA model,unvalidated_system_projection
-mac_config_writes,3,writes,MacMachine configuration model,unvalidated_system_projection
+dma_data_bytes,8,bytes,dma_top 64-bit AXI path,rtl_interface_observed
+dma_maxburst,7,beats,active system model,unvalidated_system_projection
+dma_fsm_overhead_cycles,4,cycles,active system model,unvalidated_system_projection
+dma_burst_overhead_cycles,2,cycles/burst,active system model,unvalidated_system_projection
+mac_config_writes,3,writes,active system model,unvalidated_system_projection
+cpu_config_write_cycles,1,cycles/write,active system model,unvalidated_system_projection

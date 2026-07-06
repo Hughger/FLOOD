@@ -1,361 +1,361 @@
 workload_id,phase,start_cycle,duration_cycles,end_cycle_exclusive,bytes_moved,rule
-gemm_001_op_00000,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_001_op_00000,dma_activation_load,3,16,19,64,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_001_op_00000,dma_weight_load,19,2638,2657,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_001_op_00000,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_001_op_00000,dma_activation_load,3,16,19,64,dma_top read path; model=default_visible_rtl_interface_model
+gemm_001_op_00000,dma_weight_load,19,2638,2657,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_001_op_00000,mac_datapath_run,2657,223,2880,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_001_op_00000,dma_output_store,2880,46,2926,256,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_002_op_00001,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_002_op_00001,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_002_op_00001,dma_weight_load,49,10538,10587,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_001_op_00000,dma_output_store,2880,46,2926,256,dma_top write path; model=default_visible_rtl_interface_model
+gemm_002_op_00001,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_002_op_00001,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_002_op_00001,dma_weight_load,49,10538,10587,65536,dma_top read path; model=default_visible_rtl_interface_model
 gemm_002_op_00001,mac_datapath_run,10587,541,11128,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_002_op_00001,dma_output_store,11128,46,11174,256,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_001_op_00002,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_001_op_00002,dma_activation_load,3,5930,5933,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_001_op_00002,dma_weight_load,5933,376,6309,2304,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_002_op_00001,dma_output_store,11128,46,11174,256,dma_top write path; model=default_visible_rtl_interface_model
+conv_001_op_00002,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_001_op_00002,dma_activation_load,3,5930,5933,36864,dma_top read path; model=default_visible_rtl_interface_model
+conv_001_op_00002,dma_weight_load,5933,376,6309,2304,dma_top read path; model=default_visible_rtl_interface_model
 conv_001_op_00002,mac_datapath_run,6309,42304,48613,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_001_op_00002,dma_output_store,48613,10538,59151,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_002_op_00003,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_002_op_00003,dma_activation_load,3,94798,94801,589824,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_002_op_00003,dma_weight_load,94801,5930,100731,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_001_op_00002,dma_output_store,48613,10538,59151,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_002_op_00003,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_002_op_00003,dma_activation_load,3,94798,94801,589824,dma_top read path; model=default_visible_rtl_interface_model
+conv_002_op_00003,dma_weight_load,94801,5930,100731,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_002_op_00003,mac_datapath_run,100731,379200,479931,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_002_op_00003,dma_output_store,479931,10538,490469,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_003_op_00004,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_003_op_00004,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_003_op_00004,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_002_op_00003,dma_output_store,479931,10538,490469,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_003_op_00004,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_003_op_00004,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_003_op_00004,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_003_op_00004,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_003_op_00004,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_003_op_00005,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_003_op_00005,dma_activation_load,3,94798,94801,589824,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_003_op_00005,dma_weight_load,94801,5930,100731,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_003_op_00004,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_003_op_00005,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_003_op_00005,dma_activation_load,3,94798,94801,589824,dma_top read path; model=default_visible_rtl_interface_model
+conv_003_op_00005,dma_weight_load,94801,5930,100731,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_003_op_00005,mac_datapath_run,100731,379200,479931,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_003_op_00005,dma_output_store,479931,10538,490469,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_004_op_00006,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_004_op_00006,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_004_op_00006,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_003_op_00005,dma_output_store,479931,10538,490469,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_004_op_00006,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_004_op_00006,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+conv_004_op_00006,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_004_op_00006,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_004_op_00006,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_004_op_00007,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_004_op_00007,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_004_op_00007,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_004_op_00006,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_004_op_00007,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_004_op_00007,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_004_op_00007,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_004_op_00007,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_004_op_00007,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_005_op_00008,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_005_op_00008,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_005_op_00008,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_004_op_00007,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_005_op_00008,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_005_op_00008,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_005_op_00008,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_005_op_00008,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_005_op_00008,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_006_op_00009,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_006_op_00009,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_006_op_00009,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_005_op_00008,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_006_op_00009,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_006_op_00009,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_006_op_00009,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_006_op_00009,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_006_op_00009,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_007_op_00010,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_007_op_00010,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_007_op_00010,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_006_op_00009,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_007_op_00010,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_007_op_00010,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_007_op_00010,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_007_op_00010,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_007_op_00010,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_008_op_00011,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_008_op_00011,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_008_op_00011,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_007_op_00010,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_008_op_00011,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_008_op_00011,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_008_op_00011,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_008_op_00011,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_008_op_00011,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_009_op_00012,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_009_op_00012,dma_activation_load,3,9508,9511,59136,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_009_op_00012,dma_weight_load,9511,7904,17415,49152,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_008_op_00011,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_009_op_00012,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_009_op_00012,dma_activation_load,3,9508,9511,59136,dma_top read path; model=default_visible_rtl_interface_model
+gemm_009_op_00012,dma_weight_load,9511,7904,17415,49152,dma_top read path; model=default_visible_rtl_interface_model
 gemm_009_op_00012,mac_datapath_run,17415,6375,23790,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_009_op_00012,dma_output_store,23790,796,24586,4928,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_010_op_00013,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_010_op_00013,dma_activation_load,3,9508,9511,59136,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_010_op_00013,dma_weight_load,9511,7904,17415,49152,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_009_op_00012,dma_output_store,23790,796,24586,4928,dma_top write path; model=default_visible_rtl_interface_model
+gemm_010_op_00013,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_010_op_00013,dma_activation_load,3,9508,9511,59136,dma_top read path; model=default_visible_rtl_interface_model
+gemm_010_op_00013,dma_weight_load,9511,7904,17415,49152,dma_top read path; model=default_visible_rtl_interface_model
 gemm_010_op_00013,mac_datapath_run,17415,6375,23790,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_010_op_00013,dma_output_store,23790,796,24586,4928,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_011_op_00014,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_011_op_00014,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_011_op_00014,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_010_op_00013,dma_output_store,23790,796,24586,4928,dma_top write path; model=default_visible_rtl_interface_model
+gemm_011_op_00014,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_011_op_00014,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_011_op_00014,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_011_op_00014,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_011_op_00014,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_012_op_00015,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_012_op_00015,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_012_op_00015,dma_weight_load,10541,5272,15813,32768,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_011_op_00014,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_012_op_00015,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_012_op_00015,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_012_op_00015,dma_weight_load,10541,5272,15813,32768,dma_top read path; model=default_visible_rtl_interface_model
 gemm_012_op_00015,mac_datapath_run,15813,7242,23055,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_012_op_00015,dma_output_store,23055,84266,107321,524288,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_013_op_00016,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_013_op_00016,dma_activation_load,3,42136,42139,262144,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_013_op_00016,dma_weight_load,42139,2638,44777,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_012_op_00015,dma_output_store,23055,84266,107321,524288,dma_top write path; model=default_visible_rtl_interface_model
+gemm_013_op_00016,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_013_op_00016,dma_activation_load,3,42136,42139,262144,dma_top read path; model=default_visible_rtl_interface_model
+gemm_013_op_00016,dma_weight_load,42139,2638,44777,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_013_op_00016,mac_datapath_run,44777,27328,72105,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_013_op_00016,dma_output_store,72105,10538,82643,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_005_op_00017,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_005_op_00017,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_005_op_00017,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_013_op_00016,dma_output_store,72105,10538,82643,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_005_op_00017,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_005_op_00017,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+conv_005_op_00017,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_005_op_00017,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_005_op_00017,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_006_op_00018,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_006_op_00018,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_006_op_00018,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_005_op_00017,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_006_op_00018,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_006_op_00018,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_006_op_00018,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_006_op_00018,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_006_op_00018,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_007_op_00019,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_007_op_00019,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_007_op_00019,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_006_op_00018,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_007_op_00019,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_007_op_00019,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_007_op_00019,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_007_op_00019,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_007_op_00019,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_014_op_00020,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_014_op_00020,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_014_op_00020,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_007_op_00019,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_014_op_00020,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_014_op_00020,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_014_op_00020,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_014_op_00020,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_014_op_00020,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_008_op_00021,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_008_op_00021,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_008_op_00021,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_014_op_00020,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_008_op_00021,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_008_op_00021,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_008_op_00021,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_008_op_00021,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_008_op_00021,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_009_op_00022,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_009_op_00022,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_009_op_00022,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_008_op_00021,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_009_op_00022,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_009_op_00022,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_009_op_00022,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_009_op_00022,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_009_op_00022,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_015_op_00023,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_015_op_00023,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_015_op_00023,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_009_op_00022,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_015_op_00023,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_015_op_00023,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_015_op_00023,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_015_op_00023,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_015_op_00023,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_010_op_00024,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_010_op_00024,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_010_op_00024,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_015_op_00023,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_010_op_00024,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_010_op_00024,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_010_op_00024,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_010_op_00024,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_010_op_00024,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_011_op_00025,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_011_op_00025,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_011_op_00025,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_010_op_00024,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_011_op_00025,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_011_op_00025,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+conv_011_op_00025,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_011_op_00025,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_011_op_00025,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_016_op_00026,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_016_op_00026,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_016_op_00026,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_011_op_00025,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_016_op_00026,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_016_op_00026,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+gemm_016_op_00026,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_016_op_00026,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_016_op_00026,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_017_op_00027,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_017_op_00027,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_017_op_00027,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_016_op_00026,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_017_op_00027,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_017_op_00027,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+gemm_017_op_00027,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_017_op_00027,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_017_op_00027,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_018_op_00028,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_018_op_00028,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_018_op_00028,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_017_op_00027,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_018_op_00028,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_018_op_00028,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+gemm_018_op_00028,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_018_op_00028,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_018_op_00028,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_019_op_00029,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_019_op_00029,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_019_op_00029,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_018_op_00028,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_019_op_00029,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_019_op_00029,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+gemm_019_op_00029,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_019_op_00029,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_019_op_00029,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_020_op_00030,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_020_op_00030,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_020_op_00030,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_019_op_00029,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_020_op_00030,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_020_op_00030,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+gemm_020_op_00030,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_020_op_00030,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_020_op_00030,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_021_op_00031,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_021_op_00031,dma_activation_load,3,9508,9511,59136,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_021_op_00031,dma_weight_load,9511,7904,17415,49152,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_020_op_00030,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_021_op_00031,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_021_op_00031,dma_activation_load,3,9508,9511,59136,dma_top read path; model=default_visible_rtl_interface_model
+gemm_021_op_00031,dma_weight_load,9511,7904,17415,49152,dma_top read path; model=default_visible_rtl_interface_model
 gemm_021_op_00031,mac_datapath_run,17415,6375,23790,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_021_op_00031,dma_output_store,23790,796,24586,4928,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_022_op_00032,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_022_op_00032,dma_activation_load,3,9508,9511,59136,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_022_op_00032,dma_weight_load,9511,7904,17415,49152,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_021_op_00031,dma_output_store,23790,796,24586,4928,dma_top write path; model=default_visible_rtl_interface_model
+gemm_022_op_00032,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_022_op_00032,dma_activation_load,3,9508,9511,59136,dma_top read path; model=default_visible_rtl_interface_model
+gemm_022_op_00032,dma_weight_load,9511,7904,17415,49152,dma_top read path; model=default_visible_rtl_interface_model
 gemm_022_op_00032,mac_datapath_run,17415,6375,23790,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_022_op_00032,dma_output_store,23790,796,24586,4928,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_023_op_00033,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_023_op_00033,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_023_op_00033,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_022_op_00032,dma_output_store,23790,796,24586,4928,dma_top write path; model=default_visible_rtl_interface_model
+gemm_023_op_00033,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_023_op_00033,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+gemm_023_op_00033,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_023_op_00033,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_023_op_00033,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_024_op_00034,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_024_op_00034,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_024_op_00034,dma_weight_load,2641,5272,7913,32768,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_023_op_00033,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_024_op_00034,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_024_op_00034,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+gemm_024_op_00034,dma_weight_load,2641,5272,7913,32768,dma_top read path; model=default_visible_rtl_interface_model
 gemm_024_op_00034,mac_datapath_run,7913,2010,9923,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_024_op_00034,dma_output_store,9923,21070,30993,131072,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_025_op_00035,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_025_op_00035,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_025_op_00035,dma_weight_load,10541,2638,13179,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_024_op_00034,dma_output_store,9923,21070,30993,131072,dma_top write path; model=default_visible_rtl_interface_model
+gemm_025_op_00035,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_025_op_00035,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_025_op_00035,dma_weight_load,10541,2638,13179,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_025_op_00035,mac_datapath_run,13179,6832,20011,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_025_op_00035,dma_output_store,20011,2638,22649,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_012_op_00036,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_012_op_00036,dma_activation_load,3,2638,2641,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_012_op_00036,dma_weight_load,2641,664,3305,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_025_op_00035,dma_output_store,20011,2638,22649,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_012_op_00036,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_012_op_00036,dma_activation_load,3,2638,2641,16384,dma_top read path; model=default_visible_rtl_interface_model
+conv_012_op_00036,dma_weight_load,2641,664,3305,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_012_op_00036,mac_datapath_run,3305,1744,5049,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_012_op_00036,dma_output_store,5049,2638,7687,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_013_op_00037,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_013_op_00037,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_013_op_00037,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_012_op_00036,dma_output_store,5049,2638,7687,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_013_op_00037,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_013_op_00037,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_013_op_00037,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_013_op_00037,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_013_op_00037,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_026_op_00038,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_026_op_00038,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_026_op_00038,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_013_op_00037,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_026_op_00038,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_026_op_00038,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_026_op_00038,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_026_op_00038,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_026_op_00038,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_014_op_00039,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_014_op_00039,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_014_op_00039,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_026_op_00038,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_014_op_00039,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_014_op_00039,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_014_op_00039,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_014_op_00039,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_014_op_00039,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_015_op_00040,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_015_op_00040,dma_activation_load,3,47402,47405,294912,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_015_op_00040,dma_weight_load,47405,11854,59259,73728,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_014_op_00039,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_015_op_00040,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_015_op_00040,dma_activation_load,3,47402,47405,294912,dma_top read path; model=default_visible_rtl_interface_model
+conv_015_op_00040,dma_weight_load,47405,11854,59259,73728,dma_top read path; model=default_visible_rtl_interface_model
 conv_015_op_00040,mac_datapath_run,59259,189552,248811,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_015_op_00040,dma_output_store,248811,2638,251449,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_027_op_00041,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_027_op_00041,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_027_op_00041,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_015_op_00040,dma_output_store,248811,2638,251449,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_027_op_00041,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_027_op_00041,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_027_op_00041,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_027_op_00041,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_027_op_00041,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_016_op_00042,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_016_op_00042,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_016_op_00042,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_027_op_00041,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_016_op_00042,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_016_op_00042,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_016_op_00042,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_016_op_00042,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_016_op_00042,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_017_op_00043,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_017_op_00043,dma_activation_load,3,5272,5275,32768,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_017_op_00043,dma_weight_load,5275,1322,6597,8192,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_016_op_00042,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_017_op_00043,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_017_op_00043,dma_activation_load,3,5272,5275,32768,dma_top read path; model=default_visible_rtl_interface_model
+conv_017_op_00043,dma_weight_load,5275,1322,6597,8192,dma_top read path; model=default_visible_rtl_interface_model
 conv_017_op_00043,mac_datapath_run,6597,3440,10037,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_017_op_00043,dma_output_store,10037,2638,12675,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_018_op_00044,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_018_op_00044,dma_activation_load,3,47402,47405,294912,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_018_op_00044,dma_weight_load,47405,11854,59259,73728,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_017_op_00043,dma_output_store,10037,2638,12675,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_018_op_00044,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_018_op_00044,dma_activation_load,3,47402,47405,294912,dma_top read path; model=default_visible_rtl_interface_model
+conv_018_op_00044,dma_weight_load,47405,11854,59259,73728,dma_top read path; model=default_visible_rtl_interface_model
 conv_018_op_00044,mac_datapath_run,59259,189552,248811,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_018_op_00044,dma_output_store,248811,2638,251449,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_028_op_00045,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_028_op_00045,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_028_op_00045,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_018_op_00044,dma_output_store,248811,2638,251449,16384,dma_top write path; model=default_visible_rtl_interface_model
+gemm_028_op_00045,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_028_op_00045,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_028_op_00045,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_028_op_00045,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_028_op_00045,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_019_op_00046,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_019_op_00046,dma_activation_load,3,23704,23707,147456,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_019_op_00046,dma_weight_load,23707,5930,29637,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_028_op_00045,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_019_op_00046,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_019_op_00046,dma_activation_load,3,23704,23707,147456,dma_top read path; model=default_visible_rtl_interface_model
+conv_019_op_00046,dma_weight_load,23707,5930,29637,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_019_op_00046,mac_datapath_run,29637,94800,124437,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_019_op_00046,dma_output_store,124437,2638,127075,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_020_op_00047,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_020_op_00047,dma_activation_load,3,5272,5275,32768,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_020_op_00047,dma_weight_load,5275,1322,6597,8192,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_019_op_00046,dma_output_store,124437,2638,127075,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_020_op_00047,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_020_op_00047,dma_activation_load,3,5272,5275,32768,dma_top read path; model=default_visible_rtl_interface_model
+conv_020_op_00047,dma_weight_load,5275,1322,6597,8192,dma_top read path; model=default_visible_rtl_interface_model
 conv_020_op_00047,mac_datapath_run,6597,3440,10037,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_020_op_00047,dma_output_store,10037,2638,12675,16384,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_021_op_00048,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_021_op_00048,dma_activation_load,3,94798,94801,589824,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_021_op_00048,dma_weight_load,94801,5930,100731,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_020_op_00047,dma_output_store,10037,2638,12675,16384,dma_top write path; model=default_visible_rtl_interface_model
+conv_021_op_00048,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_021_op_00048,dma_activation_load,3,94798,94801,589824,dma_top read path; model=default_visible_rtl_interface_model
+conv_021_op_00048,dma_weight_load,94801,5930,100731,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_021_op_00048,mac_datapath_run,100731,379200,479931,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_021_op_00048,dma_output_store,479931,10538,490469,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_022_op_00049,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_022_op_00049,dma_activation_load,3,189592,189595,1179648,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_022_op_00049,dma_weight_load,189595,11854,201449,73728,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_021_op_00048,dma_output_store,479931,10538,490469,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_022_op_00049,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_022_op_00049,dma_activation_load,3,189592,189595,1179648,dma_top read path; model=default_visible_rtl_interface_model
+conv_022_op_00049,dma_weight_load,189595,11854,201449,73728,dma_top read path; model=default_visible_rtl_interface_model
 conv_022_op_00049,mac_datapath_run,201449,758208,959657,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_022_op_00049,dma_output_store,959657,10538,970195,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_029_op_00050,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_029_op_00050,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_029_op_00050,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_022_op_00049,dma_output_store,959657,10538,970195,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_029_op_00050,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_029_op_00050,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_029_op_00050,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_029_op_00050,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_029_op_00050,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_023_op_00051,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_023_op_00051,dma_activation_load,3,94798,94801,589824,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_023_op_00051,dma_weight_load,94801,5930,100731,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_029_op_00050,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_023_op_00051,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_023_op_00051,dma_activation_load,3,94798,94801,589824,dma_top read path; model=default_visible_rtl_interface_model
+conv_023_op_00051,dma_weight_load,94801,5930,100731,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_023_op_00051,mac_datapath_run,100731,379200,479931,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_023_op_00051,dma_output_store,479931,10538,490469,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_024_op_00052,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_024_op_00052,dma_activation_load,3,21070,21073,131072,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_024_op_00052,dma_weight_load,21073,1322,22395,8192,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_023_op_00051,dma_output_store,479931,10538,490469,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_024_op_00052,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_024_op_00052,dma_activation_load,3,21070,21073,131072,dma_top read path; model=default_visible_rtl_interface_model
+conv_024_op_00052,dma_weight_load,21073,1322,22395,8192,dma_top read path; model=default_visible_rtl_interface_model
 conv_024_op_00052,mac_datapath_run,22395,13760,36155,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_024_op_00052,dma_output_store,36155,10538,46693,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_025_op_00053,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_025_op_00053,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_025_op_00053,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_024_op_00052,dma_output_store,36155,10538,46693,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_025_op_00053,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_025_op_00053,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+conv_025_op_00053,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_025_op_00053,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_025_op_00053,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_030_op_00054,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_030_op_00054,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_030_op_00054,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_025_op_00053,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_030_op_00054,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_030_op_00054,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_030_op_00054,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_030_op_00054,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_030_op_00054,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_031_op_00055,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_031_op_00055,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_031_op_00055,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_030_op_00054,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_031_op_00055,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_031_op_00055,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_031_op_00055,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_031_op_00055,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_031_op_00055,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_032_op_00056,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_032_op_00056,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_032_op_00056,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_031_op_00055,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_032_op_00056,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_032_op_00056,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_032_op_00056,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_032_op_00056,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_032_op_00056,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_033_op_00057,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_033_op_00057,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_033_op_00057,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_032_op_00056,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_033_op_00057,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_033_op_00057,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_033_op_00057,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_033_op_00057,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_033_op_00057,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_034_op_00058,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_034_op_00058,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_034_op_00058,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_033_op_00057,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_034_op_00058,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_034_op_00058,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_034_op_00058,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_034_op_00058,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_034_op_00058,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_035_op_00059,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_035_op_00059,dma_activation_load,3,9508,9511,59136,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_035_op_00059,dma_weight_load,9511,7904,17415,49152,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_034_op_00058,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_035_op_00059,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_035_op_00059,dma_activation_load,3,9508,9511,59136,dma_top read path; model=default_visible_rtl_interface_model
+gemm_035_op_00059,dma_weight_load,9511,7904,17415,49152,dma_top read path; model=default_visible_rtl_interface_model
 gemm_035_op_00059,mac_datapath_run,17415,6375,23790,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_035_op_00059,dma_output_store,23790,796,24586,4928,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_036_op_00060,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_036_op_00060,dma_activation_load,3,9508,9511,59136,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_036_op_00060,dma_weight_load,9511,7904,17415,49152,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_035_op_00059,dma_output_store,23790,796,24586,4928,dma_top write path; model=default_visible_rtl_interface_model
+gemm_036_op_00060,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_036_op_00060,dma_activation_load,3,9508,9511,59136,dma_top read path; model=default_visible_rtl_interface_model
+gemm_036_op_00060,dma_weight_load,9511,7904,17415,49152,dma_top read path; model=default_visible_rtl_interface_model
 gemm_036_op_00060,mac_datapath_run,17415,6375,23790,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_036_op_00060,dma_output_store,23790,796,24586,4928,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_037_op_00061,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_037_op_00061,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_037_op_00061,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_036_op_00060,dma_output_store,23790,796,24586,4928,dma_top write path; model=default_visible_rtl_interface_model
+gemm_037_op_00061,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_037_op_00061,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_037_op_00061,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 gemm_037_op_00061,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_037_op_00061,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_038_op_00062,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_038_op_00062,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_038_op_00062,dma_weight_load,10541,5272,15813,32768,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_037_op_00061,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_038_op_00062,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_038_op_00062,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+gemm_038_op_00062,dma_weight_load,10541,5272,15813,32768,dma_top read path; model=default_visible_rtl_interface_model
 gemm_038_op_00062,mac_datapath_run,15813,7242,23055,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_038_op_00062,dma_output_store,23055,84266,107321,524288,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_039_op_00063,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_039_op_00063,dma_activation_load,3,42136,42139,262144,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_039_op_00063,dma_weight_load,42139,2638,44777,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_038_op_00062,dma_output_store,23055,84266,107321,524288,dma_top write path; model=default_visible_rtl_interface_model
+gemm_039_op_00063,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_039_op_00063,dma_activation_load,3,42136,42139,262144,dma_top read path; model=default_visible_rtl_interface_model
+gemm_039_op_00063,dma_weight_load,42139,2638,44777,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_039_op_00063,mac_datapath_run,44777,27328,72105,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_039_op_00063,dma_output_store,72105,10538,82643,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_026_op_00064,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_026_op_00064,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_026_op_00064,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_039_op_00063,dma_output_store,72105,10538,82643,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_026_op_00064,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_026_op_00064,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+conv_026_op_00064,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_026_op_00064,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_026_op_00064,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_027_op_00065,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_027_op_00065,dma_activation_load,3,189592,189595,1179648,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_027_op_00065,dma_weight_load,189595,11854,201449,73728,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_026_op_00064,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_027_op_00065,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_027_op_00065,dma_activation_load,3,189592,189595,1179648,dma_top read path; model=default_visible_rtl_interface_model
+conv_027_op_00065,dma_weight_load,189595,11854,201449,73728,dma_top read path; model=default_visible_rtl_interface_model
 conv_027_op_00065,mac_datapath_run,201449,758208,959657,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_027_op_00065,dma_output_store,959657,10538,970195,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-gemm_040_op_00066,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-gemm_040_op_00066,dma_activation_load,3,46,49,256,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-gemm_040_op_00066,dma_weight_load,49,2638,2687,16384,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_027_op_00065,dma_output_store,959657,10538,970195,65536,dma_top write path; model=default_visible_rtl_interface_model
+gemm_040_op_00066,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+gemm_040_op_00066,dma_activation_load,3,46,49,256,dma_top read path; model=default_visible_rtl_interface_model
+gemm_040_op_00066,dma_weight_load,49,2638,2687,16384,dma_top read path; model=default_visible_rtl_interface_model
 gemm_040_op_00066,mac_datapath_run,2687,427,3114,0,cycle interval from Base FLOOD MAC datapath simulator
-gemm_040_op_00066,dma_output_store,3114,16,3130,64,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_028_op_00067,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_028_op_00067,dma_activation_load,3,94798,94801,589824,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_028_op_00067,dma_weight_load,94801,5930,100731,36864,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+gemm_040_op_00066,dma_output_store,3114,16,3130,64,dma_top write path; model=default_visible_rtl_interface_model
+conv_028_op_00067,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_028_op_00067,dma_activation_load,3,94798,94801,589824,dma_top read path; model=default_visible_rtl_interface_model
+conv_028_op_00067,dma_weight_load,94801,5930,100731,36864,dma_top read path; model=default_visible_rtl_interface_model
 conv_028_op_00067,mac_datapath_run,100731,379200,479931,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_028_op_00067,dma_output_store,479931,10538,490469,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_029_op_00068,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_029_op_00068,dma_activation_load,3,21070,21073,131072,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_029_op_00068,dma_weight_load,21073,1322,22395,8192,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_028_op_00067,dma_output_store,479931,10538,490469,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_029_op_00068,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_029_op_00068,dma_activation_load,3,21070,21073,131072,dma_top read path; model=default_visible_rtl_interface_model
+conv_029_op_00068,dma_weight_load,21073,1322,22395,8192,dma_top read path; model=default_visible_rtl_interface_model
 conv_029_op_00068,mac_datapath_run,22395,13760,36155,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_029_op_00068,dma_output_store,36155,10538,46693,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_030_op_00069,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_030_op_00069,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_030_op_00069,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_029_op_00068,dma_output_store,36155,10538,46693,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_030_op_00069,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_030_op_00069,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+conv_030_op_00069,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_030_op_00069,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_030_op_00069,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_031_op_00080,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_031_op_00080,dma_activation_load,3,10538,10541,65536,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_031_op_00080,dma_weight_load,10541,664,11205,4096,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_030_op_00069,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_031_op_00080,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_031_op_00080,dma_activation_load,3,10538,10541,65536,dma_top read path; model=default_visible_rtl_interface_model
+conv_031_op_00080,dma_weight_load,10541,664,11205,4096,dma_top read path; model=default_visible_rtl_interface_model
 conv_031_op_00080,mac_datapath_run,11205,6976,18181,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_031_op_00080,dma_output_store,18181,10538,28719,65536,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
-conv_032_op_00081,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency
-conv_032_op_00081,dma_activation_load,3,94798,94801,589824,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
-conv_032_op_00081,dma_weight_load,94801,376,95177,2304,dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection
+conv_031_op_00080,dma_output_store,18181,10538,28719,65536,dma_top write path; model=default_visible_rtl_interface_model
+conv_032_op_00081,cpu_config_writes,0,3,3,0,configBus writes from MacMachine_top/FSMDualMode; model=default_visible_rtl_interface_model
+conv_032_op_00081,dma_activation_load,3,94798,94801,589824,dma_top read path; model=default_visible_rtl_interface_model
+conv_032_op_00081,dma_weight_load,94801,376,95177,2304,dma_top read path; model=default_visible_rtl_interface_model
 conv_032_op_00081,mac_datapath_run,95177,209856,305033,0,cycle interval from Base FLOOD MAC datapath simulator
-conv_032_op_00081,dma_output_store,305033,664,305697,4096,dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection
+conv_032_op_00081,dma_output_store,305033,664,305697,4096,dma_top write path; model=default_visible_rtl_interface_model

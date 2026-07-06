@@ -54,6 +54,32 @@ DIRECT_BLOCKED_WORKLOAD_IDS = {
 }
 
 
+@dataclass(frozen=True)
+class SystemModel:
+    name: str
+    dma_data_bytes: int
+    dma_maxburst: int
+    dma_fsm_overhead_cycles: int
+    dma_burst_overhead_cycles: int
+    cpu_config_write_cycles: int
+    mac_config_writes: int
+    system_model_status: str
+    system_model_note: str
+
+
+DEFAULT_SYSTEM_MODEL = SystemModel(
+    name="default_visible_rtl_interface_model",
+    dma_data_bytes=DMA_DATA_BYTES,
+    dma_maxburst=DMA_DEFAULT_MAXBURST,
+    dma_fsm_overhead_cycles=DMA_FSM_OVERHEAD_CYCLES,
+    dma_burst_overhead_cycles=2,
+    cpu_config_write_cycles=CPU_CONFIG_WRITE_CYCLES,
+    mac_config_writes=MAC_CONFIG_WRITES,
+    system_model_status="unvalidated_system_projection",
+    system_model_note="Includes CPU config and DMA/SRAM transfer intervals from visible RTL widths, but not direct full-chip RTL-clean evidence.",
+)
+
+
 def ceil_div(a: int, b: int) -> int:
     return (a + b - 1) // b
 
@@ -67,6 +93,33 @@ def fnum(value: Any) -> float:
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as fh:
         return list(csv.DictReader(fh))
+
+
+def read_system_model(path: Path | None) -> SystemModel:
+    if path is None or not str(path):
+        return DEFAULT_SYSTEM_MODEL
+    rows = read_csv(path)
+    values: dict[str, str] = {}
+    for row in rows:
+        key = row.get("parameter") or row.get("name")
+        value = row.get("calibrated_value") or row.get("value") or row.get("current_value")
+        if key and value not in ("", None, "NA", "MISSING"):
+            values[key] = str(value)
+
+    def get_int(key: str, default: int) -> int:
+        return int(float(values.get(key, default)))
+
+    return SystemModel(
+        name=values.get("system_model_name", path.stem),
+        dma_data_bytes=get_int("dma_data_bytes", DEFAULT_SYSTEM_MODEL.dma_data_bytes),
+        dma_maxburst=get_int("dma_maxburst", DEFAULT_SYSTEM_MODEL.dma_maxburst),
+        dma_fsm_overhead_cycles=get_int("dma_fsm_overhead_cycles", DEFAULT_SYSTEM_MODEL.dma_fsm_overhead_cycles),
+        dma_burst_overhead_cycles=get_int("dma_burst_overhead_cycles", DEFAULT_SYSTEM_MODEL.dma_burst_overhead_cycles),
+        cpu_config_write_cycles=get_int("cpu_config_write_cycles", DEFAULT_SYSTEM_MODEL.cpu_config_write_cycles),
+        mac_config_writes=get_int("mac_config_writes", DEFAULT_SYSTEM_MODEL.mac_config_writes),
+        system_model_status=values.get("system_model_status", "calibrated_or_user_supplied_system_model"),
+        system_model_note=values.get("system_model_note", f"Loaded from {path}"),
+    )
 
 
 def read_numeric_values(path: Path) -> list[float]:
@@ -93,8 +146,15 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
-def write_hardware_profile(out_dir: Path) -> None:
+def write_hardware_profile(out_dir: Path, system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> None:
     rows = [
+        {
+            "parameter": "system_model_name",
+            "value": system_model.name,
+            "unit": "",
+            "source_or_basis": "active system model for this run",
+            "evidence_grade": system_model.system_model_status,
+        },
         {
             "parameter": "process_node",
             "value": "28nm",
@@ -138,35 +198,118 @@ def write_hardware_profile(out_dir: Path) -> None:
             "evidence_grade": "model_assumption",
         },
         {
-            "parameter": "dma_data_width",
-            "value": DMA_DATA_BYTES,
+            "parameter": "dma_data_bytes",
+            "value": system_model.dma_data_bytes,
             "unit": "bytes",
             "source_or_basis": "dma_top 64-bit AXI path",
             "evidence_grade": "rtl_interface_observed",
         },
         {
-            "parameter": "dma_default_maxburst",
-            "value": DMA_DEFAULT_MAXBURST,
+            "parameter": "dma_maxburst",
+            "value": system_model.dma_maxburst,
             "unit": "beats",
-            "source_or_basis": "current conservative DMA model",
-            "evidence_grade": "unvalidated_system_projection",
+            "source_or_basis": "active system model",
+            "evidence_grade": system_model.system_model_status,
         },
         {
-            "parameter": "dma_fsm_overhead",
-            "value": DMA_FSM_OVERHEAD_CYCLES,
+            "parameter": "dma_fsm_overhead_cycles",
+            "value": system_model.dma_fsm_overhead_cycles,
             "unit": "cycles",
-            "source_or_basis": "current conservative DMA model",
-            "evidence_grade": "unvalidated_system_projection",
+            "source_or_basis": "active system model",
+            "evidence_grade": system_model.system_model_status,
+        },
+        {
+            "parameter": "dma_burst_overhead_cycles",
+            "value": system_model.dma_burst_overhead_cycles,
+            "unit": "cycles/burst",
+            "source_or_basis": "active system model",
+            "evidence_grade": system_model.system_model_status,
         },
         {
             "parameter": "mac_config_writes",
-            "value": MAC_CONFIG_WRITES,
+            "value": system_model.mac_config_writes,
             "unit": "writes",
-            "source_or_basis": "MacMachine configuration model",
-            "evidence_grade": "unvalidated_system_projection",
+            "source_or_basis": "active system model",
+            "evidence_grade": system_model.system_model_status,
+        },
+        {
+            "parameter": "cpu_config_write_cycles",
+            "value": system_model.cpu_config_write_cycles,
+            "unit": "cycles/write",
+            "source_or_basis": "active system model",
+            "evidence_grade": system_model.system_model_status,
         },
     ]
     write_csv(out_dir / "hardware_profile.csv", rows)
+
+
+def write_system_model_template(out_dir: Path, system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> None:
+    rows = [
+        {
+            "parameter": "system_model_name",
+            "current_value": system_model.name,
+            "calibrated_value": "",
+            "unit": "",
+            "notes": "Optional name for the active system model.",
+        },
+        {
+            "parameter": "dma_data_bytes",
+            "current_value": system_model.dma_data_bytes,
+            "calibrated_value": "",
+            "unit": "bytes",
+            "notes": "AXI/DMA data width. Keep 8 for 64-bit DMA unless RTL says otherwise.",
+        },
+        {
+            "parameter": "dma_maxburst",
+            "current_value": system_model.dma_maxburst,
+            "calibrated_value": "",
+            "unit": "beats",
+            "notes": "Burst length used by dma_cycles = fsm_overhead + beats + burst_overhead*bursts.",
+        },
+        {
+            "parameter": "dma_fsm_overhead_cycles",
+            "current_value": system_model.dma_fsm_overhead_cycles,
+            "calibrated_value": "",
+            "unit": "cycles",
+            "notes": "Fixed DMA setup/finish overhead per transfer.",
+        },
+        {
+            "parameter": "dma_burst_overhead_cycles",
+            "current_value": system_model.dma_burst_overhead_cycles,
+            "calibrated_value": "",
+            "unit": "cycles/burst",
+            "notes": "Handshake/bookkeeping overhead per burst.",
+        },
+        {
+            "parameter": "cpu_config_write_cycles",
+            "current_value": system_model.cpu_config_write_cycles,
+            "calibrated_value": "",
+            "unit": "cycles/write",
+            "notes": "CPU/configBus write latency.",
+        },
+        {
+            "parameter": "mac_config_writes",
+            "current_value": system_model.mac_config_writes,
+            "calibrated_value": "",
+            "unit": "writes",
+            "notes": "Number of configuration writes before a MAC run.",
+        },
+        {
+            "parameter": "system_model_status",
+            "current_value": system_model.system_model_status,
+            "calibrated_value": "",
+            "unit": "",
+            "notes": "Use full_chip_rtl_calibrated only after system_calibration_summary proves the claimed scope.",
+        },
+        {
+            "parameter": "system_model_note",
+            "current_value": system_model.system_model_note,
+            "calibrated_value": "",
+            "unit": "",
+            "notes": "Short provenance note shown in output rows.",
+        },
+    ]
+    write_csv(out_dir / "system_model_template.csv", rows)
 
 
 @dataclass(frozen=True)
@@ -243,17 +386,17 @@ def shape_bytes(shape: Shape) -> dict[str, int]:
     return {"activation_bytes": activation, "weight_bytes": weight, "output_bytes": output}
 
 
-def dma_cycles(num_bytes: int, maxburst: int = DMA_DEFAULT_MAXBURST) -> int:
+def dma_cycles(num_bytes: int, system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> int:
     if num_bytes <= 0:
         return 0
-    beats = ceil_div(num_bytes, DMA_DATA_BYTES)
-    bursts = ceil_div(beats, max(1, maxburst))
+    beats = ceil_div(num_bytes, system_model.dma_data_bytes)
+    bursts = ceil_div(beats, max(1, system_model.dma_maxburst))
     # One ideal beat per data beat plus request/response bookkeeping per burst.
-    return DMA_FSM_OVERHEAD_CYCLES + beats + 2 * bursts
+    return system_model.dma_fsm_overhead_cycles + beats + system_model.dma_burst_overhead_cycles * bursts
 
 
-def config_cycles(write_count: int = MAC_CONFIG_WRITES) -> int:
-    return max(0, write_count) * CPU_CONFIG_WRITE_CYCLES
+def config_cycles(system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> int:
+    return max(0, system_model.mac_config_writes) * system_model.cpu_config_write_cycles
 
 
 def shape_to_params(workload_id: str, shape: Shape) -> SimParams:
@@ -385,26 +528,26 @@ def simulate_runs(workload_id: str, shape: Shape) -> tuple[list[RunEvent], dict[
     return simulate_params(shape_to_params(workload_id, shape))
 
 
-def simulate_system_events(workload_id: str, shape: Shape, mac_cycles: int) -> tuple[list[SystemEvent], dict[str, Any]]:
+def simulate_system_events(workload_id: str, shape: Shape, mac_cycles: int, system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> tuple[list[SystemEvent], dict[str, Any]]:
     sizes = shape_bytes(shape)
     phases = [
         (
             "cpu_config_writes",
-            config_cycles(),
+            config_cycles(system_model),
             0,
-            "configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency",
+            f"configBus writes from MacMachine_top/FSMDualMode; model={system_model.name}",
         ),
         (
             "dma_activation_load",
-            dma_cycles(sizes["activation_bytes"]),
+            dma_cycles(sizes["activation_bytes"], system_model),
             sizes["activation_bytes"],
-            "dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection",
+            f"dma_top read path; model={system_model.name}",
         ),
         (
             "dma_weight_load",
-            dma_cycles(sizes["weight_bytes"]),
+            dma_cycles(sizes["weight_bytes"], system_model),
             sizes["weight_bytes"],
-            "dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection",
+            f"dma_top read path; model={system_model.name}",
         ),
         (
             "mac_datapath_run",
@@ -414,9 +557,9 @@ def simulate_system_events(workload_id: str, shape: Shape, mac_cycles: int) -> t
         ),
         (
             "dma_output_store",
-            dma_cycles(sizes["output_bytes"]),
+            dma_cycles(sizes["output_bytes"], system_model),
             sizes["output_bytes"],
-            "dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection",
+            f"dma_top write path; model={system_model.name}",
         ),
     ]
     events: list[SystemEvent] = []
@@ -442,18 +585,19 @@ def simulate_system_events(workload_id: str, shape: Shape, mac_cycles: int) -> t
         "output_dma_cycles": phases[4][1],
         "system_total_cycles": cursor,
         "system_latency_us_330mhz": round(cursor / FREQ_MHZ, 6),
-        "system_model_status": "unvalidated_system_projection",
-        "system_model_note": "Includes CPU config and DMA/SRAM transfer intervals from visible RTL widths, but not direct full-chip RTL-clean evidence.",
+        "system_model_name": system_model.name,
+        "system_model_status": system_model.system_model_status,
+        "system_model_note": system_model.system_model_note,
     }
 
 
-def system_prediction_for_row(row: dict[str, str], index: int) -> dict[str, Any]:
+def system_prediction_for_row(row: dict[str, str], index: int, system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> dict[str, Any]:
     wid = row_id(row, index)
     op = row.get("operator", "").lower()
     shape = parse_shape(op, row.get("shape_args", ""))
     events, sim = simulate_runs(wid, shape)
     mac_cycles = int(fnum(sim.get("total_cycles")))
-    _system_events, system = simulate_system_events(wid, shape, mac_cycles)
+    _system_events, system = simulate_system_events(wid, shape, mac_cycles, system_model)
     return {
         "workload_id": wid,
         "operator": op,
@@ -495,12 +639,12 @@ def cycle_error_fields(predicted: float, measured: float | None, prefix: str) ->
     }
 
 
-def build_system_calibration_rows(path: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def build_system_calibration_rows(path: Path, system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     rows = read_csv(path)
     details: list[dict[str, Any]] = []
     for index, row in enumerate(rows):
         try:
-            pred = system_prediction_for_row(row, index)
+            pred = system_prediction_for_row(row, index, system_model)
             measured_config = measured_field(row, "measured_config_cycles", "rtl_config_cycles", "config_cycles")
             measured_activation = measured_field(row, "measured_activation_dma_cycles", "rtl_activation_dma_cycles", "activation_dma_cycles")
             measured_weight = measured_field(row, "measured_weight_dma_cycles", "rtl_weight_dma_cycles", "weight_dma_cycles")
@@ -514,6 +658,8 @@ def build_system_calibration_rows(path: Path) -> tuple[list[dict[str, Any]], lis
                 "rtl_status": row.get("rtl_status", ""),
                 "notes": row.get("notes", ""),
                 "confidence_grade": pred["confidence_grade"],
+                "system_model_name": system_model.name,
+                "system_model_status": system_model.system_model_status,
             }
             for prefix, predicted, measured in [
                 ("config", pred["predicted_config_cycles"], measured_config),
@@ -1051,6 +1197,7 @@ def main() -> None:
     parser.add_argument("--cycle-trace-cap", type=int, default=0)
     parser.add_argument("--rtl-validation", default="", help="Optional direct RTL-clean validation CSV.")
     parser.add_argument("--system-calibration", default="", help="Optional full-chip/system calibration CSV with measured_* cycle columns.")
+    parser.add_argument("--system-model", default="", help="Optional CSV parameter file overriding system DMA/config model constants.")
     parser.add_argument("--include-system", action="store_true", help="Emit unvalidated CPU config + DMA/SRAM system intervals.")
     parser.add_argument("--golden-values", default="", help="Optional golden numeric output file for value checking.")
     parser.add_argument("--rtl-values", default="", help="Optional RTL numeric output file for value checking.")
@@ -1059,6 +1206,7 @@ def main() -> None:
     parser.add_argument("--value-check-only", action="store_true", help="Only run output-value checker.")
     parser.add_argument("--emit-paper-tables", action="store_true", help="Emit plot-oriented paper CSVs with confidence gates.")
     args = parser.parse_args()
+    system_model = read_system_model(Path(args.system_model) if args.system_model else None)
 
     if args.value_check_only:
         out_dir = Path(args.out_dir)
@@ -1071,7 +1219,8 @@ def main() -> None:
         write_csv(out_dir / "value_check_summary.csv", value_summary)
         if value_details:
             write_csv(out_dir / "value_check_details.csv", value_details)
-        write_hardware_profile(out_dir)
+        write_hardware_profile(out_dir, system_model)
+        write_system_model_template(out_dir, system_model)
         print(f"wrote FLOOD value check to {out_dir}")
         return
 
@@ -1083,17 +1232,19 @@ def main() -> None:
         write_csv(out_dir / "rtl_blocked_cases.csv", blocked)
         write_csv(out_dir / "rtl_validation_summary.csv", summary)
         write_csv(out_dir / "rtl_validation_intervals.csv", intervals)
-        write_hardware_profile(out_dir)
+        write_hardware_profile(out_dir, system_model)
+        write_system_model_template(out_dir, system_model)
         write_validation_readme(out_dir, summary)
         print(f"wrote FLOOD cycle simulator RTL validation to {out_dir}")
         return
 
     if args.system_calibration:
         out_dir = Path(args.out_dir)
-        details, summary = build_system_calibration_rows(Path(args.system_calibration))
+        details, summary = build_system_calibration_rows(Path(args.system_calibration), system_model)
         write_csv(out_dir / "system_calibration_details.csv", details)
         write_csv(out_dir / "system_calibration_summary.csv", summary)
-        write_hardware_profile(out_dir)
+        write_hardware_profile(out_dir, system_model)
+        write_system_model_template(out_dir, system_model)
         print(f"wrote FLOOD system calibration report to {out_dir}")
         return
 
@@ -1128,7 +1279,7 @@ def main() -> None:
             out["model_scope"] = "Base FLOOD MAC path; no softmax/sparsity/zero-skip innovation modeled"
             interval_rows.extend(event_to_row(event) for event in events)
             if args.include_system:
-                system_events, system = simulate_system_events(wid, shape, int(flood_cycles))
+                system_events, system = simulate_system_events(wid, shape, int(flood_cycles), system_model)
                 out.update(system)
                 system_cycles = fnum(out.get("system_total_cycles"))
                 out["system_speedup_vs_pytorchsim_cycles"] = round(base / system_cycles, 6) if base and system_cycles else ""
@@ -1140,7 +1291,8 @@ def main() -> None:
 
     write_csv(out_dir / "workload_summary.csv", summary)
     write_csv(out_dir / "cycle_intervals.csv", interval_rows)
-    write_hardware_profile(out_dir)
+    write_hardware_profile(out_dir, system_model)
+    write_system_model_template(out_dir, system_model)
     value_summary, value_details = build_value_check(
         Path(args.golden_values) if args.golden_values else None,
         Path(args.rtl_values) if args.rtl_values else None,

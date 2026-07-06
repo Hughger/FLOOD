@@ -1,0 +1,33 @@
+param(
+    [string]$Python = "C:\Users\98676\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe",
+    [string]$OutDir = "results\flood_cycle_sim_v1"
+)
+
+$ErrorActionPreference = "Stop"
+if ($PSVersionTable.PSVersion.Major -ge 7) {
+    $PSNativeCommandUseErrorActionPreference = $true
+}
+
+$searchRoots = Get-ChildItem -Path . -Directory -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -notin @("FLOOD", "PyTorchSim", ".git", "_gitdir", "tmp") }
+$person2 = $searchRoots |
+    ForEach-Object { Get-ChildItem -Path $_.FullName -Recurse -Filter person2_pytorchsim_transformer.csv -ErrorAction SilentlyContinue } |
+    Select-Object -First 1
+if (-not $person2) {
+    throw "Cannot find person2_pytorchsim_transformer.csv under current workspace."
+}
+
+& $Python flood_local\flood_cycle_sim.py `
+    --out-dir "$OutDir\rtl_validation" `
+    --rtl-validation results\flood_pytorchsim_backend_v1\workload_direct_rtl_validation_v1\workload_direct_validation_details.csv
+
+& $Python flood_local\flood_cycle_sim.py `
+    --input $person2.FullName `
+    --out-dir "$OutDir\person2_gemm" `
+    --cycle-trace-cap 2000
+
+& $Python flood_local\flood_cycle_sim.py `
+    --input results\synthetic_unet_trace_v1\synthetic_unet_workload_from_trace_v1.csv `
+    --out-dir "$OutDir\synthetic_unet_trace"
+
+Write-Host "FLOOD cycle simulator regression finished: $OutDir"

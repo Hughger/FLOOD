@@ -1,0 +1,2 @@
+rtl_clean_cases,passed_cases,failed_cases,pass_rate_percent,max_abs_cycle_error,validation_scope
+6,6,0,100.0,0,direct RTL-clean MAC datapath cases only

@@ -18,6 +18,8 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -65,6 +67,17 @@ def fnum(value: Any) -> float:
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as fh:
         return list(csv.DictReader(fh))
+
+
+def read_numeric_values(path: Path) -> list[float]:
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    values: list[float] = []
+    for token in re.findall(r"[-+]?(?:0x[0-9a-fA-F]+|\d*\.\d+|\d+)(?:[eE][-+]?\d+)?", text):
+        try:
+            values.append(float(int(token, 16)) if token.lower().startswith(("0x", "+0x", "-0x")) else float(token))
+        except ValueError:
+            continue
+    return values
 
 
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -469,6 +482,94 @@ def summarize_validation(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
+def build_value_check(golden_path: Path | None, rtl_path: Path | None, rtol: float, atol: float) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    if golden_path is None or rtl_path is None:
+        return (
+            [
+                {
+                    "value_check_status": "missing_evidence",
+                    "golden_path": str(golden_path or ""),
+                    "rtl_output_path": str(rtl_path or ""),
+                    "num_values": 0,
+                    "num_mismatches": "MISSING",
+                    "max_abs_error": "MISSING",
+                    "max_rel_error": "MISSING",
+                    "note": "Provide both --golden-values and --rtl-values to validate output correctness.",
+                }
+            ],
+            [],
+        )
+    if not golden_path.exists() or not rtl_path.exists():
+        return (
+            [
+                {
+                    "value_check_status": "missing_file",
+                    "golden_path": str(golden_path),
+                    "rtl_output_path": str(rtl_path),
+                    "num_values": 0,
+                    "num_mismatches": "MISSING",
+                    "max_abs_error": "MISSING",
+                    "max_rel_error": "MISSING",
+                    "note": "At least one value file does not exist.",
+                }
+            ],
+            [],
+        )
+
+    golden = read_numeric_values(golden_path)
+    rtl = read_numeric_values(rtl_path)
+    details: list[dict[str, Any]] = []
+    mismatches = 0
+    max_abs = 0.0
+    max_rel = 0.0
+    n = min(len(golden), len(rtl))
+    for idx in range(n):
+        g = golden[idx]
+        r = rtl[idx]
+        abs_err = abs(g - r)
+        rel_err = abs_err / max(abs(g), 1e-12)
+        max_abs = max(max_abs, abs_err)
+        max_rel = max(max_rel, rel_err)
+        passed = math.isclose(g, r, rel_tol=rtol, abs_tol=atol)
+        if not passed:
+            mismatches += 1
+            if len(details) < 100:
+                details.append(
+                    {
+                        "index": idx,
+                        "golden": g,
+                        "rtl": r,
+                        "abs_error": abs_err,
+                        "rel_error": rel_err,
+                        "status": "mismatch",
+                    }
+                )
+    length_mismatch = len(golden) != len(rtl)
+    if length_mismatch:
+        mismatches += abs(len(golden) - len(rtl))
+    status = "pass" if mismatches == 0 else "fail"
+    return (
+        [
+            {
+                "value_check_status": status,
+                "golden_path": str(golden_path),
+                "rtl_output_path": str(rtl_path),
+                "golden_values": len(golden),
+                "rtl_values": len(rtl),
+                "compared_values": n,
+                "length_mismatch": length_mismatch,
+                "num_mismatches": mismatches,
+                "max_abs_error": max_abs,
+                "max_rel_error": max_rel,
+                "rtol": rtol,
+                "atol": atol,
+                "note": "Numeric token comparison; file format is not semantically parsed.",
+            }
+        ],
+        details,
+    )
+
+
 def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_cap: int) -> None:
     grades: dict[str, int] = {}
     for row in summary_rows:
@@ -492,6 +593,7 @@ def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_
         "- `workload_summary.csv`: one row per workload, including FLOOD cycles, latency, speedup, and confidence grade.",
         "- `cycle_intervals.csv`: compressed cycle-level state intervals for each workload.",
         "- `system_intervals.csv`: optional CPU config + DMA + MAC top-level intervals when `--include-system` is enabled.",
+        "- `value_check_summary.csv`: output-value correctness status, emitted as missing_evidence unless golden and RTL value files are provided.",
         "- `cycle_trace.csv`: optional per-cycle trace, emitted only when `--cycle-trace-cap` is nonzero.",
         "",
         "## Confidence summary",
@@ -542,7 +644,26 @@ def main() -> None:
     parser.add_argument("--cycle-trace-cap", type=int, default=0)
     parser.add_argument("--rtl-validation", default="", help="Optional direct RTL-clean validation CSV.")
     parser.add_argument("--include-system", action="store_true", help="Emit unvalidated CPU config + DMA/SRAM system intervals.")
+    parser.add_argument("--golden-values", default="", help="Optional golden numeric output file for value checking.")
+    parser.add_argument("--rtl-values", default="", help="Optional RTL numeric output file for value checking.")
+    parser.add_argument("--value-rtol", type=float, default=0.0)
+    parser.add_argument("--value-atol", type=float, default=0.0)
+    parser.add_argument("--value-check-only", action="store_true", help="Only run output-value checker.")
     args = parser.parse_args()
+
+    if args.value_check_only:
+        out_dir = Path(args.out_dir)
+        value_summary, value_details = build_value_check(
+            Path(args.golden_values) if args.golden_values else None,
+            Path(args.rtl_values) if args.rtl_values else None,
+            args.value_rtol,
+            args.value_atol,
+        )
+        write_csv(out_dir / "value_check_summary.csv", value_summary)
+        if value_details:
+            write_csv(out_dir / "value_check_details.csv", value_details)
+        print(f"wrote FLOOD value check to {out_dir}")
+        return
 
     if args.rtl_validation:
         out_dir = Path(args.out_dir)
@@ -598,6 +719,15 @@ def main() -> None:
 
     write_csv(out_dir / "workload_summary.csv", summary)
     write_csv(out_dir / "cycle_intervals.csv", interval_rows)
+    value_summary, value_details = build_value_check(
+        Path(args.golden_values) if args.golden_values else None,
+        Path(args.rtl_values) if args.rtl_values else None,
+        args.value_rtol,
+        args.value_atol,
+    )
+    write_csv(out_dir / "value_check_summary.csv", value_summary)
+    if value_details:
+        write_csv(out_dir / "value_check_details.csv", value_details)
     if args.include_system:
         write_csv(out_dir / "system_intervals.csv", system_interval_rows)
     if args.cycle_trace_cap:

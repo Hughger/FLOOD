@@ -1,0 +1,2 @@
+index,golden,rtl,abs_error,rel_error,status
+4,5.0,6.0,1.0,0.2,mismatch

@@ -32,4 +32,16 @@ if (-not $person2) {
     --out-dir "$OutDir\synthetic_unet_trace" `
     --include-system
 
+& $Python flood_local\flood_cycle_sim.py `
+    --out-dir "$OutDir\value_checker_smoke\pass_case" `
+    --value-check-only `
+    --golden-values "$OutDir\value_checker_smoke\golden_values.txt" `
+    --rtl-values "$OutDir\value_checker_smoke\rtl_values_pass.txt"
+
+& $Python flood_local\flood_cycle_sim.py `
+    --out-dir "$OutDir\value_checker_smoke\fail_case" `
+    --value-check-only `
+    --golden-values "$OutDir\value_checker_smoke\golden_values.txt" `
+    --rtl-values "$OutDir\value_checker_smoke\rtl_values_fail.txt"
+
 Write-Host "FLOOD cycle simulator regression finished: $OutDir"

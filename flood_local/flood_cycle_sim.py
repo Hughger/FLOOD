@@ -422,13 +422,34 @@ def cycle_list(events: list[RunEvent]) -> str:
     return ";".join(str(event.duration_cycles) for event in events)
 
 
-def build_rtl_validation_rows(path: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def build_rtl_validation_rows(path: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     rows = read_csv(path)
     details: list[dict[str, Any]] = []
+    blocked: list[dict[str, Any]] = []
     intervals: list[dict[str, Any]] = []
     for index, row in enumerate(rows):
         status = row.get("direct_status") or row.get("status") or ""
         if status != "rtl_clean_direct":
+            if status:
+                blocked.append(
+                    {
+                        "case": row.get("case", ""),
+                        "workload_id": row.get("workload_id", ""),
+                        "operator": row.get("operator", ""),
+                        "workmode": row.get("workmode", ""),
+                        "k": row.get("k", ""),
+                        "cout": row.get("cout", ""),
+                        "cin_idx_total": row.get("cin_idx_total", ""),
+                        "spatial_points": row.get("spatial_points", ""),
+                        "direct_status": status,
+                        "projected_group16_v7_cycles": row.get("projected_group16_v7_cycles", ""),
+                        "x_count": row.get("x_count", ""),
+                        "zero_cycles": row.get("zero_cycles", ""),
+                        "observed_cycle_prefix": row.get("cycle_list", ""),
+                        "blocked_reason": row.get("blocked_reason", ""),
+                        "paper_use_policy": "exclude_from_main_performance_tables",
+                    }
+                )
             continue
         params = SimParams(
             workload_id=row.get("workload_id") or row.get("case") or f"rtl_case_{index}",
@@ -463,10 +484,11 @@ def build_rtl_validation_rows(path: Path) -> tuple[list[dict[str, Any]], list[di
             }
         )
         intervals.extend(event_to_row(event) for event in events)
-    return details, intervals
+    return details, blocked, intervals
 
 
-def summarize_validation(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def summarize_validation(rows: list[dict[str, Any]], blocked_rows: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    blocked_rows = blocked_rows or []
     total = len(rows)
     passed = sum(1 for row in rows if row.get("validation_status") == "pass")
     max_abs_error = max((abs(int(row["cycle_error"])) for row in rows), default=0)
@@ -475,9 +497,12 @@ def summarize_validation(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "rtl_clean_cases": total,
             "passed_cases": passed,
             "failed_cases": total - passed,
+            "direct_blocked_cases": len(blocked_rows),
+            "blocked_x_cases": sum(1 for row in blocked_rows if fnum(row.get("x_count")) > 0),
+            "blocked_zero_cycle_cases": sum(1 for row in blocked_rows if fnum(row.get("zero_cycles")) > 0),
             "pass_rate_percent": round(passed / total * 100.0, 4) if total else 0.0,
             "max_abs_cycle_error": max_abs_error,
-            "validation_scope": "direct RTL-clean MAC datapath cases only",
+            "validation_scope": "direct RTL-clean MAC datapath cases plus explicit blocked-case exclusion list",
         }
     ]
 
@@ -625,13 +650,17 @@ def write_validation_readme(out_dir: Path, summary: list[dict[str, Any]]) -> Non
         f"- rtl_clean_cases: {row.get('rtl_clean_cases', 0)}",
         f"- passed_cases: {row.get('passed_cases', 0)}",
         f"- failed_cases: {row.get('failed_cases', 0)}",
+        f"- direct_blocked_cases: {row.get('direct_blocked_cases', 0)}",
+        f"- blocked_x_cases: {row.get('blocked_x_cases', 0)}",
+        f"- blocked_zero_cycle_cases: {row.get('blocked_zero_cycle_cases', 0)}",
         f"- pass_rate_percent: {row.get('pass_rate_percent', 0)}",
         f"- max_abs_cycle_error: {row.get('max_abs_cycle_error', 0)}",
         "",
         "## Scope",
         "",
         "This validates the modeled MAC-machine run timing against direct RTL-clean evidence only.",
-        "It does not validate DMA, CPU software control, SRAM data correctness, softmax, sparsity, zero-skip, or large blocked-X workload cases.",
+        "Blocked direct RTL attempts are listed separately and excluded from paper main performance tables.",
+        "It does not validate DMA, CPU software control, SRAM data correctness, softmax, sparsity, or zero-skip.",
         "",
     ]
     out_dir.joinpath("README.md").write_text("\n".join(lines), encoding="utf-8")
@@ -667,9 +696,10 @@ def main() -> None:
 
     if args.rtl_validation:
         out_dir = Path(args.out_dir)
-        details, intervals = build_rtl_validation_rows(Path(args.rtl_validation))
-        summary = summarize_validation(details)
+        details, blocked, intervals = build_rtl_validation_rows(Path(args.rtl_validation))
+        summary = summarize_validation(details, blocked)
         write_csv(out_dir / "rtl_validation_details.csv", details)
+        write_csv(out_dir / "rtl_blocked_cases.csv", blocked)
         write_csv(out_dir / "rtl_validation_summary.csv", summary)
         write_csv(out_dir / "rtl_validation_intervals.csv", intervals)
         write_validation_readme(out_dir, summary)

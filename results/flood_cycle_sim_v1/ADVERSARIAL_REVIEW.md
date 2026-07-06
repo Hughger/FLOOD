@@ -27,6 +27,9 @@
 - direct RTL-clean cases: 6
 - passed cases: 6
 - failed cases: 0
+- direct RTL blocked cases: 5
+- blocked cases with X: 5
+- blocked cases with zero-cycle behavior: 1
 - pass rate: 100%
 - max absolute cycle error: 0
 
@@ -40,6 +43,7 @@
 
 - `results/flood_cycle_sim_v1/rtl_validation/rtl_validation_summary.csv`
 - `results/flood_cycle_sim_v1/rtl_validation/rtl_validation_details.csv`
+- `results/flood_cycle_sim_v1/rtl_validation/rtl_blocked_cases.csv`
 - `results/flood_cycle_sim_v1/value_checker_smoke/pass_case/value_check_summary.csv`
 - `results/flood_cycle_sim_v1/value_checker_smoke/fail_case/value_check_summary.csv`
 
@@ -52,6 +56,7 @@
 3. 每条 workload 都带 `confidence_grade`，避免把 projection、blocked RTL、direct RTL-clean 混为同等级数据。
 4. 可以输出未校准系统层区间，用于暴露 DMA/配置开销风险。
 5. 可以在提供 golden/RTL 输出文件时执行数值正确性比较。
+6. direct RTL blocked 样本会自动进入 `rtl_blocked_cases.csv`，并标记为 `exclude_from_main_performance_tables`。
 
 ## 不能主张什么
 
@@ -69,7 +74,7 @@
 | 风险 | 严重性 | 说明 | 当前处理 |
 |---|---:|---|---|
 | 误把 calibrated projection 当 direct RTL | 高 | 大部分 workload 不是逐条 RTL-clean | 输出 `confidence_grade` |
-| blocked-X 样本被误用 | 高 | 部分大 spatial/multi-Cin 样本出现 X 或 0-cycle | 标为 D 级 |
+| blocked-X 样本被误用 | 高 | 当前 direct RTL 尝试中已有 5 个 blocked case，全部有 X，其中 1 个有 0-cycle | 进入 `rtl_blocked_cases.csv`，标为排除 |
 | 缺少真实 workload 输出值正确性 | 高 | checker 已有，但 person2/synthetic workload 还没有接入 golden/RTL 输出文件 | `value_check_status=missing_evidence` |
 | DMA/CPU/AXI 未完成 direct full-chip 校准 | 高 | 当前系统层只基于 RTL 接口宽度和 DMA 结构保守建模 | `system_model_status=unvalidated_system_projection` |
 | 创新机制未建模 | 高 | softmax/稀疏/跳零/outlier 不在当前 Base RTL clean 证据里 | 不用于创新机制主张 |

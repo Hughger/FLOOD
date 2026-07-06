@@ -16,6 +16,7 @@ It is not yet a full-chip RTL replacement: DMA, CPU control software, SRAM conte
 - `workload_summary.csv`: one row per workload, including FLOOD cycles, latency, speedup, and confidence grade.
 - `cycle_intervals.csv`: compressed cycle-level state intervals for each workload.
 - `system_intervals.csv`: optional CPU config + DMA + MAC top-level intervals when `--include-system` is enabled.
+- `hardware_profile.csv`: explicit hardware constants and evidence grade used by this run.
 - `value_check_summary.csv`: output-value correctness status, emitted as missing_evidence unless golden and RTL value files are provided.
 - `paper_tables/`: optional plot-oriented CSVs with explicit paper-use policy when `--emit-paper-tables` is enabled.
 - `cycle_trace.csv`: optional per-cycle trace, emitted only when `--cycle-trace-cap` is nonzero.

@@ -93,6 +93,82 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
+def write_hardware_profile(out_dir: Path) -> None:
+    rows = [
+        {
+            "parameter": "process_node",
+            "value": "28nm",
+            "unit": "",
+            "source_or_basis": "user-provided FLOOD ASIC assumption",
+            "evidence_grade": "assumption_for_all_reported_latency",
+        },
+        {
+            "parameter": "frequency",
+            "value": FREQ_MHZ,
+            "unit": "MHz",
+            "source_or_basis": "user-provided FLOOD ASIC assumption",
+            "evidence_grade": "assumption_for_all_reported_latency",
+        },
+        {
+            "parameter": "tile_rows",
+            "value": TILE_ROWS,
+            "unit": "rows",
+            "source_or_basis": "current Base FLOOD MAC datapath model",
+            "evidence_grade": "calibrated_against_direct_rtl_clean_cases",
+        },
+        {
+            "parameter": "reduction_block",
+            "value": REDUCTION_BLOCK,
+            "unit": "channels",
+            "source_or_basis": "current Base FLOOD MAC datapath model",
+            "evidence_grade": "calibrated_against_direct_rtl_clean_cases",
+        },
+        {
+            "parameter": "output_block",
+            "value": OUTPUT_BLOCK,
+            "unit": "channels",
+            "source_or_basis": "current Base FLOOD MAC datapath model",
+            "evidence_grade": "calibrated_against_direct_rtl_clean_cases",
+        },
+        {
+            "parameter": "data_width",
+            "value": DATA_WIDTH_BYTES,
+            "unit": "bytes",
+            "source_or_basis": "current simulator assumes int8-equivalent traffic for base path",
+            "evidence_grade": "model_assumption",
+        },
+        {
+            "parameter": "dma_data_width",
+            "value": DMA_DATA_BYTES,
+            "unit": "bytes",
+            "source_or_basis": "dma_top 64-bit AXI path",
+            "evidence_grade": "rtl_interface_observed",
+        },
+        {
+            "parameter": "dma_default_maxburst",
+            "value": DMA_DEFAULT_MAXBURST,
+            "unit": "beats",
+            "source_or_basis": "current conservative DMA model",
+            "evidence_grade": "unvalidated_system_projection",
+        },
+        {
+            "parameter": "dma_fsm_overhead",
+            "value": DMA_FSM_OVERHEAD_CYCLES,
+            "unit": "cycles",
+            "source_or_basis": "current conservative DMA model",
+            "evidence_grade": "unvalidated_system_projection",
+        },
+        {
+            "parameter": "mac_config_writes",
+            "value": MAC_CONFIG_WRITES,
+            "unit": "writes",
+            "source_or_basis": "MacMachine configuration model",
+            "evidence_grade": "unvalidated_system_projection",
+        },
+    ]
+    write_csv(out_dir / "hardware_profile.csv", rows)
+
+
 @dataclass(frozen=True)
 class Shape:
     m: int
@@ -767,6 +843,7 @@ def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_
         "- `workload_summary.csv`: one row per workload, including FLOOD cycles, latency, speedup, and confidence grade.",
         "- `cycle_intervals.csv`: compressed cycle-level state intervals for each workload.",
         "- `system_intervals.csv`: optional CPU config + DMA + MAC top-level intervals when `--include-system` is enabled.",
+        "- `hardware_profile.csv`: explicit hardware constants and evidence grade used by this run.",
         "- `value_check_summary.csv`: output-value correctness status, emitted as missing_evidence unless golden and RTL value files are provided.",
         "- `paper_tables/`: optional plot-oriented CSVs with explicit paper-use policy when `--emit-paper-tables` is enabled.",
         "- `cycle_trace.csv`: optional per-cycle trace, emitted only when `--cycle-trace-cap` is nonzero.",
@@ -842,6 +919,7 @@ def main() -> None:
         write_csv(out_dir / "value_check_summary.csv", value_summary)
         if value_details:
             write_csv(out_dir / "value_check_details.csv", value_details)
+        write_hardware_profile(out_dir)
         print(f"wrote FLOOD value check to {out_dir}")
         return
 
@@ -853,6 +931,7 @@ def main() -> None:
         write_csv(out_dir / "rtl_blocked_cases.csv", blocked)
         write_csv(out_dir / "rtl_validation_summary.csv", summary)
         write_csv(out_dir / "rtl_validation_intervals.csv", intervals)
+        write_hardware_profile(out_dir)
         write_validation_readme(out_dir, summary)
         print(f"wrote FLOOD cycle simulator RTL validation to {out_dir}")
         return
@@ -900,6 +979,7 @@ def main() -> None:
 
     write_csv(out_dir / "workload_summary.csv", summary)
     write_csv(out_dir / "cycle_intervals.csv", interval_rows)
+    write_hardware_profile(out_dir)
     value_summary, value_details = build_value_check(
         Path(args.golden_values) if args.golden_values else None,
         Path(args.rtl_values) if args.rtl_values else None,

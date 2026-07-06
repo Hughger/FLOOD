@@ -1,0 +1,2 @@
+workload_id,log_file
+log_smoke_gemm,results/flood_cycle_sim_v1/system_log_parse_smoke/log_smoke_gemm.log

@@ -193,3 +193,25 @@ smoke 结果：
 - 建议值保持 `dma_fsm_overhead_cycles=4`、`dma_burst_overhead_cycles=2`、`cpu_config_write_cycles=1`
 
 严格结论：这一步补齐了“真实 RTL 测量 -> 生成候选 system model -> 重新校准”的自动化路径。但候选模型必须再次跑 `--system-calibration` 并通过目标范围的 mismatch gate 后，才能升级为论文主表依据。
+
+## 2026-07-06 更新：RTL/testbench log 解析入口
+
+本轮加入 `flood_local/parse_system_calibration_logs.py`，用于把 RTL/testbench 日志自动转成 `--system-calibration` 可读的 CSV。
+
+推荐日志标记：
+- `FLOOD_CONFIG_CYCLES`
+- `FLOOD_ACTIVATION_DMA_CYCLES`
+- `FLOOD_WEIGHT_DMA_CYCLES`
+- `FLOOD_MAC_CYCLES`
+- `FLOOD_OUTPUT_DMA_CYCLES`
+- `FLOOD_SYSTEM_TOTAL_CYCLES`
+- `FLOOD_RTL_STATUS`
+
+smoke 路径：
+- 输入模板：`results/flood_cycle_sim_v1/system_log_parse_smoke/template.csv`
+- 日志映射：`results/flood_cycle_sim_v1/system_log_parse_smoke/log_map.csv`
+- 示例日志：`results/flood_cycle_sim_v1/system_log_parse_smoke/log_smoke_gemm.log`
+- 解析输出：`results/flood_cycle_sim_v1/system_log_parse_smoke/parsed_system_calibration.csv`
+- 校准结果：1 measured row, 1 pass, 0 mismatch。
+
+严格结论：现在 full-chip RTL/testbench 只要打印上述标记，就可以自动进入 simulator 校准 gate，不需要手工填写 measured cycle 字段。没有这些分阶段标记时，工具不会假装已经完成 phase-level 校准。

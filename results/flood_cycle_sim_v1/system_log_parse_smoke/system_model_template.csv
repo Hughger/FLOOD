@@ -1,0 +1,10 @@
+parameter,current_value,calibrated_value,unit,notes
+system_model_name,default_visible_rtl_interface_model,,,Optional name for the active system model.
+dma_data_bytes,8,,bytes,AXI/DMA data width. Keep 8 for 64-bit DMA unless RTL says otherwise.
+dma_maxburst,7,,beats,Burst length used by dma_cycles = fsm_overhead + beats + burst_overhead*bursts.
+dma_fsm_overhead_cycles,4,,cycles,Fixed DMA setup/finish overhead per transfer.
+dma_burst_overhead_cycles,2,,cycles/burst,Handshake/bookkeeping overhead per burst.
+cpu_config_write_cycles,1,,cycles/write,CPU/configBus write latency.
+mac_config_writes,3,,writes,Number of configuration writes before a MAC run.
+system_model_status,unvalidated_system_projection,,,Use full_chip_rtl_calibrated only after system_calibration_summary proves the claimed scope.
+system_model_note,"Includes CPU config and DMA/SRAM transfer intervals from visible RTL widths, but not direct full-chip RTL-clean evidence.",,,Short provenance note shown in output rows.

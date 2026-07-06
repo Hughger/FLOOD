@@ -39,6 +39,15 @@ if (-not $person2) {
     --system-calibration "$OutDir\system_calibration_smoke\system_calibration_input.csv" `
     --system-model "$OutDir\system_calibration_smoke\system_model_input.csv"
 
+& $Python flood_local\parse_system_calibration_logs.py `
+    --template "$OutDir\system_log_parse_smoke\template.csv" `
+    --log-map "$OutDir\system_log_parse_smoke\log_map.csv" `
+    --out "$OutDir\system_log_parse_smoke\parsed_system_calibration.csv"
+
+& $Python flood_local\flood_cycle_sim.py `
+    --out-dir "$OutDir\system_log_parse_smoke" `
+    --system-calibration "$OutDir\system_log_parse_smoke\parsed_system_calibration.csv"
+
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\value_checker_smoke\pass_case" `
     --value-check-only `

@@ -27,6 +27,12 @@ FREQ_MHZ = 330.0
 TILE_ROWS = 16
 REDUCTION_BLOCK = 32
 OUTPUT_BLOCK = 32
+DATA_WIDTH_BYTES = 1
+DMA_DATA_BYTES = 8
+DMA_DEFAULT_MAXBURST = 7
+DMA_FSM_OVERHEAD_CYCLES = 4
+CPU_CONFIG_WRITE_CYCLES = 1
+MAC_CONFIG_WRITES = 3
 
 DIRECT_CLEAN_WORKLOAD_IDS = {
     "trace_gemm_001",
@@ -84,6 +90,17 @@ class Shape:
 
 
 @dataclass(frozen=True)
+class SystemEvent:
+    workload_id: str
+    phase: str
+    start_cycle: int
+    duration_cycles: int
+    end_cycle_exclusive: int
+    bytes_moved: int
+    rule: str
+
+
+@dataclass(frozen=True)
 class RunEvent:
     workload_id: str
     spatial_idx: int
@@ -128,6 +145,26 @@ def row_id(row: dict[str, str], index: int) -> str:
 
 def baseline_cycles(row: dict[str, str]) -> float:
     return fnum(row.get("pytorchsim_cycles") or row.get("total_cycles") or row.get("baseline_cycles"))
+
+
+def shape_bytes(shape: Shape) -> dict[str, int]:
+    weight = shape.reduction * shape.n * DATA_WIDTH_BYTES
+    activation = shape.m * shape.reduction * DATA_WIDTH_BYTES
+    output = shape.m * shape.n * DATA_WIDTH_BYTES
+    return {"activation_bytes": activation, "weight_bytes": weight, "output_bytes": output}
+
+
+def dma_cycles(num_bytes: int, maxburst: int = DMA_DEFAULT_MAXBURST) -> int:
+    if num_bytes <= 0:
+        return 0
+    beats = ceil_div(num_bytes, DMA_DATA_BYTES)
+    bursts = ceil_div(beats, max(1, maxburst))
+    # One ideal beat per data beat plus request/response bookkeeping per burst.
+    return DMA_FSM_OVERHEAD_CYCLES + beats + 2 * bursts
+
+
+def config_cycles(write_count: int = MAC_CONFIG_WRITES) -> int:
+    return max(0, write_count) * CPU_CONFIG_WRITE_CYCLES
 
 
 def shape_to_params(workload_id: str, shape: Shape) -> SimParams:
@@ -259,6 +296,68 @@ def simulate_runs(workload_id: str, shape: Shape) -> tuple[list[RunEvent], dict[
     return simulate_params(shape_to_params(workload_id, shape))
 
 
+def simulate_system_events(workload_id: str, shape: Shape, mac_cycles: int) -> tuple[list[SystemEvent], dict[str, Any]]:
+    sizes = shape_bytes(shape)
+    phases = [
+        (
+            "cpu_config_writes",
+            config_cycles(),
+            0,
+            "configBus writes from MacMachine_top/FSMDualMode; unvalidated fixed write latency",
+        ),
+        (
+            "dma_activation_load",
+            dma_cycles(sizes["activation_bytes"]),
+            sizes["activation_bytes"],
+            "dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection",
+        ),
+        (
+            "dma_weight_load",
+            dma_cycles(sizes["weight_bytes"]),
+            sizes["weight_bytes"],
+            "dma_top 64-bit AXI read path; ideal ready/valid; unvalidated system projection",
+        ),
+        (
+            "mac_datapath_run",
+            mac_cycles,
+            0,
+            "cycle interval from Base FLOOD MAC datapath simulator",
+        ),
+        (
+            "dma_output_store",
+            dma_cycles(sizes["output_bytes"]),
+            sizes["output_bytes"],
+            "dma_top 64-bit AXI write path; ideal ready/valid; unvalidated system projection",
+        ),
+    ]
+    events: list[SystemEvent] = []
+    cursor = 0
+    for phase, duration, bytes_moved, rule in phases:
+        events.append(
+            SystemEvent(
+                workload_id=workload_id,
+                phase=phase,
+                start_cycle=cursor,
+                duration_cycles=duration,
+                end_cycle_exclusive=cursor + duration,
+                bytes_moved=bytes_moved,
+                rule=rule,
+            )
+        )
+        cursor += duration
+    return events, {
+        **sizes,
+        "config_cycles": phases[0][1],
+        "activation_dma_cycles": phases[1][1],
+        "weight_dma_cycles": phases[2][1],
+        "output_dma_cycles": phases[4][1],
+        "system_total_cycles": cursor,
+        "system_latency_us_330mhz": round(cursor / FREQ_MHZ, 6),
+        "system_model_status": "unvalidated_system_projection",
+        "system_model_note": "Includes CPU config and DMA/SRAM transfer intervals from visible RTL widths, but not direct full-chip RTL-clean evidence.",
+    }
+
+
 def event_to_row(event: RunEvent) -> dict[str, Any]:
     return {
         "workload_id": event.workload_id,
@@ -268,6 +367,18 @@ def event_to_row(event: RunEvent) -> dict[str, Any]:
         "start_cycle": event.start_cycle,
         "duration_cycles": event.duration_cycles,
         "end_cycle_exclusive": event.end_cycle_exclusive,
+        "rule": event.rule,
+    }
+
+
+def system_event_to_row(event: SystemEvent) -> dict[str, Any]:
+    return {
+        "workload_id": event.workload_id,
+        "phase": event.phase,
+        "start_cycle": event.start_cycle,
+        "duration_cycles": event.duration_cycles,
+        "end_cycle_exclusive": event.end_cycle_exclusive,
+        "bytes_moved": event.bytes_moved,
         "rule": event.rule,
     }
 
@@ -380,6 +491,7 @@ def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_
         "",
         "- `workload_summary.csv`: one row per workload, including FLOOD cycles, latency, speedup, and confidence grade.",
         "- `cycle_intervals.csv`: compressed cycle-level state intervals for each workload.",
+        "- `system_intervals.csv`: optional CPU config + DMA + MAC top-level intervals when `--include-system` is enabled.",
         "- `cycle_trace.csv`: optional per-cycle trace, emitted only when `--cycle-trace-cap` is nonzero.",
         "",
         "## Confidence summary",
@@ -429,6 +541,7 @@ def main() -> None:
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--cycle-trace-cap", type=int, default=0)
     parser.add_argument("--rtl-validation", default="", help="Optional direct RTL-clean validation CSV.")
+    parser.add_argument("--include-system", action="store_true", help="Emit unvalidated CPU config + DMA/SRAM system intervals.")
     args = parser.parse_args()
 
     if args.rtl_validation:
@@ -449,6 +562,7 @@ def main() -> None:
     out_dir = Path(args.out_dir)
     summary: list[dict[str, Any]] = []
     interval_rows: list[dict[str, Any]] = []
+    system_interval_rows: list[dict[str, Any]] = []
     cycle_rows: list[dict[str, Any]] = []
 
     for index, row in enumerate(rows):
@@ -467,9 +581,16 @@ def main() -> None:
             events, sim = simulate_runs(wid, shape)
             out.update(sim)
             flood_cycles = fnum(out.get("total_cycles"))
+            out["mac_total_cycles"] = int(flood_cycles) if flood_cycles else ""
             out["speedup_vs_pytorchsim_cycles"] = round(base / flood_cycles, 6) if base and flood_cycles else ""
             out["model_scope"] = "Base FLOOD MAC path; no softmax/sparsity/zero-skip innovation modeled"
             interval_rows.extend(event_to_row(event) for event in events)
+            if args.include_system:
+                system_events, system = simulate_system_events(wid, shape, int(flood_cycles))
+                out.update(system)
+                system_cycles = fnum(out.get("system_total_cycles"))
+                out["system_speedup_vs_pytorchsim_cycles"] = round(base / system_cycles, 6) if base and system_cycles else ""
+                system_interval_rows.extend(system_event_to_row(event) for event in system_events)
             cycle_rows.extend(build_cycle_rows(events, args.cycle_trace_cap - len(cycle_rows)) if args.cycle_trace_cap else [])
         except Exception as exc:  # keep batch runs inspectable
             out.update({"sim_status": "error", "error": str(exc), "confidence_grade": "D_error"})
@@ -477,6 +598,8 @@ def main() -> None:
 
     write_csv(out_dir / "workload_summary.csv", summary)
     write_csv(out_dir / "cycle_intervals.csv", interval_rows)
+    if args.include_system:
+        write_csv(out_dir / "system_intervals.csv", system_interval_rows)
     if args.cycle_trace_cap:
         write_csv(out_dir / "cycle_trace.csv", cycle_rows)
     write_readme(out_dir, summary, args.cycle_trace_cap)

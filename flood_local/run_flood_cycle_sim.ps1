@@ -24,10 +24,12 @@ if (-not $person2) {
 & $Python flood_local\flood_cycle_sim.py `
     --input $person2.FullName `
     --out-dir "$OutDir\person2_gemm" `
-    --cycle-trace-cap 2000
+    --cycle-trace-cap 2000 `
+    --include-system
 
 & $Python flood_local\flood_cycle_sim.py `
     --input results\synthetic_unet_trace_v1\synthetic_unet_workload_from_trace_v1.csv `
-    --out-dir "$OutDir\synthetic_unet_trace"
+    --out-dir "$OutDir\synthetic_unet_trace" `
+    --include-system
 
 Write-Host "FLOOD cycle simulator regression finished: $OutDir"

@@ -177,3 +177,19 @@ smoke 验证：
 - 原有周期结果保持不变，说明参数文件读取和 provenance 传播正常。
 
 严格结论：现在 simulator 已经具备“实测 full-chip RTL -> 更新 system model CSV -> 重新生成论文候选数据”的闭环接口。但当前 `full_chip_rtl_calibrated_smoke` 只是 smoke 标签，不是真实论文证据。
+
+## 2026-07-06 更新：system model 自动建议
+
+本轮加入 `system_model_suggestion.csv`，在运行 `--system-calibration` 时自动生成。该表从分阶段实测周期拟合建议参数，而不是用 system total residual 强行补偿。
+
+拟合规则：
+- DMA：使用 `measured_dma_cycles - ideal_beats = dma_fsm_overhead_cycles + dma_burst_overhead_cycles * bursts`。
+- config：使用 `measured_config_cycles / mac_config_writes` 估计 `cpu_config_write_cycles`。
+- `dma_data_bytes`、`dma_maxburst`、`mac_config_writes` 默认保持 active model 值，因为这些应由 RTL/driver 结构证明，不应只靠 timing 拟合。
+
+smoke 结果：
+- `dma_phase_samples=6`
+- `config_phase_samples=2`
+- 建议值保持 `dma_fsm_overhead_cycles=4`、`dma_burst_overhead_cycles=2`、`cpu_config_write_cycles=1`
+
+严格结论：这一步补齐了“真实 RTL 测量 -> 生成候选 system model -> 重新校准”的自动化路径。但候选模型必须再次跑 `--system-calibration` 并通过目标范围的 mismatch gate 后，才能升级为论文主表依据。

@@ -714,6 +714,141 @@ def build_system_calibration_rows(path: Path, system_model: SystemModel = DEFAUL
     return details, summary
 
 
+def solve_two_param_least_squares(samples: list[tuple[float, float, float]]) -> tuple[float, float] | None:
+    if not samples:
+        return None
+    # y = a + b*x, where y=(measured_dma_cycles - ideal_beats), x=bursts.
+    n = float(len(samples))
+    sum_x = sum(x for x, _beats, y in samples)
+    sum_y = sum(y for _x, _beats, y in samples)
+    sum_xx = sum(x * x for x, _beats, _y in samples)
+    sum_xy = sum(x * y for x, _beats, y in samples)
+    det = n * sum_xx - sum_x * sum_x
+    if abs(det) < 1e-12:
+        return (sum_y / n, 0.0)
+    a = (sum_y * sum_xx - sum_x * sum_xy) / det
+    b = (n * sum_xy - sum_x * sum_y) / det
+    return a, b
+
+
+def build_system_model_suggestion_rows(path: Path, system_model: SystemModel = DEFAULT_SYSTEM_MODEL) -> list[dict[str, Any]]:
+    rows = read_csv(path)
+    dma_samples: list[tuple[float, float, float]] = []
+    config_per_write: list[float] = []
+    used_rows = 0
+    for index, row in enumerate(rows):
+        try:
+            op = row.get("operator", "").lower()
+            shape = parse_shape(op, row.get("shape_args", ""))
+            sizes = shape_bytes(shape)
+            measured_config = measured_field(row, "measured_config_cycles", "rtl_config_cycles", "config_cycles")
+            if measured_config is not None and system_model.mac_config_writes:
+                config_per_write.append(measured_config / system_model.mac_config_writes)
+            for phase, bytes_key, field_names in [
+                ("activation_dma", "activation_bytes", ("measured_activation_dma_cycles", "rtl_activation_dma_cycles", "activation_dma_cycles")),
+                ("weight_dma", "weight_bytes", ("measured_weight_dma_cycles", "rtl_weight_dma_cycles", "weight_dma_cycles")),
+                ("output_dma", "output_bytes", ("measured_output_dma_cycles", "rtl_output_dma_cycles", "output_dma_cycles")),
+            ]:
+                measured = measured_field(row, *field_names)
+                if measured is None:
+                    continue
+                beats = ceil_div(sizes[bytes_key], system_model.dma_data_bytes)
+                bursts = ceil_div(beats, max(1, system_model.dma_maxburst))
+                dma_samples.append((float(bursts), float(beats), float(measured - beats)))
+                used_rows += 1
+        except Exception:
+            continue
+
+    dma_fit = solve_two_param_least_squares(dma_samples)
+    suggested_fsm = system_model.dma_fsm_overhead_cycles
+    suggested_burst = system_model.dma_burst_overhead_cycles
+    if dma_fit is not None:
+        suggested_fsm = max(0, int(round(dma_fit[0])))
+        suggested_burst = max(0, int(round(dma_fit[1])))
+    suggested_config = system_model.cpu_config_write_cycles
+    if config_per_write:
+        suggested_config = max(0, int(round(sum(config_per_write) / len(config_per_write))))
+
+    fit_status = "insufficient_measurements"
+    if dma_samples or config_per_write:
+        fit_status = "suggestion_from_measured_phase_cycles"
+
+    return [
+        {
+            "parameter": "system_model_name",
+            "current_value": system_model.name,
+            "suggested_value": f"{system_model.name}_fitted",
+            "unit": "",
+            "fit_status": fit_status,
+            "fit_basis": "phase-level measured cycles, not system-total residual forcing",
+        },
+        {
+            "parameter": "dma_data_bytes",
+            "current_value": system_model.dma_data_bytes,
+            "suggested_value": system_model.dma_data_bytes,
+            "unit": "bytes",
+            "fit_status": "kept_from_active_model",
+            "fit_basis": "interface width should come from RTL, not fitted from timing",
+        },
+        {
+            "parameter": "dma_maxburst",
+            "current_value": system_model.dma_maxburst,
+            "suggested_value": system_model.dma_maxburst,
+            "unit": "beats",
+            "fit_status": "kept_from_active_model",
+            "fit_basis": "burst policy should be verified from DMA RTL/testbench",
+        },
+        {
+            "parameter": "dma_fsm_overhead_cycles",
+            "current_value": system_model.dma_fsm_overhead_cycles,
+            "suggested_value": suggested_fsm,
+            "unit": "cycles",
+            "fit_status": fit_status,
+            "fit_basis": f"dma_phase_samples={len(dma_samples)}",
+        },
+        {
+            "parameter": "dma_burst_overhead_cycles",
+            "current_value": system_model.dma_burst_overhead_cycles,
+            "suggested_value": suggested_burst,
+            "unit": "cycles/burst",
+            "fit_status": fit_status,
+            "fit_basis": f"dma_phase_samples={len(dma_samples)}",
+        },
+        {
+            "parameter": "cpu_config_write_cycles",
+            "current_value": system_model.cpu_config_write_cycles,
+            "suggested_value": suggested_config,
+            "unit": "cycles/write",
+            "fit_status": fit_status if config_per_write else "insufficient_measurements",
+            "fit_basis": f"config_phase_samples={len(config_per_write)}",
+        },
+        {
+            "parameter": "mac_config_writes",
+            "current_value": system_model.mac_config_writes,
+            "suggested_value": system_model.mac_config_writes,
+            "unit": "writes",
+            "fit_status": "kept_from_active_model",
+            "fit_basis": "configuration sequence count should come from RTL/software driver",
+        },
+        {
+            "parameter": "system_model_status",
+            "current_value": system_model.system_model_status,
+            "suggested_value": "candidate_fitted_from_system_calibration",
+            "unit": "",
+            "fit_status": fit_status,
+            "fit_basis": f"rows={len(rows)}; measured_phase_samples={used_rows}",
+        },
+        {
+            "parameter": "system_model_note",
+            "current_value": system_model.system_model_note,
+            "suggested_value": f"Candidate fitted from {path}",
+            "unit": "",
+            "fit_status": fit_status,
+            "fit_basis": "Must be re-run through --system-calibration before any paper main-table use.",
+        },
+    ]
+
+
 def event_to_row(event: RunEvent) -> dict[str, Any]:
     return {
         "workload_id": event.workload_id,
@@ -1241,8 +1376,10 @@ def main() -> None:
     if args.system_calibration:
         out_dir = Path(args.out_dir)
         details, summary = build_system_calibration_rows(Path(args.system_calibration), system_model)
+        suggestions = build_system_model_suggestion_rows(Path(args.system_calibration), system_model)
         write_csv(out_dir / "system_calibration_details.csv", details)
         write_csv(out_dir / "system_calibration_summary.csv", summary)
+        write_csv(out_dir / "system_model_suggestion.csv", suggestions)
         write_hardware_profile(out_dir, system_model)
         write_system_model_template(out_dir, system_model)
         print(f"wrote FLOOD system calibration report to {out_dir}")

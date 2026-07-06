@@ -229,7 +229,7 @@ def parse_shape(operator: str, shape_args: str) -> Shape:
 
 
 def row_id(row: dict[str, str], index: int) -> str:
-    return row.get("id") or row.get("workload") or f"row_{index:04d}"
+    return row.get("id") or row.get("workload_id") or row.get("workload") or f"row_{index:04d}"
 
 
 def baseline_cycles(row: dict[str, str]) -> float:
@@ -445,6 +445,127 @@ def simulate_system_events(workload_id: str, shape: Shape, mac_cycles: int) -> t
         "system_model_status": "unvalidated_system_projection",
         "system_model_note": "Includes CPU config and DMA/SRAM transfer intervals from visible RTL widths, but not direct full-chip RTL-clean evidence.",
     }
+
+
+def system_prediction_for_row(row: dict[str, str], index: int) -> dict[str, Any]:
+    wid = row_id(row, index)
+    op = row.get("operator", "").lower()
+    shape = parse_shape(op, row.get("shape_args", ""))
+    events, sim = simulate_runs(wid, shape)
+    mac_cycles = int(fnum(sim.get("total_cycles")))
+    _system_events, system = simulate_system_events(wid, shape, mac_cycles)
+    return {
+        "workload_id": wid,
+        "operator": op,
+        "shape_args": row.get("shape_args", ""),
+        "predicted_config_cycles": system["config_cycles"],
+        "predicted_activation_dma_cycles": system["activation_dma_cycles"],
+        "predicted_weight_dma_cycles": system["weight_dma_cycles"],
+        "predicted_mac_cycles": mac_cycles,
+        "predicted_output_dma_cycles": system["output_dma_cycles"],
+        "predicted_system_total_cycles": system["system_total_cycles"],
+        "prediction_status": "ok",
+        "confidence_grade": sim.get("confidence_grade", ""),
+        "confidence_note": sim.get("confidence_note", ""),
+    }
+
+
+def measured_field(row: dict[str, str], *names: str) -> float | None:
+    for name in names:
+        value = row.get(name)
+        if value not in ("", None, "NA", "MISSING"):
+            return float(value)
+    return None
+
+
+def cycle_error_fields(predicted: float, measured: float | None, prefix: str) -> dict[str, Any]:
+    if measured is None:
+        return {
+            f"measured_{prefix}_cycles": "",
+            f"{prefix}_cycle_error": "",
+            f"{prefix}_error_percent": "",
+            f"{prefix}_calibration_status": "missing_measurement",
+        }
+    error = predicted - measured
+    return {
+        f"measured_{prefix}_cycles": measured,
+        f"{prefix}_cycle_error": error,
+        f"{prefix}_error_percent": round(error / measured * 100.0, 6) if measured else "",
+        f"{prefix}_calibration_status": "pass" if error == 0 else "mismatch",
+    }
+
+
+def build_system_calibration_rows(path: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    rows = read_csv(path)
+    details: list[dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        try:
+            pred = system_prediction_for_row(row, index)
+            measured_config = measured_field(row, "measured_config_cycles", "rtl_config_cycles", "config_cycles")
+            measured_activation = measured_field(row, "measured_activation_dma_cycles", "rtl_activation_dma_cycles", "activation_dma_cycles")
+            measured_weight = measured_field(row, "measured_weight_dma_cycles", "rtl_weight_dma_cycles", "weight_dma_cycles")
+            measured_mac = measured_field(row, "measured_mac_cycles", "rtl_mac_cycles", "mac_cycles")
+            measured_output = measured_field(row, "measured_output_dma_cycles", "rtl_output_dma_cycles", "output_dma_cycles")
+            measured_total = measured_field(row, "measured_system_total_cycles", "rtl_system_total_cycles", "system_total_cycles", "total_cycles")
+            out: dict[str, Any] = {
+                "workload_id": pred["workload_id"],
+                "operator": pred["operator"],
+                "shape_args": pred["shape_args"],
+                "rtl_status": row.get("rtl_status", ""),
+                "notes": row.get("notes", ""),
+                "confidence_grade": pred["confidence_grade"],
+            }
+            for prefix, predicted, measured in [
+                ("config", pred["predicted_config_cycles"], measured_config),
+                ("activation_dma", pred["predicted_activation_dma_cycles"], measured_activation),
+                ("weight_dma", pred["predicted_weight_dma_cycles"], measured_weight),
+                ("mac", pred["predicted_mac_cycles"], measured_mac),
+                ("output_dma", pred["predicted_output_dma_cycles"], measured_output),
+                ("system_total", pred["predicted_system_total_cycles"], measured_total),
+            ]:
+                out[f"predicted_{prefix}_cycles"] = predicted
+                out.update(cycle_error_fields(float(predicted), measured, prefix))
+            phase_statuses = [str(value) for key, value in out.items() if key.endswith("_calibration_status")]
+            if all(status == "pass" for status in phase_statuses):
+                out["system_calibration_status"] = "pass"
+            elif any(status == "mismatch" for status in phase_statuses):
+                out["system_calibration_status"] = "mismatch"
+            else:
+                out["system_calibration_status"] = "missing_measurement"
+            details.append(out)
+        except Exception as exc:
+            details.append(
+                {
+                    "workload_id": row_id(row, index),
+                    "operator": row.get("operator", ""),
+                    "shape_args": row.get("shape_args", ""),
+                    "system_calibration_status": "error",
+                    "error": str(exc),
+                }
+            )
+
+    measured = [
+        row for row in details
+        if row.get("system_calibration_status") in {"pass", "mismatch"}
+    ]
+    mismatches = [row for row in measured if row.get("system_calibration_status") == "mismatch"]
+    max_abs_total_error = max((abs(float(row.get("system_total_cycle_error") or 0)) for row in measured), default=0.0)
+    max_abs_total_error_percent = max((abs(float(row.get("system_total_error_percent") or 0)) for row in measured), default=0.0)
+    summary = [
+        {
+            "rows": len(details),
+            "measured_rows": len(measured),
+            "pass_rows": len(measured) - len(mismatches),
+            "mismatch_rows": len(mismatches),
+            "missing_measurement_rows": sum(1 for row in details if row.get("system_calibration_status") == "missing_measurement"),
+            "error_rows": sum(1 for row in details if row.get("system_calibration_status") == "error"),
+            "max_abs_system_total_cycle_error": max_abs_total_error,
+            "max_abs_system_total_error_percent": round(max_abs_total_error_percent, 6),
+            "calibration_scope": "CPU config + DMA + MAC total phase comparison against full-chip RTL/testbench measurements when supplied",
+            "paper_use_policy": "system main-table use requires measured_rows>0 and mismatch_rows=0 for the claimed scope",
+        }
+    ]
+    return details, summary
 
 
 def event_to_row(event: RunEvent) -> dict[str, Any]:
@@ -820,6 +941,35 @@ def write_paper_tables(out_dir: Path, summary_rows: list[dict[str, Any]], system
     write_csv(paper_dir / "manifest.csv", manifest_rows)
 
 
+def write_system_calibration_template(out_dir: Path, summary_rows: list[dict[str, Any]]) -> None:
+    rows: list[dict[str, Any]] = []
+    for row in summary_rows:
+        if row.get("sim_status") != "ok":
+            continue
+        rows.append(
+            {
+                "workload_id": row.get("id", ""),
+                "operator": row.get("operator", ""),
+                "shape_args": row.get("shape_args", ""),
+                "predicted_config_cycles": row.get("config_cycles", ""),
+                "measured_config_cycles": "",
+                "predicted_activation_dma_cycles": row.get("activation_dma_cycles", ""),
+                "measured_activation_dma_cycles": "",
+                "predicted_weight_dma_cycles": row.get("weight_dma_cycles", ""),
+                "measured_weight_dma_cycles": "",
+                "predicted_mac_cycles": row.get("mac_total_cycles", ""),
+                "measured_mac_cycles": "",
+                "predicted_output_dma_cycles": row.get("output_dma_cycles", ""),
+                "measured_output_dma_cycles": "",
+                "predicted_system_total_cycles": row.get("system_total_cycles", ""),
+                "measured_system_total_cycles": "",
+                "rtl_status": "",
+                "notes": "Fill measured_* fields from full-chip RTL/testbench logs, then run --system-calibration on this CSV.",
+            }
+        )
+    write_csv(out_dir / "system_calibration_template.csv", rows)
+
+
 def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_cap: int) -> None:
     grades: dict[str, int] = {}
     for row in summary_rows:
@@ -843,6 +993,7 @@ def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_
         "- `workload_summary.csv`: one row per workload, including FLOOD cycles, latency, speedup, and confidence grade.",
         "- `cycle_intervals.csv`: compressed cycle-level state intervals for each workload.",
         "- `system_intervals.csv`: optional CPU config + DMA + MAC top-level intervals when `--include-system` is enabled.",
+        "- `system_calibration_template.csv`: optional fill-in CSV for full-chip RTL/testbench measurements when `--include-system` is enabled.",
         "- `hardware_profile.csv`: explicit hardware constants and evidence grade used by this run.",
         "- `value_check_summary.csv`: output-value correctness status, emitted as missing_evidence unless golden and RTL value files are provided.",
         "- `paper_tables/`: optional plot-oriented CSVs with explicit paper-use policy when `--emit-paper-tables` is enabled.",
@@ -899,6 +1050,7 @@ def main() -> None:
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--cycle-trace-cap", type=int, default=0)
     parser.add_argument("--rtl-validation", default="", help="Optional direct RTL-clean validation CSV.")
+    parser.add_argument("--system-calibration", default="", help="Optional full-chip/system calibration CSV with measured_* cycle columns.")
     parser.add_argument("--include-system", action="store_true", help="Emit unvalidated CPU config + DMA/SRAM system intervals.")
     parser.add_argument("--golden-values", default="", help="Optional golden numeric output file for value checking.")
     parser.add_argument("--rtl-values", default="", help="Optional RTL numeric output file for value checking.")
@@ -934,6 +1086,15 @@ def main() -> None:
         write_hardware_profile(out_dir)
         write_validation_readme(out_dir, summary)
         print(f"wrote FLOOD cycle simulator RTL validation to {out_dir}")
+        return
+
+    if args.system_calibration:
+        out_dir = Path(args.out_dir)
+        details, summary = build_system_calibration_rows(Path(args.system_calibration))
+        write_csv(out_dir / "system_calibration_details.csv", details)
+        write_csv(out_dir / "system_calibration_summary.csv", summary)
+        write_hardware_profile(out_dir)
+        print(f"wrote FLOOD system calibration report to {out_dir}")
         return
 
     if not args.input:
@@ -991,6 +1152,7 @@ def main() -> None:
         write_csv(out_dir / "value_check_details.csv", value_details)
     if args.include_system:
         write_csv(out_dir / "system_intervals.csv", system_interval_rows)
+        write_system_calibration_template(out_dir, summary)
     if args.emit_paper_tables:
         write_paper_tables(out_dir, summary, system_interval_rows, value_summary)
     if args.cycle_trace_cap:

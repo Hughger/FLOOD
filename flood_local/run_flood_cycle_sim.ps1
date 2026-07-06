@@ -35,6 +35,10 @@ if (-not $person2) {
     --emit-paper-tables
 
 & $Python flood_local\flood_cycle_sim.py `
+    --out-dir "$OutDir\system_calibration_smoke" `
+    --system-calibration "$OutDir\system_calibration_smoke\system_calibration_input.csv"
+
+& $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\value_checker_smoke\pass_case" `
     --value-check-only `
     --golden-values "$OutDir\value_checker_smoke\golden_values.txt" `

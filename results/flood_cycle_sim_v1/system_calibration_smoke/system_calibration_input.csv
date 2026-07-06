@@ -1,0 +1,3 @@
+workload_id,operator,shape_args,measured_config_cycles,measured_activation_dma_cycles,measured_weight_dma_cycles,measured_mac_cycles,measured_output_dma_cycles,measured_system_total_cycles,rtl_status,notes
+smoke_gemm_match,gemm,1 64 256,3,16,2638,223,46,2926,full_chip_clean_synthetic_smoke,Matches current prediction exactly; used only to test calibration report plumbing.
+smoke_gemm_mismatch,gemm,1 64 256,3,16,2638,223,46,2936,full_chip_clean_synthetic_smoke,Intentional +10 cycle total mismatch; used only to test calibration report plumbing.

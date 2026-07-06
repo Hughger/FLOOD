@@ -134,3 +134,21 @@
 - `synthetic_unet_trace`：72 行；0 行 `main_table_candidate`；45 行 appendix projection；27 行 exclude。
 
 严格结论：这些 workload 现在可以用于调试工具链和暴露风险，但不能直接作为 HPCA 主性能图数据。工具已经可以自动给出这个判断，避免学生批量跑完后手工混入不可信数据。
+
+## 2026-07-06 更新：system calibration 回填入口
+
+本轮加入 `--system-calibration`，用于把 full-chip RTL/testbench 实测周期回填到 simulator，按阶段检查误差。
+
+新增输入/输出：
+- `system_calibration_template.csv`：普通 workload 开启 `--include-system` 后自动生成，供填写 RTL/testbench 实测周期。
+- `system_calibration_details.csv`：逐 workload、逐阶段误差，包括 config、activation DMA、weight DMA、MAC、output DMA、system total。
+- `system_calibration_summary.csv`：汇总 pass/mismatch/missing/error 数量。
+
+smoke 结果：
+- rows: 2
+- measured_rows: 2
+- pass_rows: 1
+- mismatch_rows: 1
+- max_abs_system_total_cycle_error: 10
+
+严格结论：现在工具已经具备 system-level 校准回填接口，但还没有真实 full-chip RTL 实测数据。因此 system interval 仍不能作为 HPCA 主性能图依据；只有当真实校准表达到 `measured_rows>0` 且目标范围内 `mismatch_rows=0`，对应 system-level 数据才可以升级为主表候选。

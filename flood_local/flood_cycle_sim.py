@@ -595,6 +595,155 @@ def build_value_check(golden_path: Path | None, rtl_path: Path | None, rtol: flo
     )
 
 
+def paper_use_policy(row: dict[str, Any], value_status: str) -> tuple[str, str]:
+    grade = str(row.get("confidence_grade", ""))
+    sim_status = str(row.get("sim_status", ""))
+    if sim_status != "ok":
+        return "exclude_from_paper_tables", f"sim_status={sim_status}"
+    if grade.startswith("D_"):
+        return "exclude_from_main_performance_tables", str(row.get("confidence_note", "blocked or invalid direct RTL evidence"))
+    if value_status not in {"pass", "missing_evidence"}:
+        return "exclude_until_value_check_passes", f"value_check_status={value_status}"
+    if grade.startswith("B_"):
+        if value_status == "pass":
+            return "main_table_candidate", "direct RTL-clean timing and output-value check passed"
+        return "cycle_only_main_candidate_pending_value_check", "direct RTL-clean timing, but output-value evidence is still missing"
+    if grade.startswith("C_"):
+        return "appendix_projection_only", "calibrated projection without exact direct RTL-clean workload evidence"
+    return "manual_review_required", f"unrecognized confidence_grade={grade}"
+
+
+def write_paper_tables(out_dir: Path, summary_rows: list[dict[str, Any]], system_interval_rows: list[dict[str, Any]], value_summary: list[dict[str, Any]]) -> None:
+    paper_dir = out_dir / "paper_tables"
+    value_status = str((value_summary[0] if value_summary else {}).get("value_check_status", "missing_evidence"))
+
+    latency_rows: list[dict[str, Any]] = []
+    rejected_rows: list[dict[str, Any]] = []
+    gate_counts: dict[tuple[str, str], int] = {}
+    for row in summary_rows:
+        policy, reason = paper_use_policy(row, value_status)
+        grade = str(row.get("confidence_grade", ""))
+        gate_counts[(grade, policy)] = gate_counts.get((grade, policy), 0) + 1
+        out = {
+            "workload_id": row.get("id", ""),
+            "operator": row.get("operator", ""),
+            "source_stage": row.get("source_stage", ""),
+            "shape_args": row.get("shape_args", ""),
+            "pytorchsim_cycles": row.get("pytorchsim_cycles", ""),
+            "flood_mac_cycles": row.get("mac_total_cycles", ""),
+            "flood_system_cycles": row.get("system_total_cycles", ""),
+            "mac_speedup_vs_pytorchsim": row.get("speedup_vs_pytorchsim_cycles", ""),
+            "system_speedup_vs_pytorchsim": row.get("system_speedup_vs_pytorchsim_cycles", ""),
+            "latency_us_330mhz": row.get("latency_us_330mhz", ""),
+            "system_latency_us_330mhz": row.get("system_latency_us_330mhz", ""),
+            "confidence_grade": grade,
+            "value_check_status": value_status,
+            "paper_use_policy": policy,
+            "paper_use_reason": reason,
+            "model_scope": row.get("model_scope", ""),
+        }
+        latency_rows.append(out)
+        if policy != "main_table_candidate":
+            rejected_rows.append(out)
+
+    phase_by_workload: dict[str, dict[str, Any]] = {}
+    for event in system_interval_rows:
+        wid = str(event.get("workload_id", ""))
+        phase = str(event.get("phase", ""))
+        duration = int(fnum(event.get("duration_cycles")))
+        bucket = phase_by_workload.setdefault(
+            wid,
+            {
+                "workload_id": wid,
+                "config_cycles": 0,
+                "activation_load_cycles": 0,
+                "weight_load_cycles": 0,
+                "compute_cycles": 0,
+                "output_store_cycles": 0,
+                "system_total_cycles": 0,
+            },
+        )
+        bucket["system_total_cycles"] += duration
+        if phase == "cpu_config_writes":
+            bucket["config_cycles"] += duration
+        elif phase == "dma_activation_load":
+            bucket["activation_load_cycles"] += duration
+        elif phase == "dma_weight_load":
+            bucket["weight_load_cycles"] += duration
+        elif phase == "mac_datapath_run":
+            bucket["compute_cycles"] += duration
+        elif phase == "dma_output_store":
+            bucket["output_store_cycles"] += duration
+
+    summary_by_id = {str(row.get("id", "")): row for row in summary_rows}
+    breakdown_rows: list[dict[str, Any]] = []
+    for wid, row in phase_by_workload.items():
+        total = int(fnum(row.get("system_total_cycles")))
+        source = summary_by_id.get(wid, {})
+        policy, reason = paper_use_policy(source, value_status) if source else ("manual_review_required", "missing summary row")
+        memory = int(row["activation_load_cycles"]) + int(row["weight_load_cycles"]) + int(row["output_store_cycles"])
+        breakdown_rows.append(
+            {
+                **row,
+                "memory_dma_cycles": memory,
+                "compute_ratio": round(int(row["compute_cycles"]) / total, 6) if total else "",
+                "memory_ratio": round(memory / total, 6) if total else "",
+                "confidence_grade": source.get("confidence_grade", ""),
+                "system_model_status": source.get("system_model_status", ""),
+                "paper_use_policy": "appendix_system_projection" if policy.startswith("main") else policy,
+                "paper_use_reason": "system intervals are not direct full-chip RTL-clean evidence; use as diagnostic unless calibrated",
+                "base_cycle_policy": reason,
+            }
+        )
+
+    gate_rows = [
+        {
+            "confidence_grade": grade,
+            "paper_use_policy": policy,
+            "rows": count,
+            "value_check_status": value_status,
+        }
+        for (grade, policy), count in sorted(gate_counts.items())
+    ]
+    gate_rows.append(
+        {
+            "confidence_grade": "TOTAL",
+            "paper_use_policy": "all_rows",
+            "rows": len(summary_rows),
+            "value_check_status": value_status,
+        }
+    )
+
+    manifest_rows = [
+        {
+            "file": "fig6_latency_candidates.csv",
+            "purpose": "Fig.6 latency/speedup candidate table with paper-use policy per row",
+            "paper_status": "requires filtering by paper_use_policy",
+        },
+        {
+            "file": "fig4_state_breakdown.csv",
+            "purpose": "Fig.4 state-cycle breakdown from system intervals",
+            "paper_status": "diagnostic until full-chip RTL calibrated",
+        },
+        {
+            "file": "fig3_evidence_gate.csv",
+            "purpose": "Fig.3 provenance and confidence gate counts",
+            "paper_status": "audit table",
+        },
+        {
+            "file": "rejected_or_appendix_rows.csv",
+            "purpose": "Rows excluded from main tables or limited to appendix/projection",
+            "paper_status": "must not be silently mixed into main plots",
+        },
+    ]
+
+    write_csv(paper_dir / "fig6_latency_candidates.csv", latency_rows)
+    write_csv(paper_dir / "fig4_state_breakdown.csv", breakdown_rows)
+    write_csv(paper_dir / "fig3_evidence_gate.csv", gate_rows)
+    write_csv(paper_dir / "rejected_or_appendix_rows.csv", rejected_rows)
+    write_csv(paper_dir / "manifest.csv", manifest_rows)
+
+
 def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_cap: int) -> None:
     grades: dict[str, int] = {}
     for row in summary_rows:
@@ -619,6 +768,7 @@ def write_readme(out_dir: Path, summary_rows: list[dict[str, Any]], cycle_trace_
         "- `cycle_intervals.csv`: compressed cycle-level state intervals for each workload.",
         "- `system_intervals.csv`: optional CPU config + DMA + MAC top-level intervals when `--include-system` is enabled.",
         "- `value_check_summary.csv`: output-value correctness status, emitted as missing_evidence unless golden and RTL value files are provided.",
+        "- `paper_tables/`: optional plot-oriented CSVs with explicit paper-use policy when `--emit-paper-tables` is enabled.",
         "- `cycle_trace.csv`: optional per-cycle trace, emitted only when `--cycle-trace-cap` is nonzero.",
         "",
         "## Confidence summary",
@@ -678,6 +828,7 @@ def main() -> None:
     parser.add_argument("--value-rtol", type=float, default=0.0)
     parser.add_argument("--value-atol", type=float, default=0.0)
     parser.add_argument("--value-check-only", action="store_true", help="Only run output-value checker.")
+    parser.add_argument("--emit-paper-tables", action="store_true", help="Emit plot-oriented paper CSVs with confidence gates.")
     args = parser.parse_args()
 
     if args.value_check_only:
@@ -760,6 +911,8 @@ def main() -> None:
         write_csv(out_dir / "value_check_details.csv", value_details)
     if args.include_system:
         write_csv(out_dir / "system_intervals.csv", system_interval_rows)
+    if args.emit_paper_tables:
+        write_paper_tables(out_dir, summary, system_interval_rows, value_summary)
     if args.cycle_trace_cap:
         write_csv(out_dir / "cycle_trace.csv", cycle_rows)
     write_readme(out_dir, summary, args.cycle_trace_cap)

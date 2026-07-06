@@ -114,3 +114,23 @@
 3. 接入真实 workload 的 golden 输出和 RTL 输出，使 `value_check_status` 从 `missing_evidence` 变成 pass/fail。
 4. 增加 softmax/稀疏/跳零/outlier 的机制开关，但在没有 RTL 证据前默认 `unsupported`。
 5. 增加 CI/回归入口：每次修改 simulator 后自动跑 `rtl_validation` 和 `value_checker_smoke`，要求周期 6/6 pass，checker pass/fail 均正确。
+
+## 2026-07-06 更新：plot-ready 门禁
+
+本轮在 `flood_local/flood_cycle_sim.py` 中加入 `--emit-paper-tables`，用于把 workload 运行结果直接整理成可画图 CSV，同时保留严格的论文使用边界。
+
+新增输出目录：
+- `results/flood_cycle_sim_v1/person2_gemm/paper_tables/`
+- `results/flood_cycle_sim_v1/synthetic_unet_trace/paper_tables/`
+
+新增表：
+- `fig6_latency_candidates.csv`：Fig.6 latency/speedup 候选表，每行带 `paper_use_policy`。
+- `fig4_state_breakdown.csv`：Fig.4 state-cycle breakdown，当前只作为 diagnostic/appendix，因为 system interval 还不是 full-chip RTL-clean。
+- `fig3_evidence_gate.csv`：按 `confidence_grade` 和 `paper_use_policy` 汇总的证据门禁表。
+- `rejected_or_appendix_rows.csv`：不能进入主性能图或只能进 appendix/projection 的行。
+
+当前门禁结果：
+- `person2_gemm`：30 行；0 行 `main_table_candidate`；20 行 appendix projection；10 行 exclude。
+- `synthetic_unet_trace`：72 行；0 行 `main_table_candidate`；45 行 appendix projection；27 行 exclude。
+
+严格结论：这些 workload 现在可以用于调试工具链和暴露风险，但不能直接作为 HPCA 主性能图数据。工具已经可以自动给出这个判断，避免学生批量跑完后手工混入不可信数据。

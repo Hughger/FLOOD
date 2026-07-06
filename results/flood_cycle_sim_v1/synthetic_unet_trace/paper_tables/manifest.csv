@@ -1,0 +1,5 @@
+file,purpose,paper_status
+fig6_latency_candidates.csv,Fig.6 latency/speedup candidate table with paper-use policy per row,requires filtering by paper_use_policy
+fig4_state_breakdown.csv,Fig.4 state-cycle breakdown from system intervals,diagnostic until full-chip RTL calibrated
+fig3_evidence_gate.csv,Fig.3 provenance and confidence gate counts,audit table
+rejected_or_appendix_rows.csv,Rows excluded from main tables or limited to appendix/projection,must not be silently mixed into main plots

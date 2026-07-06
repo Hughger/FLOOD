@@ -25,12 +25,14 @@ if (-not $person2) {
     --input $person2.FullName `
     --out-dir "$OutDir\person2_gemm" `
     --cycle-trace-cap 2000 `
-    --include-system
+    --include-system `
+    --emit-paper-tables
 
 & $Python flood_local\flood_cycle_sim.py `
     --input results\synthetic_unet_trace_v1\synthetic_unet_workload_from_trace_v1.csv `
     --out-dir "$OutDir\synthetic_unet_trace" `
-    --include-system
+    --include-system `
+    --emit-paper-tables
 
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\value_checker_smoke\pass_case" `

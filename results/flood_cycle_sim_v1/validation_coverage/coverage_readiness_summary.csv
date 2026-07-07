@@ -1,0 +1,2 @@
+workload_rows,coverage_summary_rows,priority_rows_total,p0_rows,p1_rows,direct_clean_shapes,blocked_shapes,policy
+106,8,106,58,48,5,5,Use next_rtl_validation_priority.csv to select the next full-chip RTL/value calibration targets.

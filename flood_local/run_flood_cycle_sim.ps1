@@ -121,6 +121,13 @@ if (-not $person2) {
     "$OutDir\synthetic_unet_trace" `
     "$OutDir\softmax_smoke"
 
+& $Python flood_local\build_validation_coverage_matrix.py `
+    --results-root "$OutDir" `
+    --out-dir "$OutDir\validation_coverage" `
+    --workload-dir person2_gemm `
+    --workload-dir synthetic_unet_trace `
+    --workload-dir softmax_smoke
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

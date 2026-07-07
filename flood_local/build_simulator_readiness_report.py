@@ -166,6 +166,21 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Fix interval accounting before trusting generated cycle totals.",
     )
 
+    coverage_summary_path = results_root / "validation_coverage" / "coverage_readiness_summary.csv"
+    coverage_summary = first_row(coverage_summary_path)
+    workload_rows = as_int(coverage_summary, "workload_rows")
+    priority_rows = as_int(coverage_summary, "priority_rows_total")
+    p0_rows = as_int(coverage_summary, "p0_rows")
+    add(
+        rows,
+        "validation_coverage",
+        "Coverage matrix identifies projection/blocked workload rows for next RTL validation.",
+        PASS if workload_rows > 0 and priority_rows > 0 else MISSING,
+        f"{coverage_summary_path}: workload_rows={workload_rows}, priority_rows={priority_rows}, p0_rows={p0_rows}",
+        "" if workload_rows > 0 and priority_rows > 0 else "Coverage matrix has no actionable validation targets.",
+        "Use next_rtl_validation_priority.csv to choose the next full-chip RTL/value runs.",
+    )
+
     person2_value = first_row(results_root / "person2_gemm" / "value_check_summary.csv")
     synthetic_value = first_row(results_root / "synthetic_unet_trace" / "value_check_summary.csv")
     value_statuses = {

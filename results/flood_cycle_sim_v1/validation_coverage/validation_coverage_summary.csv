@@ -1,0 +1,9 @@
+result_dir,operator,evidence_bucket,rows,total_cycles,direct_clean_shape_hits,blocked_shape_hits
+person2_gemm,gemm,blocked_or_excluded,10,90234,0,8
+person2_gemm,gemm,projection_only,20,41727,16,4
+softmax_smoke,softmax,blocked_or_excluded,1,0,0,0
+softmax_smoke,softmax,projection_only,3,215,0,0
+synthetic_unet_trace,conv,blocked_or_excluded,10,76256,0,8
+synthetic_unet_trace,conv,projection_only,22,4900368,2,0
+synthetic_unet_trace,gemm,blocked_or_excluded,17,159684,0,13
+synthetic_unet_trace,gemm,projection_only,23,54904,17,6

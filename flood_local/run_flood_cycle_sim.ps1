@@ -99,6 +99,13 @@ if (-not $person2) {
     --manifest "$OutDir\system_calibration_batch_templates\system_calibration_smoke_manifest.csv" `
     --out-root "$OutDir\system_calibration_batch_smoke"
 
+& $Python flood_local\build_paper_data_gate.py `
+    --manifest "$OutDir\final_paper_gate_templates\final_paper_gate_smoke_manifest.csv" `
+    --workload-gate "$OutDir\batch_smoke\batch_readiness_summary.csv" `
+    --value-gate "$OutDir\value_check_batch_smoke\value_readiness_summary.csv" `
+    --system-gate "$OutDir\system_calibration_batch_smoke\calibration_readiness_summary.csv" `
+    --out-dir "$OutDir\final_paper_gate_smoke"
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

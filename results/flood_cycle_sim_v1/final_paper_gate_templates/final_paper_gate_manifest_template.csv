@@ -1,0 +1,2 @@
+paper_row_id,workload_id,value_workload_id,system_calibration_id,owner,notes
+paper_row_name,WORKLOAD_BATCH_ID,VALUE_CHECK_BATCH_ID,SYSTEM_CALIBRATION_BATCH_ID,student_or_owner,"all three IDs must point to passing gates before this row can enter main figures"

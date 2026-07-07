@@ -1,2 +1,2 @@
 total_requirements,pass,partial,missing,blocked_by_evidence,strict_pass_percent,usable_with_caveats_percent,goal_status,main_blocker
-15,10,3,1,1,66.67,76.67,not_complete_for_hpca_paper_data,real workload value checks and full-chip/system timing calibration
+16,11,3,1,1,68.75,78.12,not_complete_for_hpca_paper_data,real workload value checks and full-chip/system timing calibration

@@ -293,6 +293,22 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Add real workload value checks and full-chip calibration before declaring main-figure readiness.",
     )
 
+    final_gate_path = results_root / "final_paper_gate_smoke" / "final_paper_data_summary.csv"
+    final_gate = first_row(final_gate_path)
+    final_rows = as_int(final_gate, "paper_rows")
+    final_ready = as_int(final_gate, "ready_for_main_figure")
+    final_not_ready = as_int(final_gate, "not_ready_for_main_figure")
+    final_gate_ok = final_rows > 0 and final_not_ready > 0 and final_ready == 0
+    add(
+        rows,
+        "delivery",
+        "Final paper-data gate merges workload, value, and system evidence before plotting.",
+        PASS if final_gate_ok else MISSING,
+        f"{final_gate_path}: ready={final_ready}, not_ready={final_not_ready}",
+        "" if final_gate_ok else "Final paper-data gate is missing or not conservative.",
+        "Use final_paper_data_policy as the single source of truth for main figures.",
+    )
+
     add(
         rows,
         "delivery",

@@ -328,3 +328,40 @@ full-chip timing 样本。但这不等于真实论文 workload 已经完成 full
 4. `value_check_status=pass`
 
 否则即使周期数据能跑出来，也只能作为 timing/projection 审查材料，不能作为主图级完整实验数据。
+
+## Final Paper Data Gate
+
+本轮新增最终论文数据闸门：
+
+- `flood_local/build_paper_data_gate.py`
+- `results/flood_cycle_sim_v1/final_paper_gate_templates/final_paper_gate_manifest_template.csv`
+- `results/flood_cycle_sim_v1/final_paper_gate_templates/final_paper_gate_smoke_manifest.csv`
+- `results/flood_cycle_sim_v1/final_paper_gate_smoke/final_paper_data_gate.csv`
+
+它把三类证据合并到同一行：
+
+1. workload timing / paper-use gate
+2. output value-correctness gate
+3. full-chip/system timing calibration gate
+
+最终只看一个字段：
+
+```text
+final_paper_data_policy
+```
+
+当前 smoke 结果：
+
+- paper rows: 2
+- ready for main figure: 0
+- not ready for main figure: 2
+
+严格解释：这是正确行为。当前 smoke 中即使存在 value pass 和 system pass，
+只要 workload timing 本身仍是 projection 或没有主图候选行，最终 gate 仍然会阻止进入主图。
+
+后续交给学生批量跑时，原则应改为：
+
+- 学生负责按 manifest 跑 workload/value/system 三类数据。
+- 我们只认 `final_paper_data_gate.csv`。
+- 只有 `final_paper_data_policy=ready_for_main_figure` 的行才能进入主图。
+- 其它行可以作为 appendix、debug 或补证据任务，但不能直接画主图。

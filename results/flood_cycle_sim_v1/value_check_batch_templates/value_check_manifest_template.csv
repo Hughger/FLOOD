@@ -1,0 +1,2 @@
+workload_id,golden_values,rtl_values,out_subdir,rtol,atol,owner,notes
+workload_name,PATH_TO_GOLDEN_NUMERIC_OUTPUT,PATH_TO_RTL_NUMERIC_OUTPUT,workload_name,0.0,0.0,student_or_owner,"golden and RTL files may be text/CSV/log files; the checker compares numeric tokens"

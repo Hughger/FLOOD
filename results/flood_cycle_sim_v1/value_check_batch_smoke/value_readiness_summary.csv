@@ -1,0 +1,3 @@
+workload_id,run_status,value_check_status,main_value_ready_policy,blockers
+value_pass_smoke,pass,pass,ready_for_main_figure_value,
+value_fail_smoke,pass,fail,not_ready_for_main_figure,value_check_status=fail

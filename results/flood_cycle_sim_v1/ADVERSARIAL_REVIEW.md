@@ -301,3 +301,30 @@ full-chip timing 样本。但这不等于真实论文 workload 已经完成 full
 4. `error_rows = 0`
 
 只有满足这些条件的 workload，系统层周期才可以进入主图候选。
+
+## Value Check Batch
+
+本轮新增输出数值检查批量入口：
+
+- `flood_local/run_value_check_batch.py`
+- `results/flood_cycle_sim_v1/value_check_batch_templates/value_check_manifest_template.csv`
+- `results/flood_cycle_sim_v1/value_check_batch_templates/value_check_smoke_manifest.csv`
+- `results/flood_cycle_sim_v1/value_check_batch_smoke/value_readiness_summary.csv`
+
+它的作用是把每个 workload 的 golden 数值输出和 RTL/testbench 数值输出成对比较，
+并生成 `main_value_ready_policy`。
+
+当前 smoke 结果：
+
+- `value_pass_smoke`: `ready_for_main_figure_value`
+- `value_fail_smoke`: `not_ready_for_main_figure`
+
+严格解释：这证明批量数值检查通路可以同时放行正确结果、拦截错误结果。
+但这仍不代表真实论文 workload 已经通过数值正确性验证。真实 workload 必须提供：
+
+1. golden numeric output
+2. RTL/testbench numeric output
+3. 合理的 `rtol/atol`
+4. `value_check_status=pass`
+
+否则即使周期数据能跑出来，也只能作为 timing/projection 审查材料，不能作为主图级完整实验数据。

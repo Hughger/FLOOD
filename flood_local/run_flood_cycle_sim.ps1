@@ -87,6 +87,10 @@ if (-not $person2) {
     --golden-values "$OutDir\value_checker_smoke\golden_values.txt" `
     --rtl-values "$OutDir\value_checker_smoke\rtl_values_fail.txt"
 
+& $Python flood_local\run_value_check_batch.py `
+    --manifest "$OutDir\value_check_batch_templates\value_check_smoke_manifest.csv" `
+    --out-root "$OutDir\value_check_batch_smoke"
+
 & $Python flood_local\run_paper_workload_batch.py `
     --manifest "$OutDir\batch_templates\batch_smoke_manifest.csv" `
     --out-root "$OutDir\batch_smoke"

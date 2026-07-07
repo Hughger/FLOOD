@@ -167,6 +167,23 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Keep this smoke test in every regression run.",
     )
 
+    value_batch_path = results_root / "value_check_batch_smoke" / "value_readiness_summary.csv"
+    value_batch_rows = read_rows(value_batch_path)
+    value_batch_has_pass = any(row.get("main_value_ready_policy") == "ready_for_main_figure_value" for row in value_batch_rows)
+    value_batch_has_fail_gate = any(
+        row.get("value_check_status") == "fail" and row.get("main_value_ready_policy") == "not_ready_for_main_figure"
+        for row in value_batch_rows
+    )
+    add(
+        rows,
+        "value_correctness",
+        "Batch value-check gate accepts passing outputs and rejects failing outputs.",
+        PASS if value_batch_has_pass and value_batch_has_fail_gate else MISSING,
+        f"{value_batch_path}",
+        "" if value_batch_has_pass and value_batch_has_fail_gate else "Batch value-check gate is not proven.",
+        "Use this manifest path for real workload golden/RTL output comparisons.",
+    )
+
     system = first_row(results_root / "system_calibration_smoke" / "system_calibration_summary.csv")
     measured = as_int(system, "measured_rows")
     mismatch = as_int(system, "mismatch_rows")

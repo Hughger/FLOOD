@@ -1,0 +1,3 @@
+workload_id,golden_values,rtl_values,out_dir,rtol,atol,run_status,returncode,error
+value_pass_smoke,results\flood_cycle_sim_v1\value_checker_smoke\golden_values.txt,results\flood_cycle_sim_v1\value_checker_smoke\rtl_values_pass.txt,results\flood_cycle_sim_v1\value_check_batch_smoke\value_pass_smoke,0.0,0.0,pass,0,
+value_fail_smoke,results\flood_cycle_sim_v1\value_checker_smoke\golden_values.txt,results\flood_cycle_sim_v1\value_checker_smoke\rtl_values_fail.txt,results\flood_cycle_sim_v1\value_check_batch_smoke\value_fail_smoke,0.0,0.0,pass,0,

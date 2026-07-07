@@ -1,0 +1,3 @@
+workload_id,golden_values,rtl_values,out_subdir,rtol,atol,owner,notes
+value_pass_smoke,results/flood_cycle_sim_v1/value_checker_smoke/golden_values.txt,results/flood_cycle_sim_v1/value_checker_smoke/rtl_values_pass.txt,value_pass_smoke,0.0,0.0,local_smoke,should pass
+value_fail_smoke,results/flood_cycle_sim_v1/value_checker_smoke/golden_values.txt,results/flood_cycle_sim_v1/value_checker_smoke/rtl_values_fail.txt,value_fail_smoke,0.0,0.0,local_smoke,should run but fail value readiness

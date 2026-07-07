@@ -91,6 +91,10 @@ if (-not $person2) {
     --manifest "$OutDir\batch_templates\batch_smoke_manifest.csv" `
     --out-root "$OutDir\batch_smoke"
 
+& $Python flood_local\run_system_calibration_batch.py `
+    --manifest "$OutDir\system_calibration_batch_templates\system_calibration_smoke_manifest.csv" `
+    --out-root "$OutDir\system_calibration_batch_smoke"
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

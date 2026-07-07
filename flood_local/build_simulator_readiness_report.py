@@ -181,6 +181,22 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Collect real full-chip phase-cycle logs until mismatch_rows=0 for the claimed scope.",
     )
 
+    batch_calib_path = results_root / "system_calibration_batch_smoke" / "calibration_readiness_summary.csv"
+    batch_calib_rows = read_rows(batch_calib_path)
+    batch_calib_ready = bool(batch_calib_rows) and all(
+        row.get("paper_system_timing_policy") == "ready_for_main_figure_system_timing"
+        for row in batch_calib_rows
+    )
+    add(
+        rows,
+        "system_timing",
+        "Full-chip RTL log markers can be batch-parsed and gated as system timing evidence.",
+        PASS if batch_calib_ready else MISSING,
+        f"{batch_calib_path}",
+        "" if batch_calib_ready else "System calibration batch gate is not passing.",
+        "Use this path for real workload RTL/testbench logs before claiming system-level speedup.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

@@ -1,0 +1,10 @@
+parameter,current_value,suggested_value,unit,fit_status,fit_basis
+system_model_name,default_visible_rtl_interface_model,default_visible_rtl_interface_model_fitted,,suggestion_from_measured_phase_cycles,"phase-level measured cycles, not system-total residual forcing"
+dma_data_bytes,8,8,bytes,kept_from_active_model,"interface width should come from RTL, not fitted from timing"
+dma_maxburst,7,7,beats,kept_from_active_model,burst policy should be verified from DMA RTL/testbench
+dma_fsm_overhead_cycles,4,4,cycles,suggestion_from_measured_phase_cycles,dma_phase_samples=3
+dma_burst_overhead_cycles,2,2,cycles/burst,suggestion_from_measured_phase_cycles,dma_phase_samples=3
+cpu_config_write_cycles,1,1,cycles/write,suggestion_from_measured_phase_cycles,config_phase_samples=1
+mac_config_writes,3,3,writes,kept_from_active_model,configuration sequence count should come from RTL/software driver
+system_model_status,unvalidated_system_projection,candidate_fitted_from_system_calibration,,suggestion_from_measured_phase_cycles,rows=1; measured_phase_samples=3
+system_model_note,"Includes CPU config and DMA/SRAM transfer intervals from visible RTL widths, but not direct full-chip RTL-clean evidence.",Candidate fitted from results\flood_cycle_sim_v1\system_calibration_batch_smoke\log_parse_smoke\parsed_system_calibration.csv,,suggestion_from_measured_phase_cycles,Must be re-run through --system-calibration before any paper main-table use.

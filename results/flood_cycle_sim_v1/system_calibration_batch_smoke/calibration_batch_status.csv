@@ -1,0 +1,2 @@
+calibration_id,template_csv,log_map_csv,out_dir,run_status,parse_returncode,calibration_returncode,error
+log_parse_smoke,results\flood_cycle_sim_v1\system_log_parse_smoke\template.csv,results\flood_cycle_sim_v1\system_log_parse_smoke\log_map.csv,results\flood_cycle_sim_v1\system_calibration_batch_smoke\log_parse_smoke,pass,0,0,

@@ -1,0 +1,2 @@
+calibration_id,template_csv,log_map_csv,out_subdir,system_model_csv,owner,notes
+log_parse_smoke,results/flood_cycle_sim_v1/system_log_parse_smoke/template.csv,results/flood_cycle_sim_v1/system_log_parse_smoke/log_map.csv,log_parse_smoke,,local_smoke,"uses explicit FLOOD_* cycle markers and should pass system timing gate"

@@ -1,0 +1,2 @@
+calibration_id,template_csv,log_map_csv,out_subdir,system_model_csv,owner,notes
+workload_name,PATH_TO_SYSTEM_CALIBRATION_TEMPLATE_CSV,PATH_TO_LOG_MAP_CSV,workload_name,OPTIONAL_SYSTEM_MODEL_CSV,student_or_owner,"template_csv comes from simulator system_calibration_template.csv; log_map_csv maps workload_id to RTL/testbench log files"

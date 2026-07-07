@@ -271,3 +271,33 @@ HPCA 主图数据。原因不是批量脚本不能跑，而是主图级数据还
 当前 smoke 结果中，`synthetic_unet_trace` 和 `softmax_smoke` 都能批量跑通，
 并生成合并表；但 `main_figure_ready_policy` 均为 `not_ready_for_main_figure`。
 这正是想要的行为：学生可以跑，工具会把不够主图证据等级的数据挡住。
+
+## Full-Chip/System Calibration Batch
+
+本轮新增系统校准批量入口：
+
+- `flood_local/run_system_calibration_batch.py`
+- `results/flood_cycle_sim_v1/system_calibration_batch_templates/system_calibration_manifest_template.csv`
+- `results/flood_cycle_sim_v1/system_calibration_batch_templates/system_calibration_smoke_manifest.csv`
+- `results/flood_cycle_sim_v1/system_calibration_batch_smoke/calibration_readiness_summary.csv`
+
+它的作用是把 full-chip RTL/testbench 日志中的阶段周期 marker 批量解析出来，
+再统一送入 `flood_cycle_sim.py --system-calibration` 检查。
+
+当前 smoke 结果：
+
+- calibration id: `log_parse_smoke`
+- measured rows: 1
+- mismatch rows: 0
+- policy: `ready_for_main_figure_system_timing`
+
+严格解释：这证明“系统校准通路”已经打通，也证明工具能识别一条干净的
+full-chip timing 样本。但这不等于真实论文 workload 已经完成 full-chip 校准。
+真实 workload 仍然必须提供对应 RTL/testbench 日志，并通过：
+
+1. `measured_rows > 0`
+2. `mismatch_rows = 0`
+3. `missing_measurement_rows = 0`
+4. `error_rows = 0`
+
+只有满足这些条件的 workload，系统层周期才可以进入主图候选。

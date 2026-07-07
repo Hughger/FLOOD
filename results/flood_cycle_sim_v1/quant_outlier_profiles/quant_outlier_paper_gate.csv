@@ -1,0 +1,3 @@
+mechanism,simulator_status,detected_features,confidence_grade,paper_use_policy,required_to_enable
+int8_int4,profile_only_not_enabled,quantization_unit_material;int4_or_packed_material,D_int8_int4_quality_timing_not_validated,exclude_from_main_performance_tables,"requires workload quantization config, accuracy/error metrics, output-value pass, and RTL/testbench timing; power claims require activity or gate-level power evidence"
+outlier,profile_only_not_enabled,quantization_unit_material;int4_or_packed_material;outlier_material,D_outlier_quality_timing_not_validated,exclude_from_main_performance_tables,"requires workload quantization config, accuracy/error metrics, output-value pass, and RTL/testbench timing; power claims require activity or gate-level power evidence"

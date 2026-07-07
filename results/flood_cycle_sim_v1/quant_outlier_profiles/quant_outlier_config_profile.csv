@@ -1,0 +1,17 @@
+mechanism,parameter,base_value,mechanism_value,changed
+int8_int4,rowSize,32,32,False
+int8_int4,colSize,32,32,False
+int8_int4,dataWidth,8,8,False
+int8_int4,outputWidth,2*dataWidth+log2Ceil(rowSize),2*dataWidth+log2Ceil(rowSize),False
+int8_int4,finalWidth,outputWidth+log2Ceil(tileSize)+log2Ceil(colSize),outputWidth+log2Ceil(tileSize)+log2Ceil(colSize),False
+int8_int4,weightBandWidth,colSize * dataWidth,colSize * dataWidth,False
+int8_int4,featureMapBandWidth,weightBandWidth,weightBandWidth,False
+int8_int4,outputBufferDataWidth,dataWidth,dataWidth,False
+outlier,rowSize,32,32,False
+outlier,colSize,32,32,False
+outlier,dataWidth,8,8,False
+outlier,outputWidth,2*dataWidth+log2Ceil(rowSize),2*dataWidth+log2Ceil(rowSize),False
+outlier,finalWidth,outputWidth+log2Ceil(tileSize)+log2Ceil(colSize),outputWidth+log2Ceil(tileSize)+log2Ceil(colSize),False
+outlier,weightBandWidth,colSize * dataWidth,colSize * dataWidth,False
+outlier,featureMapBandWidth,weightBandWidth,weightBandWidth,False
+outlier,outputBufferDataWidth,dataWidth,dataWidth,False

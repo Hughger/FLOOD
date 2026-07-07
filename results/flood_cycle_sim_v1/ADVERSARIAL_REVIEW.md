@@ -166,6 +166,33 @@ smoke workload：
 
 严格结论：zero-skip 和 channel-group sparsity 现在已经进入工具链证据清单，但不能影响周期结果。要让它们进入论文主图，至少还缺三类证据：逐 workload 稀疏率、RTL/testbench 周期测量、输出值正确性。若主张功耗/能效，还必须补 activity counters 或门级功耗测量。
 
+## INT8/INT4 与 Outlier 剖面
+
+本轮新增 `flood_local/build_quant_outlier_profiles.py`，用于审查：
+
+- `INT8-INT4/flood`
+- `outlier/flood`
+
+输出目录：
+
+- `results/flood_cycle_sim_v1/quant_outlier_profiles/`
+
+自动抽取结果：
+
+- `INT8-INT4` 检测到更多量化模块、量化参数、INT8/INT4 相关材料
+- `outlier` 检测到更多量化模块、INT4 相关材料，并额外检测到 outlier 相关材料
+- 两个目录都没有提供可直接绑定到 workload 的量化配置表
+- 两个目录都没有提供主表级 accuracy/error 结果
+- 两个目录都没有提供 full-chip 或 direct RTL-clean timing gate
+
+门禁结果：
+
+- `int8_int4`: `D_int8_int4_quality_timing_not_validated`
+- `outlier`: `D_outlier_quality_timing_not_validated`
+- 两者均为 `exclude_from_main_performance_tables`
+
+严格结论：量化和 outlier 机制不能只凭“源码里出现 INT4/量化/outlier”就进入论文图。它们需要同时满足两类证据：性能证据和质量证据。性能证据至少要有 RTL/testbench 周期；质量证据至少要有每个 workload 的误差/精度/图像质量指标，并且输出值检查不能失败。
+
 ## person2 GEMM 审查
 
 学生 person2 GEMM 数据适合做交叉检查，不适合做 FLOOD 优势主图。

@@ -32,6 +32,12 @@ if (-not $person2) {
     --mechanism channel_group_sparsity "channel group sparisy\flood" `
     --out-dir "$OutDir\sparsity_profiles"
 
+& $Python flood_local\build_quant_outlier_profiles.py `
+    --base-root FLOOD `
+    --mechanism int8_int4 INT8-INT4\flood `
+    --mechanism outlier outlier\flood `
+    --out-dir "$OutDir\quant_outlier_profiles"
+
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\rtl_validation" `
     --rtl-validation results\flood_pytorchsim_backend_v1\workload_direct_rtl_validation_v1\workload_direct_validation_details.csv

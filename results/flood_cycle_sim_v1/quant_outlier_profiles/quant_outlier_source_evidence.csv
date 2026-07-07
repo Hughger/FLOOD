@@ -1,0 +1,17 @@
+mechanism,pattern,base_count,mechanism_count,changed
+int8_int4,quantization_unit,36,47,True
+int8_int4,quantization_params,136,186,True
+int8_int4,int8,12,36,True
+int8_int4,int4,3,61,True
+int8_int4,packed_nibble,48,48,False
+int8_int4,outlier,0,0,False
+int8_int4,threshold,39,54,True
+int8_int4,python_quantize,48,48,False
+outlier,quantization_unit,36,47,True
+outlier,quantization_params,136,174,True
+outlier,int8,12,21,True
+outlier,int4,3,11,True
+outlier,packed_nibble,48,48,False
+outlier,outlier,0,17,True
+outlier,threshold,39,54,True
+outlier,python_quantize,48,48,False

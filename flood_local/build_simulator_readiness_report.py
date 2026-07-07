@@ -137,6 +137,20 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Do not give students ungated CSVs as paper-ready data.",
     )
 
+    timeline_summary_path = results_root / "timeline_consistency" / "timeline_summary.csv"
+    timeline_summary = first_row(timeline_summary_path)
+    timeline_checked = as_int(timeline_summary, "checked_rows")
+    timeline_failed = as_int(timeline_summary, "failed_rows")
+    add(
+        rows,
+        "cycle_timeline",
+        "Generated cycle and system interval timelines are internally consistent.",
+        PASS if timeline_checked > 0 and timeline_failed == 0 else MISSING,
+        f"{timeline_summary_path}: checked={timeline_checked}, failed={timeline_failed}",
+        "" if timeline_checked > 0 and timeline_failed == 0 else "Timeline consistency report has failures or no checked rows.",
+        "Fix interval accounting before trusting generated cycle totals.",
+    )
+
     person2_value = first_row(results_root / "person2_gemm" / "value_check_summary.csv")
     synthetic_value = first_row(results_root / "synthetic_unet_trace" / "value_check_summary.csv")
     value_statuses = {

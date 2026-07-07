@@ -402,3 +402,21 @@ final_paper_data_policy=ready_for_main_figure
 严格解释：这是正确行为。当前没有任何 smoke 行达到主图级证据，所以
 `main_figure_rows.csv` 应该为空。后续画图脚本应只读取这个导出包，
 不能直接读取 workload summary、projection table 或中间 gate 表。
+
+## Timeline Consistency Gate
+
+本轮新增周期时间线一致性审查：
+
+- `flood_local/build_timeline_consistency_report.py`
+- `results/flood_cycle_sim_v1/timeline_consistency/timeline_checks.csv`
+- `results/flood_cycle_sim_v1/timeline_consistency/timeline_summary.csv`
+
+检查内容：
+
+1. `duration_cycles >= 0`
+2. `end_cycle_exclusive - start_cycle = duration_cycles`
+3. 同一 workload 内 interval 连续，不出现空洞或重叠
+4. interval 末尾周期与 `workload_summary.csv` 中的总周期一致
+
+严格解释：这只能证明 simulator 输出的时间线账目自洽，不能证明 RTL 行为正确。
+但如果这一步失败，后续所有批量数据都不应该使用，因为周期表本身已经不可信。

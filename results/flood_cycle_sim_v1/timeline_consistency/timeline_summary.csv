@@ -1,0 +1,2 @@
+checked_rows,passed_rows,failed_rows,checked_result_dirs,policy
+207,207,0,3,All timeline checks must pass before using generated cycle tables for batch analysis.

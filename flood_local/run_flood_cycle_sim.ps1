@@ -110,6 +110,12 @@ if (-not $person2) {
     --final-gate "$OutDir\final_paper_gate_smoke\final_paper_data_gate.csv" `
     --out-dir "$OutDir\main_figure_export_smoke"
 
+& $Python flood_local\build_timeline_consistency_report.py `
+    --out-dir "$OutDir\timeline_consistency" `
+    "$OutDir\person2_gemm" `
+    "$OutDir\synthetic_unet_trace" `
+    "$OutDir\softmax_smoke"
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

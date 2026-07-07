@@ -1,0 +1,7 @@
+check,status,evidence,next_action
+hardware_source_signature_present,pass,566baa5411b356ed67c5572fb2231e100a1fa8e53bf07504edf503c7a1573108,Rerun full postprocessor gates if the signature changes.
+final_gate_exists_and_blocks_unqualified_rows,pass,"paper_rows=2, not_ready=2",Use final_paper_data_policy as the paper-data authority.
+main_figure_export_contains_only_approved_rows,pass,"exported=0, rejected=2",Plot only from main_figure_rows.csv.
+real_workload_value_evidence_present,missing_input_evidence,"person2=missing_evidence, synthetic_unet=missing_evidence",Collect golden and RTL numeric outputs for paper workloads.
+system_calibration_ready_for_main_data,missing_or_mismatched_input_evidence,"measured=2, mismatch=1",Collect full-chip logs until mismatch_rows=0 for claimed workload scope.
+next_rtl_tasks_are_actionable_but_not_ingested,pass,"p0_tasks=20, coverage_p0_rows=58, ready_tasks=0, placeholder_rows=20",Replace task placeholders with real logs/outputs before ingestion.

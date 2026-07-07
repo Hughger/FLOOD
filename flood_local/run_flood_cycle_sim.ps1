@@ -139,6 +139,10 @@ if (-not $person2) {
     --value-manifest "$OutDir\rtl_task_manifest\value_check_manifest_draft.csv" `
     --out-dir "$OutDir\rtl_task_manifest_check"
 
+& $Python flood_local\build_postprocessor_scorecard.py `
+    --results-root "$OutDir" `
+    --out-dir "$OutDir\postprocessor_scorecard"
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

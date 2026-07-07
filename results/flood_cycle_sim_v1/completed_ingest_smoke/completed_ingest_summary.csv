@@ -1,0 +1,2 @@
+ingest_status,checked_tasks,ready_for_gate_ingestion,system_ready_rows,value_ready_rows,final_ready_rows,final_not_ready_rows,exported_main_figure_rows,policy
+pass,1,1,1,1,0,1,0,Completed RTL task outputs must pass this ingest before plotting.

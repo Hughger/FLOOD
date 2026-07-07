@@ -139,6 +139,15 @@ if (-not $person2) {
     --value-manifest "$OutDir\rtl_task_manifest\value_check_manifest_draft.csv" `
     --out-dir "$OutDir\rtl_task_manifest_check"
 
+& $Python flood_local\run_completed_rtl_task_ingest.py `
+    --task-csv "$OutDir\completed_ingest_smoke_inputs\task_manifest.csv" `
+    --system-manifest "$OutDir\completed_ingest_smoke_inputs\system_manifest.csv" `
+    --value-manifest "$OutDir\completed_ingest_smoke_inputs\value_manifest.csv" `
+    --paper-gate-manifest "$OutDir\completed_ingest_smoke_inputs\paper_gate_manifest.csv" `
+    --workload-gate "$OutDir\batch_smoke\batch_readiness_summary.csv" `
+    --rtl-source-summary "$OutDir\rtl_source_manifest\rtl_source_summary.csv" `
+    --out-root "$OutDir\completed_ingest_smoke"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

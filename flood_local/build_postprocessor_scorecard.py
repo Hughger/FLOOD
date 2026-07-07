@@ -48,6 +48,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     coverage = first_row(results_root / "validation_coverage" / "coverage_readiness_summary.csv")
     task_summary = first_row(results_root / "rtl_task_manifest" / "rtl_task_summary.csv")
     task_check = first_row(results_root / "rtl_task_manifest_check" / "rtl_task_manifest_check_summary.csv")
+    completed_ingest = first_row(results_root / "completed_ingest_smoke" / "completed_ingest_summary.csv")
     rtl_source = first_row(results_root / "rtl_source_manifest" / "rtl_source_summary.csv")
     value_person2 = first_row(results_root / "person2_gemm" / "value_check_summary.csv")
     value_unet = first_row(results_root / "synthetic_unet_trace" / "value_check_summary.csv")
@@ -61,6 +62,9 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     p0_rows = as_int(coverage, "p0_rows")
     system_mismatch = as_int(system_smoke, "mismatch_rows")
     hardware_sig = rtl_source.get("hardware_source_signature_sha256", "")
+    ingest_ready_tasks = as_int(completed_ingest, "ready_for_gate_ingestion")
+    ingest_system_ready = as_int(completed_ingest, "system_ready_rows")
+    ingest_value_ready = as_int(completed_ingest, "value_ready_rows")
 
     checks = [
         {
@@ -99,6 +103,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "evidence": f"p0_tasks={p0_tasks}, coverage_p0_rows={p0_rows}, ready_tasks={ready_tasks}, placeholder_rows={placeholder_rows}",
             "next_action": "Replace task placeholders with real logs/outputs before ingestion.",
         },
+        {
+            "check": "completed_rtl_task_ingest_pipeline_runs",
+            "status": "pass" if completed_ingest.get("ingest_status") == "pass" and ingest_ready_tasks > 0 and ingest_system_ready > 0 and ingest_value_ready > 0 else "fail",
+            "evidence": f"ingest_status={completed_ingest.get('ingest_status','missing')}, ready_tasks={ingest_ready_tasks}, system_ready={ingest_system_ready}, value_ready={ingest_value_ready}, exported={completed_ingest.get('exported_main_figure_rows','0')}",
+            "next_action": "Use run_completed_rtl_task_ingest.py for completed student/server RTL outputs.",
+        },
     ]
     write_csv(out_dir / "postprocessor_checks.csv", checks)
 
@@ -124,6 +134,7 @@ FLOOD postprocessor so it can emit qualified paper data.
 Current interpretation:
 
 - The gate stack is in place.
+- Completed RTL task manifests can be ingested through system/value/final/export gates.
 - Current smoke data is correctly rejected from main figures.
 - Qualified paper data still requires real RTL/golden value outputs and
   full-chip calibration logs.

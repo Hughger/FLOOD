@@ -1,0 +1,2 @@
+calibration_id,template_csv,log_map_csv,out_subdir
+completed_smoke,results/flood_cycle_sim_v1/completed_ingest_smoke_inputs/system_template.csv,results/flood_cycle_sim_v1/completed_ingest_smoke_inputs/log_map.csv,completed_smoke

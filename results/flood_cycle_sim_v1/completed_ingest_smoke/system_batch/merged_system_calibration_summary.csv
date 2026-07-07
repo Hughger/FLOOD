@@ -1,0 +1,2 @@
+calibration_id,rows,measured_rows,pass_rows,mismatch_rows,missing_measurement_rows,error_rows,max_abs_system_total_cycle_error,max_abs_system_total_error_percent,calibration_scope,paper_use_policy
+completed_smoke,1,1,1,0,0,0,0.0,0.0,CPU config + DMA + MAC total phase comparison against full-chip RTL/testbench measurements when supplied,system main-table use requires measured_rows>0 and mismatch_rows=0 for the claimed scope

@@ -1,0 +1,2 @@
+workload_id,golden_values,rtl_values,out_subdir,rtol,atol
+completed_smoke,results/flood_cycle_sim_v1/value_checker_smoke/golden_values.txt,results/flood_cycle_sim_v1/value_checker_smoke/rtl_values_pass.txt,completed_smoke,0.0,0.0

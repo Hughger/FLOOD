@@ -1,0 +1,2 @@
+paper_row_id,workload_id,value_workload_id,system_calibration_id,notes
+completed_ingest_smoke,synthetic_unet_trace,completed_smoke,completed_smoke,Smoke row should pass task/value/system gates but remain blocked by workload paper policy.

@@ -5,3 +5,4 @@ main_figure_export_contains_only_approved_rows,pass,"exported=0, rejected=2",Plo
 real_workload_value_evidence_present,missing_input_evidence,"person2=missing_evidence, synthetic_unet=missing_evidence",Collect golden and RTL numeric outputs for paper workloads.
 system_calibration_ready_for_main_data,missing_or_mismatched_input_evidence,"measured=2, mismatch=1",Collect full-chip logs until mismatch_rows=0 for claimed workload scope.
 next_rtl_tasks_are_actionable_but_not_ingested,pass,"p0_tasks=20, coverage_p0_rows=58, ready_tasks=0, placeholder_rows=20",Replace task placeholders with real logs/outputs before ingestion.
+completed_rtl_task_ingest_pipeline_runs,pass,"ingest_status=pass, ready_tasks=1, system_ready=1, value_ready=1, exported=0",Use run_completed_rtl_task_ingest.py for completed student/server RTL outputs.

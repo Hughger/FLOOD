@@ -1,0 +1,2 @@
+task_id,priority,workload_id,rtl_log_file,golden_values_file,rtl_values_file,required_log_markers,notes
+completed_smoke,p0,synthetic_unet_trace,results/flood_cycle_sim_v1/system_log_parse_smoke/log_smoke_gemm.log,results/flood_cycle_sim_v1/value_checker_smoke/golden_values.txt,results/flood_cycle_sim_v1/value_checker_smoke/rtl_values_pass.txt,FLOOD_CONFIG_CYCLES;FLOOD_ACTIVATION_DMA_CYCLES;FLOOD_WEIGHT_DMA_CYCLES;FLOOD_MAC_CYCLES;FLOOD_OUTPUT_DMA_CYCLES;FLOOD_SYSTEM_TOTAL_CYCLES;FLOOD_RTL_STATUS,Smoke row proving completed task manifests can be ingested by paper gates.

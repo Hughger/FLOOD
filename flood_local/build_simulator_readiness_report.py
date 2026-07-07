@@ -210,6 +210,24 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "After real logs/outputs are collected, rerun this check and require ready_for_gate_ingestion>0.",
     )
 
+    completed_ingest_path = results_root / "completed_ingest_smoke" / "completed_ingest_summary.csv"
+    completed_ingest = first_row(completed_ingest_path)
+    completed_ingest_ok = (
+        completed_ingest.get("ingest_status") == "pass"
+        and as_int(completed_ingest, "ready_for_gate_ingestion") > 0
+        and as_int(completed_ingest, "system_ready_rows") > 0
+        and as_int(completed_ingest, "value_ready_rows") > 0
+    )
+    add(
+        rows,
+        "validation_coverage",
+        "Completed RTL task outputs can be ingested into system/value/final/export gates.",
+        PASS if completed_ingest_ok else MISSING,
+        f"{completed_ingest_path}: ingest_status={completed_ingest.get('ingest_status','missing')}, ready_tasks={completed_ingest.get('ready_for_gate_ingestion','0')}",
+        "" if completed_ingest_ok else "Completed RTL ingest pipeline is not proven.",
+        "Use this path after students replace task placeholders with real RTL logs and output dumps.",
+    )
+
     person2_value = first_row(results_root / "person2_gemm" / "value_check_summary.csv")
     synthetic_value = first_row(results_root / "synthetic_unet_trace" / "value_check_summary.csv")
     value_statuses = {

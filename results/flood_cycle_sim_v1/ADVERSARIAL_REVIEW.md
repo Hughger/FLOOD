@@ -420,3 +420,29 @@ final_paper_data_policy=ready_for_main_figure
 
 严格解释：这只能证明 simulator 输出的时间线账目自洽，不能证明 RTL 行为正确。
 但如果这一步失败，后续所有批量数据都不应该使用，因为周期表本身已经不可信。
+
+## RTL Source Manifest
+
+本轮新增 RTL/Chisel 源码签名：
+
+- `flood_local/build_rtl_source_manifest.py`
+- `results/flood_cycle_sim_v1/rtl_source_manifest/rtl_source_manifest.csv`
+- `results/flood_cycle_sim_v1/rtl_source_manifest/rtl_source_summary.csv`
+- `results/flood_cycle_sim_v1/rtl_source_manifest/hardware_source_signature.txt`
+
+它记录当前 simulator 绑定的关键源文件：
+
+1. Chisel MAC datapath / core / SRAM / IO 源码
+2. generated MAC RTL
+3. DMA 和 subsystem/bus 接口 RTL
+4. CPU/NICE/LSU 接口相关 RTL
+5. direct validation 相关 testbench
+
+每个文件记录路径、大小和 SHA256，并生成一个总的：
+
+```text
+hardware_source_signature_sha256
+```
+
+严格解释：这个签名不证明 RTL 正确，但能证明“这批 simulator 数据对应的是哪一版硬件源码”。
+如果后续 RTL 改动导致签名变化，旧数据不能和新数据混用，必须重新跑完整 gate。

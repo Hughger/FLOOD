@@ -110,6 +110,21 @@ def build_report(results_root: Path, out_dir: Path) -> None:
             "Fix direct RTL-clean mismatches before running paper-scale workloads.",
         )
 
+    rtl_source_summary_path = results_root / "rtl_source_manifest" / "rtl_source_summary.csv"
+    rtl_source_summary = first_row(rtl_source_summary_path)
+    source_files = as_int(rtl_source_summary, "source_files")
+    missing_groups = as_int(rtl_source_summary, "missing_source_groups")
+    source_signature = rtl_source_summary.get("hardware_source_signature_sha256", "")
+    add(
+        rows,
+        "rtl_source_binding",
+        "Simulator evidence is bound to a concrete RTL/Chisel source signature.",
+        PASS if source_files > 0 and missing_groups == 0 and source_signature else MISSING,
+        f"{rtl_source_summary_path}: files={source_files}, missing_groups={missing_groups}",
+        "" if source_files > 0 and missing_groups == 0 and source_signature else "RTL source manifest is missing files/groups/signature.",
+        "Regenerate simulator outputs whenever the hardware source signature changes.",
+    )
+
     blocked_path = results_root / "rtl_validation" / "rtl_blocked_cases.csv"
     add(
         rows,

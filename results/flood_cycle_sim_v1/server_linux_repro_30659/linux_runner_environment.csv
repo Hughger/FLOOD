@@ -1,0 +1,6 @@
+key,value
+runner,run_flood_cycle_sim.sh
+cwd,/root/hpca_simulator/FLOOD_postproc
+python,Python 3.10.12
+git_commit,ca76a88
+out_dir,results/flood_cycle_sim_v1

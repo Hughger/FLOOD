@@ -233,14 +233,31 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use as appendix/projection until integrated softmax RTL evidence exists.",
     )
 
+    batch_status_path = results_root / "batch_smoke" / "batch_run_status.csv"
+    batch_ready_path = results_root / "batch_smoke" / "batch_readiness_summary.csv"
+    batch_status = read_rows(batch_status_path)
+    batch_ready = read_rows(batch_ready_path)
+    batch_runs_ok = bool(batch_status) and all(r.get("run_status") == "pass" for r in batch_status)
+    batch_gate_ok = bool(batch_ready) and all(r.get("batch_ready_policy") == "ready_for_gate_review" for r in batch_ready)
     add(
         rows,
         "delivery",
-        "A student can run the tool and obtain gated CSVs for the planned workloads.",
-        PARTIAL,
-        "run_flood_cycle_sim.ps1 produces regression outputs and paper gates.",
-        "Real workload value checks and full-chip calibration are not complete.",
-        "Before handoff, provide workload manifests, golden/RTL value files, and a one-command batch wrapper.",
+        "A student can run a manifest and obtain merged gated CSVs.",
+        PASS if batch_runs_ok and batch_gate_ok else MISSING,
+        f"{batch_status_path}; {batch_ready_path}",
+        "" if batch_runs_ok and batch_gate_ok else "Batch runner or merged gates are not verified.",
+        "Use the manifest template, then review main_figure_ready_policy before plotting.",
+    )
+
+    main_ready_rows = [r for r in batch_ready if r.get("main_figure_ready_policy") == "ready_for_main_figure"]
+    add(
+        rows,
+        "delivery",
+        "Batch outputs are directly ready for main paper figures.",
+        PASS if main_ready_rows else PARTIAL,
+        f"ready_for_main_figure_rows={len(main_ready_rows)}",
+        "" if main_ready_rows else "Current smoke workloads remain projection/missing-value evidence.",
+        "Add real workload value checks and full-chip calibration before declaring main-figure readiness.",
     )
 
     add(

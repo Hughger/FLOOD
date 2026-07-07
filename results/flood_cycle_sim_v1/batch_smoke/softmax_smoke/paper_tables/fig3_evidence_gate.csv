@@ -1,0 +1,4 @@
+confidence_grade,paper_use_policy,rows,value_check_status
+C_softmax_standalone_chisel_projection,appendix_projection_only,3,missing_evidence
+D_softmax_invalid_dimension,exclude_from_paper_tables,1,missing_evidence
+TOTAL,all_rows,4,missing_evidence

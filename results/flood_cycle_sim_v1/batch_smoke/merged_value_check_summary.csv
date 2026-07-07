@@ -1,0 +1,3 @@
+workload_id,source_file,value_check_status,golden_path,rtl_output_path,num_values,num_mismatches,max_abs_error,max_rel_error,note
+synthetic_unet_trace,value_check_summary.csv,missing_evidence,,,0,MISSING,MISSING,MISSING,Provide both --golden-values and --rtl-values to validate output correctness.
+softmax_smoke,value_check_summary.csv,missing_evidence,,,0,MISSING,MISSING,MISSING,Provide both --golden-values and --rtl-values to validate output correctness.

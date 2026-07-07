@@ -239,15 +239,16 @@ smoke workload：
 
 当前严格审查结果：
 
-- strict pass: 7 / 12
-- strict pass percent: 58.33%
-- usable with caveats: 70.83%
+- strict pass: 8 / 13
+- strict pass percent: 61.54%
+- usable with caveats: 73.08%
 - goal status: `not_complete_for_hpca_paper_data`
 - main blocker: real workload value checks and full-chip/system timing calibration
 
 严格结论：工具已经能稳定地产生带证据等级和论文使用策略的 CSV，
-也已经把六个优化目录纳入 inventory 和 gate；但还不能交给学生直接批量跑出
-HPCA 主图数据。原因不是脚本不能跑，而是主图级数据还缺两类硬证据：
+也已经把六个优化目录纳入 inventory 和 gate；本轮还新增了 manifest batch runner，
+可以让学生按清单批量运行并得到合并后的 gated CSV。但还不能交给学生直接批量跑出
+HPCA 主图数据。原因不是批量脚本不能跑，而是主图级数据还缺两类硬证据：
 
 1. 真实 workload 的 RTL/golden 输出数值检查。
 2. CPU/DMA/control/full-chip 阶段周期的真实校准，且 `mismatch_rows=0`。
@@ -256,6 +257,17 @@ HPCA 主图数据。原因不是脚本不能跑，而是主图级数据还缺两
 
 - 已完成 Base FLOOD MAC datapath 的 direct RTL-clean 周期锚点。
 - 已完成机制目录的自动盘点和论文闸门。
-- 已完成学生批量运行前的部分工具底座。
+- 已完成学生批量运行入口、合并表和主图 readiness 标记。
 - 未完成完整 cycle-accurate chip simulator。
 - 未完成可直接支撑 HPCA 主图的全 workload 数据链。
+
+新增批量入口：
+
+- `flood_local/run_paper_workload_batch.py`
+- `results/flood_cycle_sim_v1/batch_templates/paper_workload_manifest_template.csv`
+- `results/flood_cycle_sim_v1/batch_templates/batch_smoke_manifest.csv`
+- `results/flood_cycle_sim_v1/batch_smoke/batch_readiness_summary.csv`
+
+当前 smoke 结果中，`synthetic_unet_trace` 和 `softmax_smoke` 都能批量跑通，
+并生成合并表；但 `main_figure_ready_policy` 均为 `not_ready_for_main_figure`。
+这正是想要的行为：学生可以跑，工具会把不够主图证据等级的数据挡住。

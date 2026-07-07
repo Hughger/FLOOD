@@ -1,0 +1,3 @@
+workload_id,input_csv,out_subdir,include_system,emit_paper_tables,owner,notes
+synthetic_unet_trace,results/synthetic_unet_trace_v1/synthetic_unet_workload_from_trace_v1.csv,synthetic_unet_trace,true,true,local_smoke,available local smoke workload
+softmax_smoke,results/flood_cycle_sim_v1/softmax_smoke/softmax_workload.csv,softmax_smoke,false,true,local_smoke,standalone projection smoke workload

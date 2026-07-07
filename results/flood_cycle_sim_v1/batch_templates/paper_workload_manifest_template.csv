@@ -1,0 +1,4 @@
+workload_id,input_csv,out_subdir,include_system,emit_paper_tables,owner,notes
+person2_gemm,PATH_TO_PERSON2_CSV,person2_gemm,true,true,student_1,replace input_csv with the cloned-server person2_pytorchsim_transformer.csv path
+synthetic_unet_trace,results/synthetic_unet_trace_v1/synthetic_unet_workload_from_trace_v1.csv,synthetic_unet_trace,true,true,student_2,synthetic smoke workload already available in this workspace
+softmax_smoke,results/flood_cycle_sim_v1/softmax_smoke/softmax_workload.csv,softmax_smoke,false,true,student_3,projection only until integrated RTL timing and value evidence are added

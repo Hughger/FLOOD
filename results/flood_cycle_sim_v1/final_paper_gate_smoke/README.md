@@ -14,5 +14,7 @@ Generated files:
 - `final_paper_data_summary.csv`: compact ready/not-ready count.
 - `evidence_manifest.csv`: source/output file sizes and SHA256 hashes.
 
+Hardware source signature: `566baa5411b356ed67c5572fb2231e100a1fa8e53bf07504edf503c7a1573108`
+
 Main-figure rule: only rows with `final_paper_data_policy=ready_for_main_figure`
 may enter main paper figures.

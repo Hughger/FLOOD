@@ -45,6 +45,7 @@ def export_package(final_gate: Path, out_dir: Path) -> None:
     rows = read_rows(final_gate)
     approved = [row for row in rows if row.get("final_paper_data_policy") == "ready_for_main_figure"]
     rejected = [row for row in rows if row.get("final_paper_data_policy") != "ready_for_main_figure"]
+    hardware_signatures = sorted({row.get("hardware_source_signature_sha256", "") for row in rows if row.get("hardware_source_signature_sha256", "")})
     write_csv(out_dir / "main_figure_rows.csv", approved)
     write_csv(out_dir / "rejected_rows.csv", rejected)
     summary = [
@@ -54,6 +55,7 @@ def export_package(final_gate: Path, out_dir: Path) -> None:
             "total_rows": str(len(rows)),
             "exported_main_figure_rows": str(len(approved)),
             "rejected_rows": str(len(rejected)),
+            "hardware_source_signature_sha256": ";".join(hardware_signatures),
             "export_policy": "Only rows with final_paper_data_policy=ready_for_main_figure are exported.",
         }
     ]
@@ -70,6 +72,8 @@ Generated files:
 - `main_figure_rows.csv`: rows allowed for main paper figures.
 - `rejected_rows.csv`: rows blocked by the final gate.
 - `export_summary.csv`: source hash and row counts.
+
+Hardware source signature: `{';'.join(hardware_signatures) or 'missing'}`
 """
     (out_dir / "README.md").write_text(text, encoding="utf-8")
 

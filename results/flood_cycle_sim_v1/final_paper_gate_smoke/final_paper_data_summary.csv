@@ -1,2 +1,2 @@
-paper_rows,ready_for_main_figure,not_ready_for_main_figure,ready_percent,policy
-2,0,2,0.00,Only final_paper_data_policy=ready_for_main_figure may enter main paper figures.
+paper_rows,ready_for_main_figure,not_ready_for_main_figure,ready_percent,hardware_source_signature_sha256,policy
+2,0,2,0.00,566baa5411b356ed67c5572fb2231e100a1fa8e53bf07504edf503c7a1573108,Only final_paper_data_policy=ready_for_main_figure may enter main paper figures.

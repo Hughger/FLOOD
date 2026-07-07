@@ -446,3 +446,16 @@ hardware_source_signature_sha256
 
 严格解释：这个签名不证明 RTL 正确，但能证明“这批 simulator 数据对应的是哪一版硬件源码”。
 如果后续 RTL 改动导致签名变化，旧数据不能和新数据混用，必须重新跑完整 gate。
+
+## Hardware Signature Propagation
+
+本轮把 `hardware_source_signature_sha256` 接入最终数据链：
+
+- `final_paper_data_gate.csv`
+- `final_paper_data_summary.csv`
+- `evidence_manifest.csv`
+- `main_figure_export_smoke/export_summary.csv`
+
+严格解释：后续每一行主图候选数据不仅要通过 workload/value/system 三类 gate，
+还必须带同一个 RTL/Chisel 源码签名。画图阶段如果看不到 hardware source signature，
+该数据包不能使用。

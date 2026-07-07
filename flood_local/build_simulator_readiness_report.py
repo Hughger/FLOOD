@@ -327,7 +327,8 @@ def build_report(results_root: Path, out_dir: Path) -> None:
     final_rows = as_int(final_gate, "paper_rows")
     final_ready = as_int(final_gate, "ready_for_main_figure")
     final_not_ready = as_int(final_gate, "not_ready_for_main_figure")
-    final_gate_ok = final_rows > 0 and final_not_ready > 0 and final_ready == 0
+    final_hardware_signature = final_gate.get("hardware_source_signature_sha256", "")
+    final_gate_ok = final_rows > 0 and final_not_ready > 0 and final_ready == 0 and bool(final_hardware_signature)
     add(
         rows,
         "delivery",
@@ -345,6 +346,7 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "input_workload_gate",
         "input_value_gate",
         "input_system_gate",
+        "input_rtl_source_summary",
         "output_final_gate",
         "output_final_summary",
     }
@@ -366,7 +368,8 @@ def build_report(results_root: Path, out_dir: Path) -> None:
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
     source_hash_ok = bool(export_summary.get("source_final_gate_sha256", ""))
-    export_ok = source_hash_ok and rejected_rows > 0 and exported_rows == 0
+    export_hardware_signature = export_summary.get("hardware_source_signature_sha256", "")
+    export_ok = source_hash_ok and bool(export_hardware_signature) and rejected_rows > 0 and exported_rows == 0
     add(
         rows,
         "delivery",

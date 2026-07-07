@@ -76,6 +76,7 @@ def build_gate(
     workload_gate: Path,
     value_gate: Path,
     system_gate: Path,
+    rtl_source_summary: Path | None,
     out_dir: Path,
 ) -> None:
     manifest_rows = read_rows(manifest)
@@ -83,6 +84,9 @@ def build_gate(
     workloads = by_key(read_rows(workload_gate), "workload_id")
     values = by_key(read_rows(value_gate), "workload_id")
     systems = by_key(read_rows(system_gate), "calibration_id")
+    rtl_source_rows = read_rows(rtl_source_summary) if rtl_source_summary else []
+    rtl_source = rtl_source_rows[0] if rtl_source_rows else {}
+    hardware_signature = rtl_source.get("hardware_source_signature_sha256", "")
 
     final_rows: list[dict[str, str]] = []
     for row in manifest_rows:
@@ -122,6 +126,7 @@ def build_gate(
                 "workload_policy": workload_policy,
                 "value_policy": value_policy,
                 "system_policy": system_policy,
+                "hardware_source_signature_sha256": hardware_signature,
                 "main_table_candidate_rows": workload.get("main_table_candidate_rows", "0"),
                 "final_paper_data_policy": "ready_for_main_figure" if ready else "not_ready_for_main_figure",
                 "blockers": ";".join(blockers),
@@ -137,6 +142,7 @@ def build_gate(
             "ready_for_main_figure": str(len(ready_rows)),
             "not_ready_for_main_figure": str(len(final_rows) - len(ready_rows)),
             "ready_percent": f"{(len(ready_rows) / len(final_rows) * 100.0) if final_rows else 0.0:.2f}",
+            "hardware_source_signature_sha256": hardware_signature,
             "policy": "Only final_paper_data_policy=ready_for_main_figure may enter main paper figures.",
         }
     ]
@@ -146,6 +152,13 @@ def build_gate(
         file_record("input_workload_gate", workload_gate),
         file_record("input_value_gate", value_gate),
         file_record("input_system_gate", system_gate),
+        file_record("input_rtl_source_summary", rtl_source_summary) if rtl_source_summary else {
+            "role": "input_rtl_source_summary",
+            "path": "",
+            "exists": "False",
+            "bytes": "0",
+            "sha256": "",
+        },
         file_record("output_final_gate", out_dir / "final_paper_data_gate.csv"),
         file_record("output_final_summary", out_dir / "final_paper_data_summary.csv"),
     ]
@@ -166,6 +179,8 @@ Generated files:
 - `final_paper_data_summary.csv`: compact ready/not-ready count.
 - `evidence_manifest.csv`: source/output file sizes and SHA256 hashes.
 
+Hardware source signature: `{hardware_signature or "missing"}`
+
 Main-figure rule: only rows with `final_paper_data_policy=ready_for_main_figure`
 may enter main paper figures.
 """
@@ -178,6 +193,7 @@ def main() -> None:
     parser.add_argument("--workload-gate", required=True)
     parser.add_argument("--value-gate", required=True)
     parser.add_argument("--system-gate", required=True)
+    parser.add_argument("--rtl-source-summary", default="")
     parser.add_argument("--out-dir", required=True)
     args = parser.parse_args()
     build_gate(
@@ -185,6 +201,7 @@ def main() -> None:
         Path(args.workload_gate),
         Path(args.value_gate),
         Path(args.system_gate),
+        Path(args.rtl_source_summary) if args.rtl_source_summary else None,
         Path(args.out_dir),
     )
 

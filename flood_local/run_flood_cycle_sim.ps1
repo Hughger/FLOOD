@@ -108,6 +108,7 @@ if (-not $person2) {
     --workload-gate "$OutDir\batch_smoke\batch_readiness_summary.csv" `
     --value-gate "$OutDir\value_check_batch_smoke\value_readiness_summary.csv" `
     --system-gate "$OutDir\system_calibration_batch_smoke\calibration_readiness_summary.csv" `
+    --rtl-source-summary "$OutDir\rtl_source_manifest\rtl_source_summary.csv" `
     --out-dir "$OutDir\final_paper_gate_smoke"
 
 & $Python flood_local\export_main_figure_package.py `

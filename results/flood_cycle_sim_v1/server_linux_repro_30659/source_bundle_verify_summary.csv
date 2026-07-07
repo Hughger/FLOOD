@@ -1,0 +1,2 @@
+verify_status,checked_files,failed_files,expected_bundle_signature_sha256,actual_bundle_signature_sha256,policy
+pass,185,0,47d35bd34fdb13cabbd0243b301f0bf3dce7c739448e3322ce70504c03c46937,47d35bd34fdb13cabbd0243b301f0bf3dce7c739448e3322ce70504c03c46937,Server source bundle must verify before running postprocessor source-profile gates.

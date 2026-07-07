@@ -1,0 +1,7 @@
+mechanism,source_root,changed_or_added_files,modified_files,added_files,removed_vs_base_files,rtl_files,testbench_or_test_files,docs_files,software_or_generator_files,data_files,sim_hook,integration_status,paper_use_policy
+mactree,mactree/flood,399,380,19,3866,286,52,14,34,13,mac datapath compute interval and first-level adder tree activity,inventory_only_not_integrated,requires_rtl_timing_and_value_validation
+outlier,outlier/flood,401,380,21,3866,285,52,14,37,13,"outlier ratio, route/shift bypass, output-value checker",inventory_only_not_integrated,requires_quality_and_rtl_value_validation
+INT8-INT4,INT8-INT4/flood,401,380,21,3866,285,57,14,32,13,"precision mode, packed traffic, MAC throughput, value tolerance",inventory_only_not_integrated,requires_precision_mode_rtl_validation
+softmax,softmax/flood,21,0,21,4249,0,2,14,3,2,softmax vector dimension and per-32-lane pipeline cycles,inventory_only_not_integrated,requires_softmax_module_timing_and_value_validation
+zero-skip,zero-skip/flood,396,380,16,3866,285,52,14,32,13,"activation/weight zero ratio, skipped multiply/add cycles",inventory_only_not_integrated,requires_sparse_counter_or_rtl_trace_validation
+channel_group_sparsity,channel group sparisy/flood,396,380,16,3866,285,52,14,32,13,channel-group bitmap density and group-skip scheduling,inventory_only_not_integrated,requires_bitmap_decode_and_group_skip_validation

@@ -17,6 +17,10 @@ if (-not $person2) {
     throw "Cannot find person2_pytorchsim_transformer.csv under current workspace."
 }
 
+& $Python flood_local\build_mechanism_inventory.py `
+    --base-root FLOOD `
+    --out-dir "$OutDir\mechanism_inventory"
+
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\rtl_validation" `
     --rtl-validation results\flood_pytorchsim_backend_v1\workload_direct_rtl_validation_v1\workload_direct_validation_details.csv

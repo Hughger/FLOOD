@@ -215,3 +215,28 @@ smoke 路径：
 - 校准结果：1 measured row, 1 pass, 0 mismatch。
 
 严格结论：现在 full-chip RTL/testbench 只要打印上述标记，就可以自动进入 simulator 校准 gate，不需要手工填写 measured cycle 字段。没有这些分阶段标记时，工具不会假装已经完成 phase-level 校准。
+
+## 2026-07-07 更新：六个优化分支材料清单
+
+本轮加入 `flood_local/build_mechanism_inventory.py`，对用户提供的六个独立优化目录做 inventory：
+
+- `mactree/`
+- `outlier/`
+- `INT8-INT4/`
+- `softmax/`
+- `zero-skip/`
+- `channel group sparisy/`
+
+新增输出：
+- `results/flood_cycle_sim_v1/mechanism_inventory/mechanism_summary.csv`
+- `results/flood_cycle_sim_v1/mechanism_inventory/mechanism_changed_files.csv`
+- `results/flood_cycle_sim_v1/mechanism_inventory/mechanism_sim_hooks.csv`
+- `results/flood_cycle_sim_v1/mechanism_inventory/mechanism_enable_template.csv`
+
+当前结论：
+- 这些目录是完整工程副本，不是干净 patch。
+- `mactree/outlier/INT8-INT4/zero-skip/channel_group_sparsity` 都有大量 RTL 和 testbench 差异，不能直接混入当前 simulator 主结果。
+- `softmax` 更像独立模块材料，当前 inventory 发现新增文档、Scala/Python、测试/数据文件，但没有直接进入 base MAC datapath timing gate。
+- 所有机制在 `mechanism_enable_template.csv` 中默认 `enabled=false`。
+
+严格结论：六个创新机制现在已经进入工具链的“材料清单和证据门禁”，但还没有进入主性能模型。要启用任一机制，必须补齐对应 timing/value/quality 证据，并通过当前 `--system-calibration`、value checker 和机制级 gate。

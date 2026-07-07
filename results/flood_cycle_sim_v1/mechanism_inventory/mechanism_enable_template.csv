@@ -1,0 +1,7 @@
+mechanism,enabled,evidence_status,timing_evidence_csv,value_evidence_csv,quality_evidence_csv,workload_scope,sim_hook,paper_use_policy,notes
+mactree,false,missing,,,,,mac datapath compute interval and first-level adder tree activity,do_not_enable_until_evidence_passes,Required: rtl cycle traces; MAC output values; activity counters if power is claimed
+outlier,false,missing,,,,,"outlier ratio, route/shift bypass, output-value checker",do_not_enable_until_evidence_passes,Required: outlier ratio per layer; golden/RTL output values; route-shift timing
+INT8-INT4,false,missing,,,,,"precision mode, packed traffic, MAC throughput, value tolerance",do_not_enable_until_evidence_passes,Required: precision mode per layer; packed data width; value tolerance; RTL timing
+softmax,false,missing,,,,,softmax vector dimension and per-32-lane pipeline cycles,do_not_enable_until_evidence_passes,Required: vector dimension; softmax input/output values; module done cycles
+zero-skip,false,missing,,,,,"activation/weight zero ratio, skipped multiply/add cycles",do_not_enable_until_evidence_passes,Required: activation/weight zero ratio; skip counters; RTL timing and values
+channel_group_sparsity,false,missing,,,,,channel-group bitmap density and group-skip scheduling,do_not_enable_until_evidence_passes,Required: bitmap density per channel group; decode cycles; group-skip counters

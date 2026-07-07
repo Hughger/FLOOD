@@ -1,0 +1,7 @@
+mechanism,sim_hook,required_inputs,minimum_evidence_to_enable,current_default
+mactree,mac datapath compute interval and first-level adder tree activity,rtl cycle traces; MAC output values; activity counters if power is claimed,requires_rtl_timing_and_value_validation,disabled
+outlier,"outlier ratio, route/shift bypass, output-value checker",outlier ratio per layer; golden/RTL output values; route-shift timing,requires_quality_and_rtl_value_validation,disabled
+INT8-INT4,"precision mode, packed traffic, MAC throughput, value tolerance",precision mode per layer; packed data width; value tolerance; RTL timing,requires_precision_mode_rtl_validation,disabled
+softmax,softmax vector dimension and per-32-lane pipeline cycles,vector dimension; softmax input/output values; module done cycles,requires_softmax_module_timing_and_value_validation,disabled
+zero-skip,"activation/weight zero ratio, skipped multiply/add cycles",activation/weight zero ratio; skip counters; RTL timing and values,requires_sparse_counter_or_rtl_trace_validation,disabled
+channel_group_sparsity,channel-group bitmap density and group-skip scheduling,bitmap density per channel group; decode cycles; group-skip counters,requires_bitmap_decode_and_group_skip_validation,disabled

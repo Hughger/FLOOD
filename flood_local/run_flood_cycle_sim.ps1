@@ -21,6 +21,11 @@ if (-not $person2) {
     --base-root FLOOD `
     --out-dir "$OutDir\mechanism_inventory"
 
+& $Python flood_local\build_mactree_profile.py `
+    --base-root FLOOD `
+    --mactree-root mactree\flood `
+    --out-dir "$OutDir\mactree_profile"
+
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\rtl_validation" `
     --rtl-validation results\flood_pytorchsim_backend_v1\workload_direct_rtl_validation_v1\workload_direct_validation_details.csv

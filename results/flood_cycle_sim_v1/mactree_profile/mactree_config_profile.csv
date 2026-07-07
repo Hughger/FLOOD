@@ -1,0 +1,12 @@
+parameter,base_value,mactree_value,changed,source_base,source_mactree
+rowSize,32,32,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+colSize,32,32,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+dataWidth,8,8,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+outputWidth,2*dataWidth+log2Ceil(rowSize),2*dataWidth+log2Ceil(rowSize),False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+pipeline,2,3,True,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+tLatency,4,4,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+compressionFactor,4,4,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+add_skip_en,MISSING,true.B,True,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+tileSize,16,16,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+maxKernelBlockCout,32,32,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala
+maxKernelBlockCin,1024,1024,False,FLOOD\src\main\scala\core\Config.scala,mactree\flood\src\main\scala\core\Config.scala

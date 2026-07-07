@@ -111,6 +111,33 @@ smoke workload：
 
 严格结论：softmax 现在可以批量跑投影数据，但不能进入论文主性能表。它最多作为 appendix/projection 或设计趋势图，除非后续完成 integrated full-chip RTL-clean timing 和输出值验证。
 
+## MACTree 结构剖面
+
+本轮新增 `flood_local/build_mactree_profile.py`，用于从 base FLOOD 和 `mactree/` 材料中自动抽取 MAC 树结构差异。
+
+输出目录：
+
+- `results/flood_cycle_sim_v1/mactree_profile/`
+
+关键结果：
+
+- base `pipeline=2`
+- mactree `pipeline=3`
+- base `tLatency=4`
+- mactree `tLatency=4`
+- base `compressionFactor=4`
+- mactree `compressionFactor=4`
+- mactree 新增 `add_skip_en=true.B`
+- `CIMcore.scala` 中 mactree 侧出现更多 `MACTreeFlood`、`stageRegistersOut`，并出现 `wZero || aZero` 跳零相关逻辑
+
+门禁结果：
+
+- `confidence_grade=D_mactree_timing_not_validated`
+- `paper_use_policy=exclude_from_main_performance_tables`
+- `simulator_status=profile_only_not_enabled`
+
+严格结论：mactree 当前不能直接作为“MAC 树更快”的论文数据。它混合了流水线结构变化和跳零相关逻辑，必须先做 RTL/testbench 周期验证和输出值验证；如果要主张功耗优势，还需要 activity counters。当前工具只把它纳入结构剖面和证据门禁，不让它影响主性能周期。
+
 ## person2 GEMM 审查
 
 学生 person2 GEMM 数据适合做交叉检查，不适合做 FLOOD 优势主图。

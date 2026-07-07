@@ -1,0 +1,7 @@
+pattern,base_count,mactree_count,changed,source_base,source_mactree
+class\s+MACTree\b,1,1,False,FLOOD\src\main\scala\core\CIMcore.scala,mactree\flood\src\main\scala\core\CIMcore.scala
+class\s+MACTreeFlood\b,1,2,True,FLOOD\src\main\scala\core\CIMcore.scala,mactree\flood\src\main\scala\core\CIMcore.scala
+class\s+MACTreeRefine\b,1,1,False,FLOOD\src\main\scala\core\CIMcore.scala,mactree\flood\src\main\scala\core\CIMcore.scala
+add_skip_en,0,4,True,FLOOD\src\main\scala\core\CIMcore.scala,mactree\flood\src\main\scala\core\CIMcore.scala
+wZero\s*\|\|\s*aZero,0,2,True,FLOOD\src\main\scala\core\CIMcore.scala,mactree\flood\src\main\scala\core\CIMcore.scala
+stageRegistersOut,18,28,True,FLOOD\src\main\scala\core\CIMcore.scala,mactree\flood\src\main\scala\core\CIMcore.scala

@@ -1,0 +1,2 @@
+mechanism,simulator_status,confidence_grade,paper_use_policy,required_to_enable
+mactree,profile_only_not_enabled,D_mactree_timing_not_validated,exclude_from_main_performance_tables,direct RTL/testbench timing cycles plus output-value pass; activity counters required for power claims

@@ -26,6 +26,12 @@ if (-not $person2) {
     --mactree-root mactree\flood `
     --out-dir "$OutDir\mactree_profile"
 
+& $Python flood_local\build_sparsity_profiles.py `
+    --base-root FLOOD `
+    --mechanism zero_skip zero-skip\flood `
+    --mechanism channel_group_sparsity "channel group sparisy\flood" `
+    --out-dir "$OutDir\sparsity_profiles"
+
 & $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\rtl_validation" `
     --rtl-validation results\flood_pytorchsim_backend_v1\workload_direct_rtl_validation_v1\workload_direct_validation_details.csv

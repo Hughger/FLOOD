@@ -1,0 +1,17 @@
+mechanism,pattern,base_count,mechanism_count,changed
+zero_skip,activation_zero_flags,0,4,True
+zero_skip,weight_zero_flags,0,4,True
+zero_skip,zero_or_condition,0,8,True
+zero_skip,mactree_flood,1,1,False
+zero_skip,group_size,76,113,True
+zero_skip,group_num,80,126,True
+zero_skip,mask,0,0,False
+zero_skip,sparse_keyword,0,0,False
+channel_group_sparsity,activation_zero_flags,0,4,True
+channel_group_sparsity,weight_zero_flags,0,4,True
+channel_group_sparsity,zero_or_condition,0,8,True
+channel_group_sparsity,mactree_flood,1,1,False
+channel_group_sparsity,group_size,76,113,True
+channel_group_sparsity,group_num,80,126,True
+channel_group_sparsity,mask,0,0,False
+channel_group_sparsity,sparse_keyword,0,0,False

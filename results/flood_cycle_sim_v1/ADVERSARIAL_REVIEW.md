@@ -138,6 +138,34 @@ smoke workload：
 
 严格结论：mactree 当前不能直接作为“MAC 树更快”的论文数据。它混合了流水线结构变化和跳零相关逻辑，必须先做 RTL/testbench 周期验证和输出值验证；如果要主张功耗优势，还需要 activity counters。当前工具只把它纳入结构剖面和证据门禁，不让它影响主性能周期。
 
+## Zero-Skip 与 Channel-Group Sparsity 剖面
+
+本轮新增 `flood_local/build_sparsity_profiles.py`，用于审查：
+
+- `zero-skip/flood`
+- `channel group sparisy/flood`
+
+输出目录：
+
+- `results/flood_cycle_sim_v1/sparsity_profiles/`
+
+自动抽取结果：
+
+- 两个目录都出现 `activation_zero_flags`
+- 两个目录都出现 `weight_zero_flags`
+- 两个目录都有 `zero_or_condition` 相关源码证据
+- 两个目录的 `groupSize` / `groupNum` 出现次数都高于 base
+- 两个目录没有提供可直接用于 workload 的稀疏率输入表
+- 两个目录没有提供可直接用于主性能表的 RTL-clean timing/value gate
+
+门禁结果：
+
+- `zero_skip`: `D_zero_skip_timing_not_validated`
+- `channel_group_sparsity`: `D_channel_group_sparsity_timing_not_validated`
+- 两者均为 `exclude_from_main_performance_tables`
+
+严格结论：zero-skip 和 channel-group sparsity 现在已经进入工具链证据清单，但不能影响周期结果。要让它们进入论文主图，至少还缺三类证据：逐 workload 稀疏率、RTL/testbench 周期测量、输出值正确性。若主张功耗/能效，还必须补 activity counters 或门级功耗测量。
+
 ## person2 GEMM 审查
 
 学生 person2 GEMM 数据适合做交叉检查，不适合做 FLOOD 优势主图。

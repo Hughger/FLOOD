@@ -1,0 +1,3 @@
+mechanism,simulator_status,detected_features,confidence_grade,paper_use_policy,required_to_enable
+zero_skip,profile_only_not_enabled,zero_flag_inputs;group_control_deltas,D_zero_skip_timing_not_validated,exclude_from_main_performance_tables,"direct RTL/testbench timing cycles, output-value pass, and workload-level sparsity statistics; activity counters required for power claims"
+channel_group_sparsity,profile_only_not_enabled,zero_flag_inputs;group_control_deltas,D_channel_group_sparsity_timing_not_validated,exclude_from_main_performance_tables,"direct RTL/testbench timing cycles, output-value pass, and workload-level sparsity statistics; activity counters required for power claims"

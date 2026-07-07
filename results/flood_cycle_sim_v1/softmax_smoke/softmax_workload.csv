@@ -1,0 +1,5 @@
+id,stage,operator,shape_args,pytorchsim_cycles
+softmax_vec_32,softmax_smoke,softmax,32,100
+softmax_vec_128,softmax_smoke,softmax,128,200
+softmax_attn_4x64,softmax_smoke,softmax,4 64,300
+softmax_invalid_33,softmax_smoke,softmax,33,100

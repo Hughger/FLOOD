@@ -39,6 +39,12 @@ if (-not $person2) {
     --emit-paper-tables
 
 & $Python flood_local\flood_cycle_sim.py `
+    --input "$OutDir\softmax_smoke\softmax_workload.csv" `
+    --out-dir "$OutDir\softmax_smoke" `
+    --cycle-trace-cap 500 `
+    --emit-paper-tables
+
+& $Python flood_local\flood_cycle_sim.py `
     --out-dir "$OutDir\system_calibration_smoke" `
     --system-calibration "$OutDir\system_calibration_smoke\system_calibration_input.csv" `
     --system-model "$OutDir\system_calibration_smoke\system_model_input.csv"

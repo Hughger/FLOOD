@@ -5,7 +5,8 @@ This is the first executable simulator layer above the RTL calibration data.
 It emits exact cycle intervals for each modeled MAC-machine run, rather than
 only a single fitted total-cycle number.  The model is intentionally scoped:
 
-- supported operators: GEMM and Conv mapped to the current Base FLOOD MAC path
+- supported operators: GEMM and Conv mapped to the current Base FLOOD MAC path;
+  Softmax is supported as a standalone-module projection
 - supported kernels: GEMM/k=1 and Conv k=1/k=3
 - frequency: 330 MHz, matching the current 28nm FLOOD assumption
 - confidence labels are emitted per row so projection-only rows are not mixed
@@ -353,6 +354,14 @@ class SimParams:
     workload_id: str
 
 
+@dataclass(frozen=True)
+class SoftmaxParams:
+    workload_id: str
+    num_vectors: int
+    vector_dim: int
+    groups32: int
+
+
 def parse_shape(operator: str, shape_args: str) -> Shape:
     dims = [int(x) for x in str(shape_args).split()]
     if operator == "gemm":
@@ -368,6 +377,12 @@ def parse_shape(operator: str, shape_args: str) -> Shape:
         ow = (w + 2 * pad - kernel) // stride + 1
         workmode = "pointwise_conv" if kernel == 1 else "spatial_conv"
         return Shape(m=b * oh * ow, reduction=ic * kernel * kernel, n=oc, kernel=kernel, workmode=workmode)
+    if operator == "softmax":
+        if len(dims) == 1:
+            return Shape(m=1, reduction=0, n=dims[0], kernel=0, workmode="softmax")
+        if len(dims) == 2:
+            return Shape(m=dims[0], reduction=0, n=dims[1], kernel=0, workmode="softmax")
+        raise ValueError(f"softmax shape must be vector_dim or num_vectors vector_dim, got: {shape_args}")
     raise ValueError(f"unsupported operator: {operator}")
 
 
@@ -409,6 +424,15 @@ def shape_to_params(workload_id: str, shape: Shape) -> SimParams:
     )
 
 
+def shape_to_softmax_params(workload_id: str, shape: Shape) -> SoftmaxParams:
+    return SoftmaxParams(
+        workload_id=workload_id,
+        num_vectors=max(1, shape.m),
+        vector_dim=shape.n,
+        groups32=shape.n // 32 if shape.n > 0 else 0,
+    )
+
+
 def confidence_status(workload_id: str, k: int, cin: int, cout: int, spatial_points: int) -> tuple[str, str]:
     if workload_id in DIRECT_CLEAN_WORKLOAD_IDS:
         return "B_direct_rtl_clean_workload_row", "exact workload row has direct RTL-clean evidence"
@@ -427,6 +451,15 @@ def confidence_status(workload_id: str, k: int, cin: int, cout: int, spatial_poi
     if k == 3:
         return "C_projection_large_k3_extent_unvalidated", "large k3 extent exceeds direct RTL-clean holdout range"
     return "C_projection_large_spatial_extent_unvalidated", "large spatial extent requires more direct RTL validation"
+
+
+def softmax_confidence_status(workload_id: str, vector_dim: int) -> tuple[str, str]:
+    if vector_dim % 32 != 0:
+        return "D_softmax_invalid_dimension", "SoftmaxModule asserts dim_err for non-32-multiple vector dimensions"
+    return (
+        "C_softmax_standalone_chisel_projection",
+        "cycle rule comes from standalone SoftmaxModule state machine; no integrated full-chip RTL-clean evidence yet",
+    )
 
 
 def simulate_params(params: SimParams) -> tuple[list[RunEvent], dict[str, Any]]:
@@ -524,7 +557,53 @@ def simulate_params(params: SimParams) -> tuple[list[RunEvent], dict[str, Any]]:
     }
 
 
+def simulate_softmax_params(params: SoftmaxParams) -> tuple[list[RunEvent], dict[str, Any]]:
+    if params.vector_dim <= 0 or params.vector_dim % 32 != 0:
+        confidence, note = softmax_confidence_status(params.workload_id, params.vector_dim)
+        return [], {
+            "sim_status": "unsupported_softmax_dim",
+            "softmax_num_vectors": params.num_vectors,
+            "softmax_vector_dim": params.vector_dim,
+            "softmax_groups32": params.groups32,
+            "confidence_grade": confidence,
+            "confidence_note": note,
+        }
+
+    per_vector_cycles = 5 * params.groups32 + 25
+    events: list[RunEvent] = []
+    cursor = 0
+    for vector_idx in range(params.num_vectors):
+        events.append(
+            RunEvent(
+                workload_id=params.workload_id,
+                spatial_idx=vector_idx,
+                cin_idx=0,
+                phase="softmax_vector_run",
+                start_cycle=cursor,
+                duration_cycles=per_vector_cycles,
+                end_cycle_exclusive=cursor + per_vector_cycles,
+                rule="softmax_standalone_chisel_5n_plus_25_v1",
+            )
+        )
+        cursor += per_vector_cycles
+    confidence, note = softmax_confidence_status(params.workload_id, params.vector_dim)
+    return events, {
+        "sim_status": "ok",
+        "softmax_num_vectors": params.num_vectors,
+        "softmax_vector_dim": params.vector_dim,
+        "softmax_groups32": params.groups32,
+        "softmax_cycles_per_vector": per_vector_cycles,
+        "total_cycles": cursor,
+        "latency_us_330mhz": round(cursor / FREQ_MHZ, 6),
+        "confidence_grade": confidence,
+        "confidence_note": note,
+        "interval_count": len(events),
+    }
+
+
 def simulate_runs(workload_id: str, shape: Shape) -> tuple[list[RunEvent], dict[str, Any]]:
+    if shape.workmode == "softmax":
+        return simulate_softmax_params(shape_to_softmax_params(workload_id, shape))
     return simulate_params(shape_to_params(workload_id, shape))
 
 
@@ -1413,7 +1492,10 @@ def main() -> None:
             flood_cycles = fnum(out.get("total_cycles"))
             out["mac_total_cycles"] = int(flood_cycles) if flood_cycles else ""
             out["speedup_vs_pytorchsim_cycles"] = round(base / flood_cycles, 6) if base and flood_cycles else ""
-            out["model_scope"] = "Base FLOOD MAC path; no softmax/sparsity/zero-skip innovation modeled"
+            if shape.workmode == "softmax":
+                out["model_scope"] = "Standalone FLOOD SoftmaxModule timing projection; not integrated full-chip RTL-clean evidence"
+            else:
+                out["model_scope"] = "Base FLOOD MAC path; no sparsity/zero-skip/outlier/INT4 innovation modeled"
             interval_rows.extend(event_to_row(event) for event in events)
             if args.include_system:
                 system_events, system = simulate_system_events(wid, shape, int(flood_cycles), system_model)

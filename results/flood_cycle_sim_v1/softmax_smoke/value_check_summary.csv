@@ -1,0 +1,2 @@
+value_check_status,golden_path,rtl_output_path,num_values,num_mismatches,max_abs_error,max_rel_error,note
+missing_evidence,,,0,MISSING,MISSING,MISSING,Provide both --golden-values and --rtl-values to validate output correctness.

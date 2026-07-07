@@ -378,3 +378,27 @@ final_paper_data_policy
 
 每个文件都会记录路径、是否存在、文件大小和 SHA256。这样后续如果某张图的数据被质疑，
 可以直接回查该行 final gate 使用的是哪一版输入表，避免“手动搬表搬错”。
+
+## Main Figure Export Package
+
+本轮新增主图数据包导出器：
+
+- `flood_local/export_main_figure_package.py`
+- `results/flood_cycle_sim_v1/main_figure_export_smoke/main_figure_rows.csv`
+- `results/flood_cycle_sim_v1/main_figure_export_smoke/rejected_rows.csv`
+- `results/flood_cycle_sim_v1/main_figure_export_smoke/export_summary.csv`
+
+它只导出：
+
+```text
+final_paper_data_policy=ready_for_main_figure
+```
+
+当前 smoke 结果：
+
+- exported main figure rows: 0
+- rejected rows: 2
+
+严格解释：这是正确行为。当前没有任何 smoke 行达到主图级证据，所以
+`main_figure_rows.csv` 应该为空。后续画图脚本应只读取这个导出包，
+不能直接读取 workload summary、projection table 或中间 gate 表。

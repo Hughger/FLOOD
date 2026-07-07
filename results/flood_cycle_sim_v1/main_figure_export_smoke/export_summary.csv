@@ -1,0 +1,2 @@
+source_final_gate,source_final_gate_sha256,total_rows,exported_main_figure_rows,rejected_rows,export_policy
+results\flood_cycle_sim_v1\final_paper_gate_smoke\final_paper_data_gate.csv,63167a4e0a4a7a360399a6623a2760a6e1b032b10bfea0abf5aa50fb5f1c8f2b,2,0,2,Only rows with final_paper_data_policy=ready_for_main_figure are exported.

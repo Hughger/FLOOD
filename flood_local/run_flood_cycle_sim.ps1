@@ -106,6 +106,10 @@ if (-not $person2) {
     --system-gate "$OutDir\system_calibration_batch_smoke\calibration_readiness_summary.csv" `
     --out-dir "$OutDir\final_paper_gate_smoke"
 
+& $Python flood_local\export_main_figure_package.py `
+    --final-gate "$OutDir\final_paper_gate_smoke\final_paper_data_gate.csv" `
+    --out-dir "$OutDir\main_figure_export_smoke"
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

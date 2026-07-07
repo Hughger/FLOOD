@@ -332,6 +332,22 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Keep this manifest with any plotted paper data for reproducibility review.",
     )
 
+    export_summary_path = results_root / "main_figure_export_smoke" / "export_summary.csv"
+    export_summary = first_row(export_summary_path)
+    exported_rows = as_int(export_summary, "exported_main_figure_rows")
+    rejected_rows = as_int(export_summary, "rejected_rows")
+    source_hash_ok = bool(export_summary.get("source_final_gate_sha256", ""))
+    export_ok = source_hash_ok and rejected_rows > 0 and exported_rows == 0
+    add(
+        rows,
+        "delivery",
+        "Main-figure export package contains only final-gate-approved rows.",
+        PASS if export_ok else MISSING,
+        f"{export_summary_path}: exported={exported_rows}, rejected={rejected_rows}",
+        "" if export_ok else "Main-figure export package is missing or not conservative.",
+        "Plotting scripts should consume this export package, not intermediate simulator CSVs.",
+    )
+
     add(
         rows,
         "delivery",

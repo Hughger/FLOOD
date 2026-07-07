@@ -337,6 +337,7 @@ full-chip timing 样本。但这不等于真实论文 workload 已经完成 full
 - `results/flood_cycle_sim_v1/final_paper_gate_templates/final_paper_gate_manifest_template.csv`
 - `results/flood_cycle_sim_v1/final_paper_gate_templates/final_paper_gate_smoke_manifest.csv`
 - `results/flood_cycle_sim_v1/final_paper_gate_smoke/final_paper_data_gate.csv`
+- `results/flood_cycle_sim_v1/final_paper_gate_smoke/evidence_manifest.csv`
 
 它把三类证据合并到同一行：
 
@@ -365,3 +366,15 @@ final_paper_data_policy
 - 我们只认 `final_paper_data_gate.csv`。
 - 只有 `final_paper_data_policy=ready_for_main_figure` 的行才能进入主图。
 - 其它行可以作为 appendix、debug 或补证据任务，但不能直接画主图。
+
+本轮进一步给 final gate 增加了 `evidence_manifest.csv`。它记录：
+
+- 输入 manifest
+- workload gate
+- value gate
+- system gate
+- final gate 输出表
+- final summary 输出表
+
+每个文件都会记录路径、是否存在、文件大小和 SHA256。这样后续如果某张图的数据被质疑，
+可以直接回查该行 final gate 使用的是哪一版输入表，避免“手动搬表搬错”。

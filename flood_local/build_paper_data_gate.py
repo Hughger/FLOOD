@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 from pathlib import Path
 
 
@@ -31,6 +32,26 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def sha256_file(path: Path) -> str:
+    if not path.exists() or not path.is_file():
+        return ""
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def file_record(role: str, path: Path) -> dict[str, str]:
+    return {
+        "role": role,
+        "path": str(path),
+        "exists": str(path.exists()),
+        "bytes": str(path.stat().st_size) if path.exists() and path.is_file() else "0",
+        "sha256": sha256_file(path),
+    }
 
 
 def by_key(rows: list[dict[str, str]], key: str) -> dict[str, dict[str, str]]:
@@ -120,6 +141,15 @@ def build_gate(
         }
     ]
     write_csv(out_dir / "final_paper_data_summary.csv", summary)
+    evidence_files = [
+        file_record("input_manifest", manifest),
+        file_record("input_workload_gate", workload_gate),
+        file_record("input_value_gate", value_gate),
+        file_record("input_system_gate", system_gate),
+        file_record("output_final_gate", out_dir / "final_paper_data_gate.csv"),
+        file_record("output_final_summary", out_dir / "final_paper_data_summary.csv"),
+    ]
+    write_csv(out_dir / "evidence_manifest.csv", evidence_files)
     text = f"""# FLOOD Final Paper Data Gate
 
 Manifest: `{manifest}`
@@ -134,6 +164,7 @@ Generated files:
 
 - `final_paper_data_gate.csv`: one row per planned paper data row.
 - `final_paper_data_summary.csv`: compact ready/not-ready count.
+- `evidence_manifest.csv`: source/output file sizes and SHA256 hashes.
 
 Main-figure rule: only rows with `final_paper_data_policy=ready_for_main_figure`
 may enter main paper figures.

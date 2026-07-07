@@ -309,6 +309,29 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use final_paper_data_policy as the single source of truth for main figures.",
     )
 
+    evidence_manifest_path = results_root / "final_paper_gate_smoke" / "evidence_manifest.csv"
+    evidence_rows = read_rows(evidence_manifest_path)
+    required_roles = {
+        "input_manifest",
+        "input_workload_gate",
+        "input_value_gate",
+        "input_system_gate",
+        "output_final_gate",
+        "output_final_summary",
+    }
+    found_roles = {row.get("role", "") for row in evidence_rows}
+    hashes_ok = evidence_rows and all(row.get("exists") == "True" and row.get("sha256") for row in evidence_rows)
+    evidence_ok = required_roles.issubset(found_roles) and hashes_ok
+    add(
+        rows,
+        "delivery",
+        "Final paper-data gate has a traceable evidence manifest with file hashes.",
+        PASS if evidence_ok else MISSING,
+        f"{evidence_manifest_path}",
+        "" if evidence_ok else "Evidence manifest is missing files or hashes.",
+        "Keep this manifest with any plotted paper data for reproducibility review.",
+    )
+
     add(
         rows,
         "delivery",

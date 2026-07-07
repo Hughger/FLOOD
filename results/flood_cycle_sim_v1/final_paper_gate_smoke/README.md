@@ -12,6 +12,7 @@ Generated files:
 
 - `final_paper_data_gate.csv`: one row per planned paper data row.
 - `final_paper_data_summary.csv`: compact ready/not-ready count.
+- `evidence_manifest.csv`: source/output file sizes and SHA256 hashes.
 
 Main-figure rule: only rows with `final_paper_data_policy=ready_for_main_figure`
 may enter main paper figures.

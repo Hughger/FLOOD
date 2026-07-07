@@ -1,0 +1,2 @@
+source_priority_csv,tasks,p0_tasks,p1_tasks,limit,policy
+results\flood_cycle_sim_v1\validation_coverage\next_rtl_validation_priority.csv,20,20,0,20,"Run these tasks in RTL/testbench, then replace placeholders and feed generated manifests to system/value/final gates."

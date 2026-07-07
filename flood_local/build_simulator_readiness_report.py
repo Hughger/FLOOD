@@ -181,6 +181,20 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use next_rtl_validation_priority.csv to choose the next full-chip RTL/value runs.",
     )
 
+    rtl_task_summary_path = results_root / "rtl_task_manifest" / "rtl_task_summary.csv"
+    rtl_task_summary = first_row(rtl_task_summary_path)
+    rtl_tasks = as_int(rtl_task_summary, "tasks")
+    rtl_p0_tasks = as_int(rtl_task_summary, "p0_tasks")
+    add(
+        rows,
+        "validation_coverage",
+        "Coverage priorities are converted into executable RTL validation task manifests.",
+        PASS if rtl_tasks > 0 and rtl_p0_tasks > 0 else MISSING,
+        f"{rtl_task_summary_path}: tasks={rtl_tasks}, p0_tasks={rtl_p0_tasks}",
+        "" if rtl_tasks > 0 and rtl_p0_tasks > 0 else "RTL task manifest has no actionable P0 tasks.",
+        "Assign rtl_validation_tasks.csv, then feed completed logs/outputs into system/value gates.",
+    )
+
     person2_value = first_row(results_root / "person2_gemm" / "value_check_summary.csv")
     synthetic_value = first_row(results_root / "synthetic_unet_trace" / "value_check_summary.csv")
     value_statuses = {

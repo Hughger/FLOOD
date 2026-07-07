@@ -128,6 +128,11 @@ if (-not $person2) {
     --workload-dir synthetic_unet_trace `
     --workload-dir softmax_smoke
 
+& $Python flood_local\build_rtl_task_manifest.py `
+    --priority-csv "$OutDir\validation_coverage\next_rtl_validation_priority.csv" `
+    --out-dir "$OutDir\rtl_task_manifest" `
+    --limit 20
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

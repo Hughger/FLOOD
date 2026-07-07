@@ -195,6 +195,21 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Assign rtl_validation_tasks.csv, then feed completed logs/outputs into system/value gates.",
     )
 
+    rtl_task_check_path = results_root / "rtl_task_manifest_check" / "rtl_task_manifest_check_summary.csv"
+    rtl_task_check = first_row(rtl_task_check_path)
+    checked_tasks = as_int(rtl_task_check, "tasks")
+    ready_tasks = as_int(rtl_task_check, "ready_for_gate_ingestion")
+    placeholder_rows = as_int(rtl_task_check, "placeholder_rows")
+    add(
+        rows,
+        "validation_coverage",
+        "RTL task manifest checker blocks draft placeholder paths before gate ingestion.",
+        PASS if checked_tasks > 0 and ready_tasks == 0 and placeholder_rows > 0 else MISSING,
+        f"{rtl_task_check_path}: tasks={checked_tasks}, ready={ready_tasks}, placeholder_rows={placeholder_rows}",
+        "" if checked_tasks > 0 and ready_tasks == 0 and placeholder_rows > 0 else "Manifest checker did not catch draft placeholders as expected.",
+        "After real logs/outputs are collected, rerun this check and require ready_for_gate_ingestion>0.",
+    )
+
     person2_value = first_row(results_root / "person2_gemm" / "value_check_summary.csv")
     synthetic_value = first_row(results_root / "synthetic_unet_trace" / "value_check_summary.csv")
     value_statuses = {

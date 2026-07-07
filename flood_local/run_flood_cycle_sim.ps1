@@ -133,6 +133,12 @@ if (-not $person2) {
     --out-dir "$OutDir\rtl_task_manifest" `
     --limit 20
 
+& $Python flood_local\check_rtl_task_manifest.py `
+    --task-csv "$OutDir\rtl_task_manifest\rtl_validation_tasks.csv" `
+    --system-manifest "$OutDir\rtl_task_manifest\system_calibration_manifest_draft.csv" `
+    --value-manifest "$OutDir\rtl_task_manifest\value_check_manifest_draft.csv" `
+    --out-dir "$OutDir\rtl_task_manifest_check"
+
 & $Python flood_local\build_simulator_readiness_report.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\readiness_report"

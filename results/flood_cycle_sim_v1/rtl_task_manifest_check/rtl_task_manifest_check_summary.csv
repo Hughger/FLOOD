@@ -1,0 +1,2 @@
+tasks,ready_for_gate_ingestion,not_ready,placeholder_rows,policy
+20,0,20,20,Only ready_for_gate_ingestion tasks may be fed to system/value/final gates.

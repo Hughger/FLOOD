@@ -115,6 +115,11 @@ if (-not $person2) {
     --final-gate "$OutDir\final_paper_gate_smoke\final_paper_data_gate.csv" `
     --out-dir "$OutDir\main_figure_export_smoke"
 
+& $Python flood_local\audit_main_figure_export.py `
+    --final-gate "$OutDir\final_paper_gate_smoke\final_paper_data_gate.csv" `
+    --export-dir "$OutDir\main_figure_export_smoke" `
+    --out-dir "$OutDir\main_figure_export_audit_smoke"
+
 & $Python flood_local\build_timeline_consistency_report.py `
     --out-dir "$OutDir\timeline_consistency" `
     "$OutDir\person2_gemm" `
@@ -147,6 +152,11 @@ if (-not $person2) {
     --workload-gate "$OutDir\batch_smoke\batch_readiness_summary.csv" `
     --rtl-source-summary "$OutDir\rtl_source_manifest\rtl_source_summary.csv" `
     --out-root "$OutDir\completed_ingest_smoke"
+
+& $Python flood_local\audit_main_figure_export.py `
+    --final-gate "$OutDir\completed_ingest_smoke\final_gate\final_paper_data_gate.csv" `
+    --export-dir "$OutDir\completed_ingest_smoke\main_figure_export" `
+    --out-dir "$OutDir\completed_ingest_smoke\main_figure_export_audit"
 
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `

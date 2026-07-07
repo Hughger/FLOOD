@@ -1,0 +1,2 @@
+audit_status,checks,failed_checks,approved_rows,exported_rows,rejected_rows,source_final_gate_sha256,policy
+pass,7,0,0,0,1,f73f5ac3f500ea85ad7ba418410be931f56e0d82f252f897a4847ac0ddbe93f4,Main figure exports must exactly match final_paper_data_policy=ready_for_main_figure rows.

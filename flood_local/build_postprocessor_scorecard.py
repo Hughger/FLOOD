@@ -45,10 +45,12 @@ def as_int(row: dict[str, str], key: str) -> int:
 def build_scorecard(results_root: Path, out_dir: Path) -> None:
     final_summary = first_row(results_root / "final_paper_gate_smoke" / "final_paper_data_summary.csv")
     export_summary = first_row(results_root / "main_figure_export_smoke" / "export_summary.csv")
+    export_audit = first_row(results_root / "main_figure_export_audit_smoke" / "main_figure_export_audit_summary.csv")
     coverage = first_row(results_root / "validation_coverage" / "coverage_readiness_summary.csv")
     task_summary = first_row(results_root / "rtl_task_manifest" / "rtl_task_summary.csv")
     task_check = first_row(results_root / "rtl_task_manifest_check" / "rtl_task_manifest_check_summary.csv")
     completed_ingest = first_row(results_root / "completed_ingest_smoke" / "completed_ingest_summary.csv")
+    completed_export_audit = first_row(results_root / "completed_ingest_smoke" / "main_figure_export_audit" / "main_figure_export_audit_summary.csv")
     rtl_source = first_row(results_root / "rtl_source_manifest" / "rtl_source_summary.csv")
     value_person2 = first_row(results_root / "person2_gemm" / "value_check_summary.csv")
     value_unet = first_row(results_root / "synthetic_unet_trace" / "value_check_summary.csv")
@@ -84,6 +86,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if exported_rows == 0 and rejected_rows > 0 else "fail",
             "evidence": f"exported={exported_rows}, rejected={rejected_rows}",
             "next_action": "Plot only from main_figure_rows.csv.",
+        },
+        {
+            "check": "main_figure_export_adversarial_audit_passes",
+            "status": "pass" if export_audit.get("audit_status") == "pass" and completed_export_audit.get("audit_status") == "pass" else "fail",
+            "evidence": f"main={export_audit.get('audit_status','missing')}, completed_ingest={completed_export_audit.get('audit_status','missing')}",
+            "next_action": "Treat any audit failure as paper-data leakage until fixed.",
         },
         {
             "check": "real_workload_value_evidence_present",

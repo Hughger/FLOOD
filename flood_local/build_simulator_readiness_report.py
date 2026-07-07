@@ -442,6 +442,21 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Plotting scripts should consume this export package, not intermediate simulator CSVs.",
     )
 
+    audit_summary_path = results_root / "main_figure_export_audit_smoke" / "main_figure_export_audit_summary.csv"
+    audit_summary = first_row(audit_summary_path)
+    completed_audit_summary_path = results_root / "completed_ingest_smoke" / "main_figure_export_audit" / "main_figure_export_audit_summary.csv"
+    completed_audit_summary = first_row(completed_audit_summary_path)
+    export_audits_ok = audit_summary.get("audit_status") == "pass" and completed_audit_summary.get("audit_status") == "pass"
+    add(
+        rows,
+        "delivery",
+        "Main-figure export packages pass adversarial leakage and hash audits.",
+        PASS if export_audits_ok else MISSING,
+        f"{audit_summary_path}: {audit_summary.get('audit_status','missing')}; {completed_audit_summary_path}: {completed_audit_summary.get('audit_status','missing')}",
+        "" if export_audits_ok else "A main-figure export audit is missing or failed.",
+        "Do not plot rows from any export directory unless its audit_status is pass.",
+    )
+
     add(
         rows,
         "delivery",

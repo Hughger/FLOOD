@@ -1,0 +1,8 @@
+check,status,evidence
+source_final_gate_exists,pass,rows=1
+source_hash_matches_export_summary,pass,"summary=f73f5ac3f500ea85ad7ba418410be931f56e0d82f252f897a4847ac0ddbe93f4, actual=f73f5ac3f500ea85ad7ba418410be931f56e0d82f252f897a4847ac0ddbe93f4"
+main_rows_are_exact_approved_set,pass,"exported=0, approved=0, extra=, missing="
+no_rejected_rows_exported,pass,
+rejected_file_matches_final_gate,pass,"rejected_file=1, final_rejected=1"
+export_summary_counts_match_files,pass,"summary_exported=0, file_exported=0, summary_rejected=1, file_rejected=1"
+hardware_signature_matches_final_gate,pass,"summary=566baa5411b356ed67c5572fb2231e100a1fa8e53bf07504edf503c7a1573108, actual=566baa5411b356ed67c5572fb2231e100a1fa8e53bf07504edf503c7a1573108"

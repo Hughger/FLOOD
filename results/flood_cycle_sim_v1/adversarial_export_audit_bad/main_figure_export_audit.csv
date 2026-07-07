@@ -1,0 +1,8 @@
+check,status,evidence
+source_final_gate_exists,pass,rows=1
+source_hash_matches_export_summary,fail,"summary=PLACEHOLDER_BAD_HASH, actual=17f044eece14f8bfbdc5cfdd49e66aebe0279bef106ecdc769528f05a4d6312b"
+main_rows_are_exact_approved_set,fail,"exported=1, approved=0, extra=leaked_rejected_row, missing="
+no_rejected_rows_exported,fail,leaked_rejected_row
+rejected_file_matches_final_gate,fail,"rejected_file=0, final_rejected=1"
+export_summary_counts_match_files,pass,"summary_exported=1, file_exported=1, summary_rejected=0, file_rejected=0"
+hardware_signature_matches_final_gate,pass,"summary=TEST_HW_SIG, actual=TEST_HW_SIG"

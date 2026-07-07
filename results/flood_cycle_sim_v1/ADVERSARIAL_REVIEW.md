@@ -227,3 +227,35 @@ smoke workload：
 3. 对 mactree/zero-skip/outlier/INT8-INT4/channel-group sparsity 先做 inventory-to-model mapping，不急着宣称主图。
 4. 在服务器上跑最小 RTL/testbench 校准样本，把真实 measured cycle 回填到 `--system-calibration`。
 5. 只有通过 gate 的行才交给学生批量跑；学生只负责重复运行和收集表格，不负责判断能不能进论文。
+
+## Simulator Readiness 自动审查
+
+本轮新增 `flood_local/build_simulator_readiness_report.py`，并已接入
+`flood_local/run_flood_cycle_sim.ps1`。每次完整回归后会自动生成：
+
+- `results/flood_cycle_sim_v1/readiness_report/readiness_requirements.csv`
+- `results/flood_cycle_sim_v1/readiness_report/readiness_summary.csv`
+- `results/flood_cycle_sim_v1/readiness_report/README.md`
+
+当前严格审查结果：
+
+- strict pass: 7 / 12
+- strict pass percent: 58.33%
+- usable with caveats: 70.83%
+- goal status: `not_complete_for_hpca_paper_data`
+- main blocker: real workload value checks and full-chip/system timing calibration
+
+严格结论：工具已经能稳定地产生带证据等级和论文使用策略的 CSV，
+也已经把六个优化目录纳入 inventory 和 gate；但还不能交给学生直接批量跑出
+HPCA 主图数据。原因不是脚本不能跑，而是主图级数据还缺两类硬证据：
+
+1. 真实 workload 的 RTL/golden 输出数值检查。
+2. CPU/DMA/control/full-chip 阶段周期的真实校准，且 `mismatch_rows=0`。
+
+因此当前最安全说法仍然是：
+
+- 已完成 Base FLOOD MAC datapath 的 direct RTL-clean 周期锚点。
+- 已完成机制目录的自动盘点和论文闸门。
+- 已完成学生批量运行前的部分工具底座。
+- 未完成完整 cycle-accurate chip simulator。
+- 未完成可直接支撑 HPCA 主图的全 workload 数据链。

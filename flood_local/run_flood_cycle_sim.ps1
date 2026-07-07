@@ -87,4 +87,8 @@ if (-not $person2) {
     --golden-values "$OutDir\value_checker_smoke\golden_values.txt" `
     --rtl-values "$OutDir\value_checker_smoke\rtl_values_fail.txt"
 
+& $Python flood_local\build_simulator_readiness_report.py `
+    --results-root "$OutDir" `
+    --out-dir "$OutDir\readiness_report"
+
 Write-Host "FLOOD cycle simulator regression finished: $OutDir"

@@ -1,0 +1,2 @@
+figures,paper_ready_figures,partial_figures,missing_figures,blocked_figures,p0_ready_figures,p0_total_figures,final_gate_ready_rows,goal_status,main_blocker
+8,1,4,3,0,1,6,0,not_ready_for_direct_paper_plotting,"real RTL value outputs, full-chip timing calibration, mechanism/quality/PPA evidence"

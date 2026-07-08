@@ -460,6 +460,26 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Keep this manifest with any plotted paper data for reproducibility review.",
     )
 
+    hpca_contract_path = results_root / "hpca_figure_contract" / "hpca_figure_contract_summary.csv"
+    hpca_contract = first_row(hpca_contract_path)
+    hpca_figures = as_int(hpca_contract, "figures")
+    hpca_ready_figures = as_int(hpca_contract, "paper_ready_figures")
+    hpca_final_ready_rows = as_int(hpca_contract, "final_gate_ready_rows")
+    hpca_contract_ok = (
+        hpca_figures == 8
+        and hpca_contract.get("goal_status") == "not_ready_for_direct_paper_plotting"
+        and hpca_final_ready_rows == 0
+    )
+    add(
+        rows,
+        "delivery",
+        "HPCA Fig.1-Fig.8 data requirements are tracked by a figure-level contract.",
+        PASS if hpca_contract_ok else MISSING,
+        f"{hpca_contract_path}: figures={hpca_figures}, paper_ready_figures={hpca_ready_figures}, final_ready_rows={hpca_final_ready_rows}",
+        "" if hpca_contract_ok else "HPCA figure contract is missing or no longer matches the final-gate state.",
+        "Use hpca_figure_contract.csv to decide which figure data can be plotted directly.",
+    )
+
     export_summary_path = results_root / "main_figure_export_smoke" / "export_summary.csv"
     export_summary = first_row(export_summary_path)
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
@@ -540,12 +560,15 @@ as paper data?
 - Base FLOOD MAC direct RTL-clean timing is currently all-pass.
 - Blocked/X/zero-cycle RTL samples are explicitly separated.
 - Paper-use gates exist, so projection rows are not silently mixed into main tables.
+- HPCA Fig.1-Fig.8 requirements are now tracked as a machine-checkable contract.
 - Six optimization folders are inventoried and remain disabled unless evidence is added.
 
 ## What Still Blocks Paper-Ready Batch Runs
 
 - Real workloads still lack pass-grade RTL/golden output-value evidence.
 - Full-chip CPU/DMA/control timing is still a smoke/projection path.
+- Fig.6/Fig.7/Fig.5 still cannot be directly plotted until real performance,
+  mechanism, and quality evidence is ingested.
 - Softmax, MACTree, zero-skip, channel-group sparsity, INT8/INT4, and outlier paths
   are inventoried but not validated enough for main performance figures.
 

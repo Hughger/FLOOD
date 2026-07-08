@@ -58,6 +58,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     source_bundle_auto = first_row(results_root / "source_bundle_auto_verify" / "rtl_source_bundle_verify_summary.csv")
     server_source_bundle_auto = first_row(results_root / "server_linux_repro_30659" / "source_bundle_auto_verify_summary.csv")
     server_source_bundle_tamper = first_row(results_root / "server_linux_repro_30659" / "source_bundle_tamper_verify" / "rtl_source_bundle_verify_summary.csv")
+    hpca_contract = first_row(results_root / "hpca_figure_contract" / "hpca_figure_contract_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -82,6 +83,11 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     source_bundle_tamper_fails = (
         server_source_bundle_tamper.get("verify_status") == "fail"
         and as_int(server_source_bundle_tamper, "failed_files") > 0
+    )
+    hpca_contract_blocks_unready = (
+        hpca_contract.get("goal_status") == "not_ready_for_direct_paper_plotting"
+        and as_int(hpca_contract, "figures") == 8
+        and as_int(hpca_contract, "final_gate_ready_rows") == 0
     )
 
     checks = [
@@ -145,6 +151,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "evidence": f"ingest_status={completed_ingest.get('ingest_status','missing')}, ready_tasks={ingest_ready_tasks}, system_ready={ingest_system_ready}, value_ready={ingest_value_ready}, exported={completed_ingest.get('exported_main_figure_rows','0')}",
             "next_action": "Use run_completed_rtl_task_ingest.py for completed student/server RTL outputs.",
         },
+        {
+            "check": "hpca_figure_contract_blocks_unready_figures",
+            "status": "pass" if hpca_contract_blocks_unready else "fail",
+            "evidence": f"figures={hpca_contract.get('figures','0')}, paper_ready_figures={hpca_contract.get('paper_ready_figures','0')}, final_gate_ready_rows={hpca_contract.get('final_gate_ready_rows','0')}, goal={hpca_contract.get('goal_status','missing')}",
+            "next_action": "Use hpca_figure_contract.csv as the figure-by-figure checklist before plotting.",
+        },
     ]
     write_csv(out_dir / "postprocessor_checks.csv", checks)
 
@@ -172,6 +184,7 @@ Current interpretation:
 - The gate stack is in place.
 - Completed RTL task manifests can be ingested through system/value/final/export gates.
 - Current smoke data is correctly rejected from main figures.
+- HPCA Fig.1-Fig.8 readiness is tracked by a figure-level contract.
 - Qualified paper data still requires real RTL/golden value outputs and
   full-chip calibration logs.
 """

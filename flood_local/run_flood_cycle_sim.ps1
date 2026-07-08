@@ -158,6 +158,12 @@ if (-not $person2) {
     --export-dir "$OutDir\completed_ingest_smoke\main_figure_export" `
     --out-dir "$OutDir\completed_ingest_smoke\main_figure_export_audit"
 
+& $Python flood_local\build_hpca_figure_contract.py `
+    --results-root "$OutDir" `
+    --legacy-micro-dir results\flood_pytorchsim_backend_v1\legacy_micro_data_v1 `
+    --backend-root results\flood_pytorchsim_backend_v1 `
+    --out-dir "$OutDir\hpca_figure_contract"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

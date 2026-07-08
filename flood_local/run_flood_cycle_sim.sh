@@ -201,6 +201,12 @@ run "$PYTHON" flood_local/audit_main_figure_export.py \
   --export-dir "$OUT_DIR/completed_ingest_smoke/main_figure_export" \
   --out-dir "$OUT_DIR/completed_ingest_smoke/main_figure_export_audit"
 
+run "$PYTHON" flood_local/build_hpca_figure_contract.py \
+  --results-root "$OUT_DIR" \
+  --legacy-micro-dir results/flood_pytorchsim_backend_v1/legacy_micro_data_v1 \
+  --backend-root results/flood_pytorchsim_backend_v1 \
+  --out-dir "$OUT_DIR/hpca_figure_contract"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

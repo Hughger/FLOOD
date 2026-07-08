@@ -6,8 +6,8 @@ as paper data?
 
 ## Summary
 
-- Strict pass: 22/27 requirements (81.48%).
-- Usable with caveats: 87.04%.
+- Strict pass: 23/28 requirements (82.14%).
+- Usable with caveats: 87.50%.
 - Goal status: not complete for HPCA paper data.
 - Main blocker: real workload output-value checks and full-chip/system timing calibration.
 
@@ -16,12 +16,15 @@ as paper data?
 - Base FLOOD MAC direct RTL-clean timing is currently all-pass.
 - Blocked/X/zero-cycle RTL samples are explicitly separated.
 - Paper-use gates exist, so projection rows are not silently mixed into main tables.
+- HPCA Fig.1-Fig.8 requirements are now tracked as a machine-checkable contract.
 - Six optimization folders are inventoried and remain disabled unless evidence is added.
 
 ## What Still Blocks Paper-Ready Batch Runs
 
 - Real workloads still lack pass-grade RTL/golden output-value evidence.
 - Full-chip CPU/DMA/control timing is still a smoke/projection path.
+- Fig.6/Fig.7/Fig.5 still cannot be directly plotted until real performance,
+  mechanism, and quality evidence is ingested.
 - Softmax, MACTree, zero-skip, channel-group sparsity, INT8/INT4, and outlier paths
   are inventoried but not validated enough for main performance figures.
 

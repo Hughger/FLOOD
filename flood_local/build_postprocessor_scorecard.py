@@ -64,6 +64,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     rtl_expansion_results = first_row(results_root / "rtl_expansion_results_ingest" / "rtl_expansion_results_summary.csv")
     rtl_tile_projection = first_row(results_root / "rtl_tile_projection" / "rtl_tile_projection_summary.csv")
     rtl_value_repeat = first_row(results_root / "rtl_value_repeat_gate" / "rtl_value_repeat_gate_summary.csv")
+    rtl_repeat_consistency = first_row(results_root / "rtl_repeat_consistency_gate" / "rtl_repeat_consistency_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -114,6 +115,19 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         rtl_value_repeat.get("repeat_value_gate_status") == "pass"
         and as_int(rtl_value_repeat, "passed_cases") > 0
         and as_int(rtl_value_repeat, "direct_paper_ready_cases") == 0
+    )
+    rtl_repeat_status_ok = (
+        rtl_repeat_consistency.get("repeat_consistency_status") == "pass"
+        and as_int(rtl_repeat_consistency, "execution_clean_cases") > 0
+    )
+    rtl_repeat_timing_ok = (
+        rtl_repeat_consistency.get("repeat_consistency_status") == "pass"
+        and as_int(rtl_repeat_consistency, "timing_repeat_pass_cases") > 0
+    )
+    rtl_repeat_hash_ok = (
+        rtl_repeat_consistency.get("repeat_consistency_status") == "pass"
+        and as_int(rtl_repeat_consistency, "output_hash_pass_cases") > 0
+        and as_int(rtl_repeat_consistency, "direct_paper_ready_cases") == 0
     )
 
     checks = [
@@ -194,6 +208,24 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if rtl_value_repeat_ok else "missing_input_evidence",
             "evidence": f"checked={rtl_value_repeat.get('checked_cases','0')}, passed={rtl_value_repeat.get('passed_cases','0')}, compared_values={rtl_value_repeat.get('total_compared_values','0')}, direct_paper_ready={rtl_value_repeat.get('direct_paper_ready_cases','0')}, policy={rtl_value_repeat.get('paper_data_policy','missing')}",
             "next_action": "Use as repeatability evidence; still collect independent software golden outputs for paper value correctness.",
+        },
+        {
+            "check": "server_rtl_repeat_executions_finish_cleanly",
+            "status": "pass" if rtl_repeat_status_ok else "missing_input_evidence",
+            "evidence": f"cases={rtl_repeat_consistency.get('cases','0')}, execution_clean={rtl_repeat_consistency.get('execution_clean_cases','0')}",
+            "next_action": "Keep this status gate with every server RTL repeatability package.",
+        },
+        {
+            "check": "server_rtl_repeat_timing_cycles_are_identical",
+            "status": "pass" if rtl_repeat_timing_ok else "missing_input_evidence",
+            "evidence": f"cases={rtl_repeat_consistency.get('cases','0')}, timing_repeat_pass={rtl_repeat_consistency.get('timing_repeat_pass_cases','0')}",
+            "next_action": "Use this as timing repeatability evidence, not full-chip timing evidence.",
+        },
+        {
+            "check": "server_rtl_repeat_output_hashes_are_identical",
+            "status": "pass" if rtl_repeat_hash_ok else "missing_input_evidence",
+            "evidence": f"cases={rtl_repeat_consistency.get('cases','0')}, output_hash_pass={rtl_repeat_consistency.get('output_hash_pass_cases','0')}, direct_paper_ready={rtl_repeat_consistency.get('direct_paper_ready_cases','0')}, policy={rtl_repeat_consistency.get('paper_data_policy','missing')}",
+            "next_action": "Use as output repeatability evidence; independent software golden remains required.",
         },
         {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",

@@ -1,0 +1,2 @@
+repeat_consistency_status,cases,execution_clean_cases,timing_repeat_pass_cases,output_hash_pass_cases,direct_paper_ready_cases,paper_data_policy
+pass,4,4,4,4,0,repeatability_only_not_full_chip_independent_golden

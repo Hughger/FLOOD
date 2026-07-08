@@ -195,6 +195,10 @@ if (-not $person2) {
     --value-summary "$OutDir\rtl_value_repeat_check\merged_value_check_summary.csv" `
     --out-dir "$OutDir\rtl_value_repeat_gate"
 
+& $Python flood_local\build_rtl_repeat_consistency_gate.py `
+    --server-root "$OutDir\server_rtl_value_repeat_v1" `
+    --out-dir "$OutDir\rtl_repeat_consistency_gate"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

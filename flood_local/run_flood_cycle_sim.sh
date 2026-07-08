@@ -238,6 +238,10 @@ run "$PYTHON" flood_local/build_rtl_value_repeat_gate.py \
   --value-summary "$OUT_DIR/rtl_value_repeat_check/merged_value_check_summary.csv" \
   --out-dir "$OUT_DIR/rtl_value_repeat_gate"
 
+run "$PYTHON" flood_local/build_rtl_repeat_consistency_gate.py \
+  --server-root "$OUT_DIR/server_rtl_value_repeat_v1" \
+  --out-dir "$OUT_DIR/rtl_repeat_consistency_gate"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

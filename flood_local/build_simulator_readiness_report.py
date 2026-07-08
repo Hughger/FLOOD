@@ -421,6 +421,49 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use this as repeatability evidence only; independent software golden remains required.",
     )
 
+    rtl_repeat_consistency_path = results_root / "rtl_repeat_consistency_gate" / "rtl_repeat_consistency_summary.csv"
+    rtl_repeat_consistency = first_row(rtl_repeat_consistency_path)
+    repeat_status_ready = (
+        rtl_repeat_consistency.get("repeat_consistency_status") == "pass"
+        and as_int(rtl_repeat_consistency, "execution_clean_cases") > 0
+    )
+    repeat_timing_ready = (
+        rtl_repeat_consistency.get("repeat_consistency_status") == "pass"
+        and as_int(rtl_repeat_consistency, "timing_repeat_pass_cases") > 0
+    )
+    repeat_hash_ready = (
+        rtl_repeat_consistency.get("repeat_consistency_status") == "pass"
+        and as_int(rtl_repeat_consistency, "output_hash_pass_cases") > 0
+        and as_int(rtl_repeat_consistency, "direct_paper_ready_cases") == 0
+    )
+    add(
+        rows,
+        "value_correctness",
+        "Server RTL repeat executions finish cleanly for P0 tile cases.",
+        PASS if repeat_status_ready else MISSING,
+        f"{rtl_repeat_consistency_path}: execution_clean={rtl_repeat_consistency.get('execution_clean_cases','0')}",
+        "" if repeat_status_ready else "Server repeat execution status is missing or failed.",
+        "Keep clean execution status as a prerequisite for value/timing repeat claims.",
+    )
+    add(
+        rows,
+        "system_timing",
+        "Server RTL repeat timing cycle lists are identical for P0 tile cases.",
+        PASS if repeat_timing_ready else MISSING,
+        f"{rtl_repeat_consistency_path}: timing_repeat_pass={rtl_repeat_consistency.get('timing_repeat_pass_cases','0')}",
+        "" if repeat_timing_ready else "Server repeat timing cycles are missing or inconsistent.",
+        "Use as repeatability evidence; full-chip system timing is still separate.",
+    )
+    add(
+        rows,
+        "value_correctness",
+        "Server RTL repeat output file hashes are identical for P0 tile cases.",
+        PASS if repeat_hash_ready else MISSING,
+        f"{rtl_repeat_consistency_path}: output_hash_pass={rtl_repeat_consistency.get('output_hash_pass_cases','0')}, direct_paper_ready={rtl_repeat_consistency.get('direct_paper_ready_cases','0')}",
+        "" if repeat_hash_ready else "Server repeat output hashes are missing or inconsistent.",
+        "Use as output repeatability evidence; independent software golden remains required.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

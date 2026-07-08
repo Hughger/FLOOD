@@ -60,6 +60,7 @@ def test_repeatability_without_independent_golden_is_blocked_from_direct_paper_d
             """
             Path("weights_ping.hex").write_text("x")
             Path("features.hex").write_text("x")
+            feature_lines = args.group_num * args.res_rows
             """,
         )
         write_csv(
@@ -104,6 +105,10 @@ def test_repeatability_without_independent_golden_is_blocked_from_direct_paper_d
         assert summary["repeatability_evidence_status"] == "pass"
         assert summary["direct_paper_ready_rows"] == "0"
         assert "python_independent_golden" in summary["main_blocker"]
+
+        checks = {row["check"]: row for row in read_csv(out_dir / "independent_golden_feasibility_checks.csv")}
+        assert checks["feature_hex_multi_resolution_column_packing"]["status"] == "missing"
+        assert "RES_COL_TOTAL" in checks["feature_hex_multi_resolution_column_packing"]["paper_policy"]
 
 
 if __name__ == "__main__":

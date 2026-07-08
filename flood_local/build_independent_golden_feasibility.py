@@ -52,6 +52,21 @@ def has_all(text: str, needles: list[str]) -> bool:
     return all(needle in text for needle in needles)
 
 
+def feature_generator_supports_multi_res_cols(text: str) -> bool:
+    """Detect whether features.hex explicitly packs more than one resolution column per row."""
+    if not text:
+        return False
+    multi_col_markers = [
+        "range(args.res_cols)",
+        "range(args.res_cols_total)",
+        "args.res_cols *",
+        "* args.res_cols",
+        "RES_COL_TOTAL",
+    ]
+    width_markers = ["FEAT_DATAW", "256 * args.res_cols", "args.res_cols * 256", "feature_row_bytes"]
+    return any(marker in text for marker in multi_col_markers) and any(marker in text for marker in width_markers)
+
+
 def build_feasibility(
     testbench: Path,
     make_hex: Path,
@@ -84,6 +99,12 @@ def build_feasibility(
             "status": "pass" if has_all(tb_text, ['weights_ping.hex', 'features.hex', '$readmemh']) else "missing",
             "evidence": "$readmemh weights/features",
             "paper_policy": "required_for_reproduction",
+        },
+        {
+            "check": "feature_hex_multi_resolution_column_packing",
+            "status": "pass" if feature_generator_supports_multi_res_cols(hex_text) else "missing",
+            "evidence": "features.hex must pack RES_COL_TOTAL * FEAT_DATAW bits per memory row when RES_COL_TOTAL>1.",
+            "paper_policy": "RES_COL_TOTAL_greater_than_1_blocks_independent_golden_until_packing_is_explicit",
         },
         {
             "check": "feature_mapping_logic_visible",

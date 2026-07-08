@@ -63,6 +63,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     real_rtl_plan = first_row(results_root / "real_workload_rtl_expansion_plan" / "rtl_expansion_plan_summary.csv")
     rtl_expansion_results = first_row(results_root / "rtl_expansion_results_ingest" / "rtl_expansion_results_summary.csv")
     rtl_tile_projection = first_row(results_root / "rtl_tile_projection" / "rtl_tile_projection_summary.csv")
+    rtl_value_repeat = first_row(results_root / "rtl_value_repeat_gate" / "rtl_value_repeat_gate_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -108,6 +109,11 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         rtl_tile_projection.get("projection_status") == "pass"
         and as_int(rtl_tile_projection, "projected_rows") > 0
         and as_int(rtl_tile_projection, "direct_paper_ready_rows") == 0
+    )
+    rtl_value_repeat_ok = (
+        rtl_value_repeat.get("repeat_value_gate_status") == "pass"
+        and as_int(rtl_value_repeat, "passed_cases") > 0
+        and as_int(rtl_value_repeat, "direct_paper_ready_cases") == 0
     )
 
     checks = [
@@ -182,6 +188,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if rtl_tile_projection_ok else "missing_input_evidence",
             "evidence": f"projected_rows={rtl_tile_projection.get('projected_rows','0')}, direct_paper_ready={rtl_tile_projection.get('direct_paper_ready_rows','0')}, policy={rtl_tile_projection.get('paper_data_policy','missing')}",
             "next_action": "Use these rows for calibration review only until full-chip timing and golden values pass.",
+        },
+        {
+            "check": "server_rtl_repeat_value_outputs_match_but_are_not_independent_golden",
+            "status": "pass" if rtl_value_repeat_ok else "missing_input_evidence",
+            "evidence": f"checked={rtl_value_repeat.get('checked_cases','0')}, passed={rtl_value_repeat.get('passed_cases','0')}, compared_values={rtl_value_repeat.get('total_compared_values','0')}, direct_paper_ready={rtl_value_repeat.get('direct_paper_ready_cases','0')}, policy={rtl_value_repeat.get('paper_data_policy','missing')}",
+            "next_action": "Use as repeatability evidence; still collect independent software golden outputs for paper value correctness.",
         },
         {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",

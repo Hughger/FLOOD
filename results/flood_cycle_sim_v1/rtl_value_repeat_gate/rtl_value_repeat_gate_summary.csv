@@ -1,0 +1,2 @@
+repeat_value_gate_status,prepared_cases,checked_cases,passed_cases,total_compared_values,direct_paper_ready_cases,paper_data_policy,main_blocker
+pass,4,4,4,4608,0,repeatability_only_not_independent_golden,independent software golden reference still required for paper value correctness

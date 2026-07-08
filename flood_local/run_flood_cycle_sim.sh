@@ -225,6 +225,19 @@ run "$PYTHON" flood_local/build_rtl_tile_projection.py \
   --expansion-plan "$OUT_DIR/real_workload_rtl_expansion_plan/next_server_run_manifest.csv" \
   --out-dir "$OUT_DIR/rtl_tile_projection"
 
+run "$PYTHON" flood_local/prepare_rtl_repeat_value_checks.py \
+  --server-root "$OUT_DIR/server_rtl_value_repeat_v1" \
+  --out-dir "$OUT_DIR/rtl_value_repeat_prepare"
+
+run "$PYTHON" flood_local/run_value_check_batch.py \
+  --manifest "$OUT_DIR/rtl_value_repeat_prepare/value_repeat_manifest.csv" \
+  --out-root "$OUT_DIR/rtl_value_repeat_check"
+
+run "$PYTHON" flood_local/build_rtl_value_repeat_gate.py \
+  --prepare-summary "$OUT_DIR/rtl_value_repeat_prepare/value_repeat_prepare_summary.csv" \
+  --value-summary "$OUT_DIR/rtl_value_repeat_check/merged_value_check_summary.csv" \
+  --out-dir "$OUT_DIR/rtl_value_repeat_gate"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

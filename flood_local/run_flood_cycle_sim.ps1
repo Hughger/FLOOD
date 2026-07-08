@@ -182,6 +182,19 @@ if (-not $person2) {
     --expansion-plan "$OutDir\real_workload_rtl_expansion_plan\next_server_run_manifest.csv" `
     --out-dir "$OutDir\rtl_tile_projection"
 
+& $Python flood_local\prepare_rtl_repeat_value_checks.py `
+    --server-root "$OutDir\server_rtl_value_repeat_v1" `
+    --out-dir "$OutDir\rtl_value_repeat_prepare"
+
+& $Python flood_local\run_value_check_batch.py `
+    --manifest "$OutDir\rtl_value_repeat_prepare\value_repeat_manifest.csv" `
+    --out-root "$OutDir\rtl_value_repeat_check"
+
+& $Python flood_local\build_rtl_value_repeat_gate.py `
+    --prepare-summary "$OutDir\rtl_value_repeat_prepare\value_repeat_prepare_summary.csv" `
+    --value-summary "$OutDir\rtl_value_repeat_check\merged_value_check_summary.csv" `
+    --out-dir "$OutDir\rtl_value_repeat_gate"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

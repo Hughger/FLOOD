@@ -404,6 +404,23 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Keep these projections out of main paper figures until value and full-chip gates pass.",
     )
 
+    rtl_value_repeat_path = results_root / "rtl_value_repeat_gate" / "rtl_value_repeat_gate_summary.csv"
+    rtl_value_repeat = first_row(rtl_value_repeat_path)
+    rtl_value_repeat_ready = (
+        rtl_value_repeat.get("repeat_value_gate_status") == "pass"
+        and as_int(rtl_value_repeat, "passed_cases") > 0
+        and as_int(rtl_value_repeat, "direct_paper_ready_cases") == 0
+    )
+    add(
+        rows,
+        "value_correctness",
+        "Server RTL repeat runs produce identical output values for P0 tile cases.",
+        PASS if rtl_value_repeat_ready else MISSING,
+        f"{rtl_value_repeat_path}: passed={rtl_value_repeat.get('passed_cases','0')}, compared_values={rtl_value_repeat.get('total_compared_values','0')}, direct_paper_ready={rtl_value_repeat.get('direct_paper_ready_cases','0')}",
+        "" if rtl_value_repeat_ready else "No passing server RTL repeat value evidence is available.",
+        "Use this as repeatability evidence only; independent software golden remains required.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

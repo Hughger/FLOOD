@@ -1,0 +1,5 @@
+workload_id,golden_values,rtl_values,out_subdir,rtol,atol
+calib_07_repeat,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_07_repeat\golden_values.txt,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_07_repeat\rtl_values.txt,calib_07_repeat,0.0,0.0
+calib_08_repeat,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_08_repeat\golden_values.txt,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_08_repeat\rtl_values.txt,calib_08_repeat,0.0,0.0
+calib_09_safe_tile,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_09_safe_tile\golden_values.txt,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_09_safe_tile\rtl_values.txt,calib_09_safe_tile,0.0,0.0
+calib_10_safe_tile,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_10_safe_tile\golden_values.txt,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_10_safe_tile\rtl_values.txt,calib_10_safe_tile,0.0,0.0

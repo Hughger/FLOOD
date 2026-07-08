@@ -1,0 +1,2 @@
+value_check_status,golden_path,rtl_output_path,golden_values,rtl_values,compared_values,length_mismatch,num_mismatches,max_abs_error,max_rel_error,rtol,atol,note
+pass,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_09_safe_tile\golden_values.txt,results\flood_cycle_sim_v1\rtl_value_repeat_prepare\values\calib_09_safe_tile\rtl_values.txt,1152,1152,1152,False,0,0.0,0.0,0.0,0.0,Numeric token comparison; file format is not semantically parsed.

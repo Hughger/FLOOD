@@ -1,0 +1,5 @@
+workload_id,run_status,value_check_status,main_value_ready_policy,blockers
+calib_07_repeat,pass,pass,ready_for_main_figure_value,
+calib_08_repeat,pass,pass,ready_for_main_figure_value,
+calib_09_safe_tile,pass,pass,ready_for_main_figure_value,
+calib_10_safe_tile,pass,pass,ready_for_main_figure_value,

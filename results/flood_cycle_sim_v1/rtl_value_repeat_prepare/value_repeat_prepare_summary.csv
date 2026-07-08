@@ -1,0 +1,2 @@
+prepare_status,cases,ready_cases,evidence_scope,paper_data_policy
+pass,4,4,server_rtl_repeatability_not_independent_software_golden,calibration_value_repeatability_only

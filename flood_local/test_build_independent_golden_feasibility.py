@@ -109,6 +109,7 @@ def test_repeatability_without_independent_golden_is_blocked_from_direct_paper_d
         checks = {row["check"]: row for row in read_csv(out_dir / "independent_golden_feasibility_checks.csv")}
         assert checks["feature_hex_multi_resolution_column_packing"]["status"] == "missing"
         assert "RES_COL_TOTAL" in checks["feature_hex_multi_resolution_column_packing"]["paper_policy"]
+        assert checks["python_feature_hex_mapping_helper_available"]["status"] == "pass"
 
 
 if __name__ == "__main__":

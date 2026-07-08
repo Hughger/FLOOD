@@ -75,7 +75,10 @@ def build_feasibility(
     repeat_gate_summary_csv: Path,
     repeat_consistency_summary_csv: Path,
     out_dir: Path,
+    mapping_helper: Path | None = None,
 ) -> None:
+    if mapping_helper is None:
+        mapping_helper = Path(__file__).with_name("rtl_hex_mapping.py")
     tb_text = read_text(testbench)
     hex_text = read_text(make_hex)
     projections = read_rows(projection_csv)
@@ -112,6 +115,12 @@ def build_feasibility(
             "status": "pass" if has_all(tb_text, ["drive_feature_from_files", "addr_in_hex", "feature_data"]) else "missing",
             "evidence": "drive_feature_from_files",
             "paper_policy": "required_for_independent_golden",
+        },
+        {
+            "check": "python_feature_hex_mapping_helper_available",
+            "status": "pass" if mapping_helper.exists() else "missing",
+            "evidence": str(mapping_helper),
+            "paper_policy": "input_mapping_foundation_for_independent_golden",
         },
         {
             "check": "output_sram_dump_logic_visible",
@@ -233,6 +242,7 @@ def main() -> None:
         "--repeat-consistency-summary",
         default="results/flood_cycle_sim_v1/rtl_repeat_consistency_gate/rtl_repeat_consistency_summary.csv",
     )
+    parser.add_argument("--mapping-helper", default="flood_local/rtl_hex_mapping.py")
     parser.add_argument("--out-dir", default="results/flood_cycle_sim_v1/independent_golden_feasibility")
     args = parser.parse_args()
     build_feasibility(
@@ -242,6 +252,7 @@ def main() -> None:
         Path(args.repeat_gate_summary),
         Path(args.repeat_consistency_summary),
         Path(args.out_dir),
+        Path(args.mapping_helper),
     )
 
 

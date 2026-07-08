@@ -387,6 +387,23 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use these tile-level results for calibration, not direct paper data.",
     )
 
+    rtl_tile_projection_path = results_root / "rtl_tile_projection" / "rtl_tile_projection_summary.csv"
+    rtl_tile_projection = first_row(rtl_tile_projection_path)
+    rtl_tile_projection_ready = (
+        rtl_tile_projection.get("projection_status") == "pass"
+        and as_int(rtl_tile_projection, "projected_rows") > 0
+        and as_int(rtl_tile_projection, "direct_paper_ready_rows") == 0
+    )
+    add(
+        rows,
+        "system_timing",
+        "Clean RTL tile results are converted into blocked full-layer MAC projections.",
+        PASS if rtl_tile_projection_ready else MISSING,
+        f"{rtl_tile_projection_path}: projected={rtl_tile_projection.get('projected_rows','0')}, direct_paper_ready={rtl_tile_projection.get('direct_paper_ready_rows','0')}",
+        "" if rtl_tile_projection_ready else "No conservative tile-calibrated full-layer projection is available.",
+        "Keep these projections out of main paper figures until value and full-chip gates pass.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

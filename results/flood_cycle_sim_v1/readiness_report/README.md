@@ -6,8 +6,8 @@ as paper data?
 
 ## Summary
 
-- Strict pass: 26/31 requirements (83.87%).
-- Usable with caveats: 88.71%.
+- Strict pass: 27/32 requirements (84.38%).
+- Usable with caveats: 89.06%.
 - Goal status: not complete for HPCA paper data.
 - Main blocker: real workload output-value checks and full-chip/system timing calibration.
 

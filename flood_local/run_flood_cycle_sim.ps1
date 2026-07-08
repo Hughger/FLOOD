@@ -177,6 +177,11 @@ if (-not $person2) {
     --log-root "$OutDir\server_rtl_real_workload_v2\logs" `
     --out-dir "$OutDir\rtl_expansion_results_ingest"
 
+& $Python flood_local\build_rtl_tile_projection.py `
+    --expansion-gate "$OutDir\rtl_expansion_results_ingest\rtl_expansion_results_gate.csv" `
+    --expansion-plan "$OutDir\real_workload_rtl_expansion_plan\next_server_run_manifest.csv" `
+    --out-dir "$OutDir\rtl_tile_projection"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

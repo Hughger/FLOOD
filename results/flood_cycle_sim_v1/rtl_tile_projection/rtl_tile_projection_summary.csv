@@ -1,0 +1,2 @@
+projection_status,projected_rows,direct_paper_ready_rows,calibration_projection_rows,paper_data_policy,main_blocker
+pass,4,0,4,not_direct_paper_data_until_full_chip_value_timing,full-chip timing and golden value checks are still required

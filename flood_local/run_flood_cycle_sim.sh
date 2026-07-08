@@ -220,6 +220,11 @@ run "$PYTHON" flood_local/ingest_rtl_expansion_results.py \
   --log-root "$OUT_DIR/server_rtl_real_workload_v2/logs" \
   --out-dir "$OUT_DIR/rtl_expansion_results_ingest"
 
+run "$PYTHON" flood_local/build_rtl_tile_projection.py \
+  --expansion-gate "$OUT_DIR/rtl_expansion_results_ingest/rtl_expansion_results_gate.csv" \
+  --expansion-plan "$OUT_DIR/real_workload_rtl_expansion_plan/next_server_run_manifest.csv" \
+  --out-dir "$OUT_DIR/rtl_tile_projection"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

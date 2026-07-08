@@ -62,6 +62,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     real_rtl_subset = first_row(results_root / "real_workload_rtl_subset_ingest" / "real_workload_rtl_subset_summary.csv")
     real_rtl_plan = first_row(results_root / "real_workload_rtl_expansion_plan" / "rtl_expansion_plan_summary.csv")
     rtl_expansion_results = first_row(results_root / "rtl_expansion_results_ingest" / "rtl_expansion_results_summary.csv")
+    rtl_tile_projection = first_row(results_root / "rtl_tile_projection" / "rtl_tile_projection_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -102,6 +103,11 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         rtl_expansion_results.get("ingest_status") == "pass"
         and as_int(rtl_expansion_results, "complete_clean_cases") > 0
         and as_int(rtl_expansion_results, "x_or_error_cases") == 0
+    )
+    rtl_tile_projection_ok = (
+        rtl_tile_projection.get("projection_status") == "pass"
+        and as_int(rtl_tile_projection, "projected_rows") > 0
+        and as_int(rtl_tile_projection, "direct_paper_ready_rows") == 0
     )
 
     checks = [
@@ -170,6 +176,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if rtl_expansion_results_ok else "missing_input_evidence",
             "evidence": f"cases={rtl_expansion_results.get('total_cases','0')}, complete={rtl_expansion_results.get('complete_clean_cases','0')}, calibration_ready={rtl_expansion_results.get('calibration_ready_cases','0')}, x_or_error={rtl_expansion_results.get('x_or_error_cases','0')}, policy={rtl_expansion_results.get('paper_data_policy','missing')}",
             "next_action": "Use clean P0 tile results to calibrate full-layer projection, then collect full-chip/value evidence.",
+        },
+        {
+            "check": "rtl_tile_calibrated_full_layer_projection_exists_but_is_blocked_from_paper",
+            "status": "pass" if rtl_tile_projection_ok else "missing_input_evidence",
+            "evidence": f"projected_rows={rtl_tile_projection.get('projected_rows','0')}, direct_paper_ready={rtl_tile_projection.get('direct_paper_ready_rows','0')}, policy={rtl_tile_projection.get('paper_data_policy','missing')}",
+            "next_action": "Use these rows for calibration review only until full-chip timing and golden values pass.",
         },
         {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",

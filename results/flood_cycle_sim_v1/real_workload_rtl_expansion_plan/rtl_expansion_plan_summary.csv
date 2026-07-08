@@ -1,0 +1,2 @@
+input_cases,tasks,p0_tasks,p1_tasks,p2_tasks,policy,paper_data_policy
+10,12,4,2,6,expand_clean_conv_tiles_first_and_quarantine_no_output_paths,not_direct_paper_data_until_full_layer_full_chip_value_timing

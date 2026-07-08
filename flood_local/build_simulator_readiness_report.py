@@ -357,6 +357,36 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use this as bounded calibration evidence; still require full-chip/full-layer logs for paper rows.",
     )
 
+    rtl_plan_path = results_root / "real_workload_rtl_expansion_plan" / "rtl_expansion_plan_summary.csv"
+    rtl_plan = first_row(rtl_plan_path)
+    rtl_plan_ready = as_int(rtl_plan, "p0_tasks") > 0 and as_int(rtl_plan, "p2_tasks") > 0
+    add(
+        rows,
+        "system_timing",
+        "Next real-workload RTL runs are prioritized so completable tiles are separated from bring-up paths.",
+        PASS if rtl_plan_ready else MISSING,
+        f"{rtl_plan_path}: p0={rtl_plan.get('p0_tasks','0')}, p1={rtl_plan.get('p1_tasks','0')}, p2={rtl_plan.get('p2_tasks','0')}",
+        "" if rtl_plan_ready else "No prioritized RTL expansion plan is available.",
+        "Run P0 first, then use P2 only for testbench/operator bring-up.",
+    )
+
+    rtl_expansion_results_path = results_root / "rtl_expansion_results_ingest" / "rtl_expansion_results_summary.csv"
+    rtl_expansion_results = first_row(rtl_expansion_results_path)
+    rtl_expansion_results_ready = (
+        rtl_expansion_results.get("ingest_status") == "pass"
+        and as_int(rtl_expansion_results, "complete_clean_cases") > 0
+        and as_int(rtl_expansion_results, "x_or_error_cases") == 0
+    )
+    add(
+        rows,
+        "system_timing",
+        "P0 real-workload RTL expansion tiles complete cleanly on the server.",
+        PASS if rtl_expansion_results_ready else MISSING,
+        f"{rtl_expansion_results_path}: complete={rtl_expansion_results.get('complete_clean_cases','0')}, calibration_ready={rtl_expansion_results.get('calibration_ready_cases','0')}, x_or_error={rtl_expansion_results.get('x_or_error_cases','0')}",
+        "" if rtl_expansion_results_ready else "P0 expansion results are missing or not clean.",
+        "Use these tile-level results for calibration, not direct paper data.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

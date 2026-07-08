@@ -60,6 +60,8 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     server_source_bundle_tamper = first_row(results_root / "server_linux_repro_30659" / "source_bundle_tamper_verify" / "rtl_source_bundle_verify_summary.csv")
     hpca_contract = first_row(results_root / "hpca_figure_contract" / "hpca_figure_contract_summary.csv")
     real_rtl_subset = first_row(results_root / "real_workload_rtl_subset_ingest" / "real_workload_rtl_subset_summary.csv")
+    real_rtl_plan = first_row(results_root / "real_workload_rtl_expansion_plan" / "rtl_expansion_plan_summary.csv")
+    rtl_expansion_results = first_row(results_root / "rtl_expansion_results_ingest" / "rtl_expansion_results_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -94,6 +96,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         real_rtl_subset.get("ingest_status") == "pass"
         and as_int(real_rtl_subset, "calibration_ready_cases") > 0
         and as_int(real_rtl_subset, "x_or_error_cases") == 0
+    )
+    real_rtl_plan_ok = as_int(real_rtl_plan, "p0_tasks") > 0 and as_int(real_rtl_plan, "p2_tasks") > 0
+    rtl_expansion_results_ok = (
+        rtl_expansion_results.get("ingest_status") == "pass"
+        and as_int(rtl_expansion_results, "complete_clean_cases") > 0
+        and as_int(rtl_expansion_results, "x_or_error_cases") == 0
     )
 
     checks = [
@@ -150,6 +158,18 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if real_rtl_subset_ok else "missing_input_evidence",
             "evidence": f"cases={real_rtl_subset.get('total_cases','0')}, complete={real_rtl_subset.get('complete_clean_cases','0')}, partial={real_rtl_subset.get('partial_progress_clean_cases','0')}, x_or_error={real_rtl_subset.get('x_or_error_cases','0')}, policy={real_rtl_subset.get('paper_data_policy','missing')}",
             "next_action": "Use this as calibration evidence only; collect full-chip/full-layer value and timing logs for main figures.",
+        },
+        {
+            "check": "real_workload_rtl_expansion_plan_prioritizes_next_runs",
+            "status": "pass" if real_rtl_plan_ok else "missing_input_evidence",
+            "evidence": f"tasks={real_rtl_plan.get('tasks','0')}, p0={real_rtl_plan.get('p0_tasks','0')}, p1={real_rtl_plan.get('p1_tasks','0')}, p2={real_rtl_plan.get('p2_tasks','0')}, policy={real_rtl_plan.get('policy','missing')}",
+            "next_action": "Run P0 before long partial runs; keep no-output paths in separate bring-up.",
+        },
+        {
+            "check": "real_workload_rtl_p0_expansion_results_are_clean",
+            "status": "pass" if rtl_expansion_results_ok else "missing_input_evidence",
+            "evidence": f"cases={rtl_expansion_results.get('total_cases','0')}, complete={rtl_expansion_results.get('complete_clean_cases','0')}, calibration_ready={rtl_expansion_results.get('calibration_ready_cases','0')}, x_or_error={rtl_expansion_results.get('x_or_error_cases','0')}, policy={rtl_expansion_results.get('paper_data_policy','missing')}",
+            "next_action": "Use clean P0 tile results to calibrate full-layer projection, then collect full-chip/value evidence.",
         },
         {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",

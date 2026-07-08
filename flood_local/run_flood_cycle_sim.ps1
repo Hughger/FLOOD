@@ -168,6 +168,15 @@ if (-not $person2) {
     --input "$OutDir\server_rtl_real_workload_v1\real_workload_rtl_subset_v1.csv" `
     --out-dir "$OutDir\real_workload_rtl_subset_ingest"
 
+& $Python flood_local\build_real_workload_rtl_expansion_plan.py `
+    --gate-csv "$OutDir\real_workload_rtl_subset_ingest\real_workload_rtl_subset_gate.csv" `
+    --out-dir "$OutDir\real_workload_rtl_expansion_plan"
+
+& $Python flood_local\ingest_rtl_expansion_results.py `
+    --raw-csv "$OutDir\server_rtl_real_workload_v2\p0_expansion_results.csv" `
+    --log-root "$OutDir\server_rtl_real_workload_v2\logs" `
+    --out-dir "$OutDir\rtl_expansion_results_ingest"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

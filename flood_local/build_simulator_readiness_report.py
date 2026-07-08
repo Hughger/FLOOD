@@ -499,6 +499,23 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use this projection for calibration review only until full-chip and independent golden gates pass.",
     )
 
+    independent_golden_path = results_root / "independent_golden_feasibility" / "independent_golden_feasibility_summary.csv"
+    independent_golden = first_row(independent_golden_path)
+    independent_golden_audit_ready = (
+        independent_golden.get("feasibility_status") == "blocked_until_semantics_are_implemented"
+        and independent_golden.get("repeatability_evidence_status") == "pass"
+        and independent_golden.get("can_claim_independent_value_correctness") == "no"
+    )
+    add(
+        rows,
+        "value_correctness",
+        "Independent-golden feasibility is audited so RTL repeatability is not mistaken for value correctness.",
+        PASS if independent_golden_audit_ready else MISSING,
+        f"{independent_golden_path}: status={independent_golden.get('feasibility_status','missing')}, repeatability={independent_golden.get('repeatability_evidence_status','missing')}, independent_value={independent_golden.get('can_claim_independent_value_correctness','missing')}",
+        "" if independent_golden_audit_ready else "Independent-golden feasibility audit is missing or not conservative.",
+        "Implement Python independent golden before allowing repeatability-only RTL values into main figures.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

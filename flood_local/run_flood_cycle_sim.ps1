@@ -214,6 +214,12 @@ if (-not $person2) {
     --plan "$OutDir\real_workload_rtl_expansion_plan\next_server_run_manifest.csv" `
     --out-dir "$OutDir\rtl_calibrated_projection_v2"
 
+& $Python flood_local\build_independent_golden_feasibility.py `
+    --projection-csv "$OutDir\rtl_calibrated_projection_v2\rtl_calibrated_projection_v2.csv" `
+    --repeat-gate-summary "$OutDir\rtl_value_repeat_gate\rtl_value_repeat_gate_summary.csv" `
+    --repeat-consistency-summary "$OutDir\rtl_repeat_consistency_gate\rtl_repeat_consistency_summary.csv" `
+    --out-dir "$OutDir\independent_golden_feasibility"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

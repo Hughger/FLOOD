@@ -257,6 +257,12 @@ run "$PYTHON" flood_local/build_rtl_calibrated_projection_v2.py \
   --plan "$OUT_DIR/real_workload_rtl_expansion_plan/next_server_run_manifest.csv" \
   --out-dir "$OUT_DIR/rtl_calibrated_projection_v2"
 
+run "$PYTHON" flood_local/build_independent_golden_feasibility.py \
+  --projection-csv "$OUT_DIR/rtl_calibrated_projection_v2/rtl_calibrated_projection_v2.csv" \
+  --repeat-gate-summary "$OUT_DIR/rtl_value_repeat_gate/rtl_value_repeat_gate_summary.csv" \
+  --repeat-consistency-summary "$OUT_DIR/rtl_repeat_consistency_gate/rtl_repeat_consistency_summary.csv" \
+  --out-dir "$OUT_DIR/independent_golden_feasibility"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

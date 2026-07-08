@@ -1,2 +1,2 @@
 postprocessor_status,paper_data_policy,main_figure_rows,rejected_rows,checks,non_pass_checks,primary_blocker
-gate_stack_ready_but_waiting_for_real_rtl_value_inputs,no_paper_ready_rows_yet,0,2,21,2,real workload golden/RTL value outputs and full-chip calibration logs
+gate_stack_ready_but_waiting_for_real_rtl_value_inputs,no_paper_ready_rows_yet,0,2,22,2,real workload golden/RTL value outputs and full-chip calibration logs

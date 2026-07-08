@@ -67,6 +67,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     rtl_repeat_consistency = first_row(results_root / "rtl_repeat_consistency_gate" / "rtl_repeat_consistency_summary.csv")
     rtl_p1_progress = first_row(results_root / "rtl_p1_progress_gate" / "rtl_p1_progress_summary.csv")
     rtl_calibrated_projection_v2 = first_row(results_root / "rtl_calibrated_projection_v2" / "rtl_calibrated_projection_v2_summary.csv")
+    independent_golden = first_row(results_root / "independent_golden_feasibility" / "independent_golden_feasibility_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -141,6 +142,11 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         and as_int(rtl_calibrated_projection_v2, "projected_rows") > 0
         and as_int(rtl_calibrated_projection_v2, "p1_selected_rows") > 0
         and as_int(rtl_calibrated_projection_v2, "direct_paper_ready_rows") == 0
+    )
+    independent_golden_blocks_direct_use = (
+        independent_golden.get("feasibility_status") == "blocked_until_semantics_are_implemented"
+        and independent_golden.get("repeatability_evidence_status") == "pass"
+        and independent_golden.get("can_claim_independent_value_correctness") == "no"
     )
 
     checks = [
@@ -251,6 +257,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if rtl_calibrated_projection_v2_ok else "missing_input_evidence",
             "evidence": f"projected={rtl_calibrated_projection_v2.get('projected_rows','0')}, p1_selected={rtl_calibrated_projection_v2.get('p1_selected_rows','0')}, p0_fallback={rtl_calibrated_projection_v2.get('p0_fallback_rows','0')}, direct_paper_ready={rtl_calibrated_projection_v2.get('direct_paper_ready_rows','0')}",
             "next_action": "Use v2 projection for calibration review; keep it out of paper rows until full-chip/golden gates pass.",
+        },
+        {
+            "check": "independent_golden_feasibility_audit_blocks_repeatability_only_evidence",
+            "status": "pass" if independent_golden_blocks_direct_use else "missing_input_evidence",
+            "evidence": f"status={independent_golden.get('feasibility_status','missing')}, repeatability={independent_golden.get('repeatability_evidence_status','missing')}, independent_value={independent_golden.get('can_claim_independent_value_correctness','missing')}, direct_paper_ready={independent_golden.get('direct_paper_ready_rows','0')}",
+            "next_action": "Implement the Python independent golden before any repeatability-only value row is allowed into main paper figures.",
         },
         {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",

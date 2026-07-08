@@ -125,6 +125,28 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Regenerate simulator outputs whenever the hardware source signature changes.",
     )
 
+    source_bundle_auto_path = results_root / "source_bundle_auto_verify" / "rtl_source_bundle_verify_summary.csv"
+    source_bundle_auto = first_row(source_bundle_auto_path)
+    server_source_bundle_auto_path = results_root / "server_linux_repro_30659" / "source_bundle_auto_verify_summary.csv"
+    server_source_bundle_auto = first_row(server_source_bundle_auto_path)
+    bundle_auto_pass = (
+        source_bundle_auto.get("verify_status") == "pass"
+        or server_source_bundle_auto.get("verify_status") == "pass"
+    )
+    bundle_auto_evidence = (
+        f"{source_bundle_auto_path}: {source_bundle_auto.get('verify_status','missing')}; "
+        f"{server_source_bundle_auto_path}: {server_source_bundle_auto.get('verify_status','missing')}"
+    )
+    add(
+        rows,
+        "rtl_source_binding",
+        "Linux/server runner automatically verifies the RTL/source bundle before source-profile gates.",
+        PASS if bundle_auto_pass else MISSING,
+        bundle_auto_evidence,
+        "" if bundle_auto_pass else "Source bundle auto verification has not passed in a runner output.",
+        "Require this gate before trusting server-generated postprocessor/source-profile results.",
+    )
+
     blocked_path = results_root / "rtl_validation" / "rtl_blocked_cases.csv"
     add(
         rows,

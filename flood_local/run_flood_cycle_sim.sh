@@ -207,6 +207,10 @@ run "$PYTHON" flood_local/build_hpca_figure_contract.py \
   --backend-root results/flood_pytorchsim_backend_v1 \
   --out-dir "$OUT_DIR/hpca_figure_contract"
 
+run "$PYTHON" flood_local/ingest_real_workload_rtl_subset.py \
+  --input "$OUT_DIR/server_rtl_real_workload_v1/real_workload_rtl_subset_v1.csv" \
+  --out-dir "$OUT_DIR/real_workload_rtl_subset_ingest"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

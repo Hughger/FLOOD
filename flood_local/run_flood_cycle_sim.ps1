@@ -164,6 +164,10 @@ if (-not $person2) {
     --backend-root results\flood_pytorchsim_backend_v1 `
     --out-dir "$OutDir\hpca_figure_contract"
 
+& $Python flood_local\ingest_real_workload_rtl_subset.py `
+    --input "$OutDir\server_rtl_real_workload_v1\real_workload_rtl_subset_v1.csv" `
+    --out-dir "$OutDir\real_workload_rtl_subset_ingest"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

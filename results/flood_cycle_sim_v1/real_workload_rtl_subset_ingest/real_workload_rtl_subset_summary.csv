@@ -1,0 +1,2 @@
+ingest_status,total_cases,datasets,real_workload_cases,complete_clean_cases,partial_progress_clean_cases,timeout_no_output_cases,x_or_error_cases,calibration_ready_cases,direct_paper_ready_cases,paper_data_policy,main_blocker
+pass,10,synthetic_unet_trace;workload_v1,3,2,2,6,0,4,0,calibration_only_not_direct_paper_data,not full-chip/full-layer RTL timing and no golden value comparison

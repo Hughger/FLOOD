@@ -59,6 +59,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     server_source_bundle_auto = first_row(results_root / "server_linux_repro_30659" / "source_bundle_auto_verify_summary.csv")
     server_source_bundle_tamper = first_row(results_root / "server_linux_repro_30659" / "source_bundle_tamper_verify" / "rtl_source_bundle_verify_summary.csv")
     hpca_contract = first_row(results_root / "hpca_figure_contract" / "hpca_figure_contract_summary.csv")
+    real_rtl_subset = first_row(results_root / "real_workload_rtl_subset_ingest" / "real_workload_rtl_subset_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -88,6 +89,11 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         hpca_contract.get("goal_status") == "not_ready_for_direct_paper_plotting"
         and as_int(hpca_contract, "figures") == 8
         and as_int(hpca_contract, "final_gate_ready_rows") == 0
+    )
+    real_rtl_subset_ok = (
+        real_rtl_subset.get("ingest_status") == "pass"
+        and as_int(real_rtl_subset, "calibration_ready_cases") > 0
+        and as_int(real_rtl_subset, "x_or_error_cases") == 0
     )
 
     checks = [
@@ -140,6 +146,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "next_action": "Collect full-chip logs until mismatch_rows=0 for claimed workload scope.",
         },
         {
+            "check": "real_workload_rtl_subset_calibration_evidence_present",
+            "status": "pass" if real_rtl_subset_ok else "missing_input_evidence",
+            "evidence": f"cases={real_rtl_subset.get('total_cases','0')}, complete={real_rtl_subset.get('complete_clean_cases','0')}, partial={real_rtl_subset.get('partial_progress_clean_cases','0')}, x_or_error={real_rtl_subset.get('x_or_error_cases','0')}, policy={real_rtl_subset.get('paper_data_policy','missing')}",
+            "next_action": "Use this as calibration evidence only; collect full-chip/full-layer value and timing logs for main figures.",
+        },
+        {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",
             "status": "pass" if p0_tasks > 0 and placeholder_rows > 0 and ready_tasks == 0 else "fail",
             "evidence": f"p0_tasks={p0_tasks}, coverage_p0_rows={p0_rows}, ready_tasks={ready_tasks}, placeholder_rows={placeholder_rows}",
@@ -185,6 +197,7 @@ Current interpretation:
 - Completed RTL task manifests can be ingested through system/value/final/export gates.
 - Current smoke data is correctly rejected from main figures.
 - HPCA Fig.1-Fig.8 readiness is tracked by a figure-level contract.
+- Real-workload-derived RTL subset runs are ingested as calibration evidence.
 - Qualified paper data still requires real RTL/golden value outputs and
   full-chip calibration logs.
 """

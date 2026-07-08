@@ -340,6 +340,23 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use this path for real workload RTL/testbench logs before claiming system-level speedup.",
     )
 
+    rtl_subset_path = results_root / "real_workload_rtl_subset_ingest" / "real_workload_rtl_subset_summary.csv"
+    rtl_subset = first_row(rtl_subset_path)
+    rtl_subset_ready = (
+        rtl_subset.get("ingest_status") == "pass"
+        and as_int(rtl_subset, "calibration_ready_cases") > 0
+        and as_int(rtl_subset, "x_or_error_cases") == 0
+    )
+    add(
+        rows,
+        "system_timing",
+        "Real-workload-derived RTL subset runs produce clean calibration evidence.",
+        PASS if rtl_subset_ready else MISSING,
+        f"{rtl_subset_path}: complete={rtl_subset.get('complete_clean_cases','0')}, partial={rtl_subset.get('partial_progress_clean_cases','0')}, timeout_no_output={rtl_subset.get('timeout_no_output_cases','0')}, x_or_error={rtl_subset.get('x_or_error_cases','0')}",
+        "" if rtl_subset_ready else "No clean real-workload-derived RTL subset evidence has been ingested.",
+        "Use this as bounded calibration evidence; still require full-chip/full-layer logs for paper rows.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

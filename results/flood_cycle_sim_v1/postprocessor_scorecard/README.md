@@ -9,5 +9,6 @@ Current interpretation:
 - Completed RTL task manifests can be ingested through system/value/final/export gates.
 - Current smoke data is correctly rejected from main figures.
 - HPCA Fig.1-Fig.8 readiness is tracked by a figure-level contract.
+- Real-workload-derived RTL subset runs are ingested as calibration evidence.
 - Qualified paper data still requires real RTL/golden value outputs and
   full-chip calibration logs.

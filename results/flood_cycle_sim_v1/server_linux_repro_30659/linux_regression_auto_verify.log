@@ -1,0 +1,41 @@
+[run] python3 flood_local/build_rtl_source_bundle.py --verify-root . --manifest results/flood_cycle_sim_v1/source_bundle/rtl_source_bundle_manifest.csv --out-dir results/flood_cycle_sim_v1/source_bundle_auto_verify
+[run] python3 flood_local/build_mechanism_inventory.py --base-root FLOOD --out-dir results/flood_cycle_sim_v1/mechanism_inventory
+wrote mechanism inventory to results/flood_cycle_sim_v1/mechanism_inventory
+[run] python3 flood_local/build_rtl_source_manifest.py --base-root FLOOD --out-dir results/flood_cycle_sim_v1/rtl_source_manifest
+[run] python3 flood_local/build_mactree_profile.py --base-root FLOOD --mactree-root mactree/flood --out-dir results/flood_cycle_sim_v1/mactree_profile
+wrote MACTree profile to results/flood_cycle_sim_v1/mactree_profile
+[run] python3 flood_local/build_sparsity_profiles.py --base-root FLOOD --mechanism zero_skip zero-skip/flood --mechanism channel_group_sparsity channel group sparisy/flood --out-dir results/flood_cycle_sim_v1/sparsity_profiles
+wrote sparsity mechanism profiles to results/flood_cycle_sim_v1/sparsity_profiles
+[run] python3 flood_local/build_quant_outlier_profiles.py --base-root FLOOD --mechanism int8_int4 INT8-INT4/flood --mechanism outlier outlier/flood --out-dir results/flood_cycle_sim_v1/quant_outlier_profiles
+wrote quantization/outlier mechanism profiles to results/flood_cycle_sim_v1/quant_outlier_profiles
+[run] python3 flood_local/flood_cycle_sim.py --out-dir results/flood_cycle_sim_v1/rtl_validation --rtl-validation results/flood_pytorchsim_backend_v1/workload_direct_rtl_validation_v1/workload_direct_validation_details.csv
+wrote FLOOD cycle simulator RTL validation to results/flood_cycle_sim_v1/rtl_validation
+[run] python3 flood_local/flood_cycle_sim.py --input results/synthetic_unet_trace_v1/synthetic_unet_workload_from_trace_v1.csv --out-dir results/flood_cycle_sim_v1/synthetic_unet_trace --include-system --emit-paper-tables
+wrote FLOOD cycle simulator output to results/flood_cycle_sim_v1/synthetic_unet_trace
+[run] python3 flood_local/flood_cycle_sim.py --input results/flood_cycle_sim_v1/softmax_smoke/softmax_workload.csv --out-dir results/flood_cycle_sim_v1/softmax_smoke --cycle-trace-cap 500 --emit-paper-tables
+wrote FLOOD cycle simulator output to results/flood_cycle_sim_v1/softmax_smoke
+[run] python3 flood_local/flood_cycle_sim.py --out-dir results/flood_cycle_sim_v1/system_calibration_smoke --system-calibration results/flood_cycle_sim_v1/system_calibration_smoke/system_calibration_input.csv --system-model results/flood_cycle_sim_v1/system_calibration_smoke/system_model_input.csv
+wrote FLOOD system calibration report to results/flood_cycle_sim_v1/system_calibration_smoke
+[run] python3 flood_local/parse_system_calibration_logs.py --template results/flood_cycle_sim_v1/system_log_parse_smoke/template.csv --log-map results/flood_cycle_sim_v1/system_log_parse_smoke/log_map.csv --out results/flood_cycle_sim_v1/system_log_parse_smoke/parsed_system_calibration.csv
+wrote parsed system calibration CSV to results/flood_cycle_sim_v1/system_log_parse_smoke/parsed_system_calibration.csv
+[run] python3 flood_local/flood_cycle_sim.py --out-dir results/flood_cycle_sim_v1/system_log_parse_smoke --system-calibration results/flood_cycle_sim_v1/system_log_parse_smoke/parsed_system_calibration.csv
+wrote FLOOD system calibration report to results/flood_cycle_sim_v1/system_log_parse_smoke
+[run] python3 flood_local/flood_cycle_sim.py --out-dir results/flood_cycle_sim_v1/value_checker_smoke/pass_case --value-check-only --golden-values results/flood_cycle_sim_v1/value_checker_smoke/golden_values.txt --rtl-values results/flood_cycle_sim_v1/value_checker_smoke/rtl_values_pass.txt
+wrote FLOOD value check to results/flood_cycle_sim_v1/value_checker_smoke/pass_case
+[run] python3 flood_local/flood_cycle_sim.py --out-dir results/flood_cycle_sim_v1/value_checker_smoke/fail_case --value-check-only --golden-values results/flood_cycle_sim_v1/value_checker_smoke/golden_values.txt --rtl-values results/flood_cycle_sim_v1/value_checker_smoke/rtl_values_fail.txt
+wrote FLOOD value check to results/flood_cycle_sim_v1/value_checker_smoke/fail_case
+[run] python3 flood_local/run_value_check_batch.py --manifest results/flood_cycle_sim_v1/value_check_batch_templates/value_check_smoke_manifest.csv --out-root results/flood_cycle_sim_v1/value_check_batch_smoke
+[run] python3 flood_local/run_paper_workload_batch.py --manifest results/flood_cycle_sim_v1/batch_templates/batch_smoke_manifest.csv --out-root results/flood_cycle_sim_v1/batch_smoke
+[run] python3 flood_local/run_system_calibration_batch.py --manifest results/flood_cycle_sim_v1/system_calibration_batch_templates/system_calibration_smoke_manifest.csv --out-root results/flood_cycle_sim_v1/system_calibration_batch_smoke
+[run] python3 flood_local/build_paper_data_gate.py --manifest results/flood_cycle_sim_v1/final_paper_gate_templates/final_paper_gate_smoke_manifest.csv --workload-gate results/flood_cycle_sim_v1/batch_smoke/batch_readiness_summary.csv --value-gate results/flood_cycle_sim_v1/value_check_batch_smoke/value_readiness_summary.csv --system-gate results/flood_cycle_sim_v1/system_calibration_batch_smoke/calibration_readiness_summary.csv --rtl-source-summary results/flood_cycle_sim_v1/rtl_source_manifest/rtl_source_summary.csv --out-dir results/flood_cycle_sim_v1/final_paper_gate_smoke
+[run] python3 flood_local/export_main_figure_package.py --final-gate results/flood_cycle_sim_v1/final_paper_gate_smoke/final_paper_data_gate.csv --out-dir results/flood_cycle_sim_v1/main_figure_export_smoke
+[run] python3 flood_local/audit_main_figure_export.py --final-gate results/flood_cycle_sim_v1/final_paper_gate_smoke/final_paper_data_gate.csv --export-dir results/flood_cycle_sim_v1/main_figure_export_smoke --out-dir results/flood_cycle_sim_v1/main_figure_export_audit_smoke
+[run] python3 flood_local/build_timeline_consistency_report.py --out-dir results/flood_cycle_sim_v1/timeline_consistency results/flood_cycle_sim_v1/synthetic_unet_trace results/flood_cycle_sim_v1/softmax_smoke
+[run] python3 flood_local/build_validation_coverage_matrix.py --results-root results/flood_cycle_sim_v1 --out-dir results/flood_cycle_sim_v1/validation_coverage --workload-dir synthetic_unet_trace --workload-dir softmax_smoke
+[run] python3 flood_local/build_rtl_task_manifest.py --priority-csv results/flood_cycle_sim_v1/validation_coverage/next_rtl_validation_priority.csv --out-dir results/flood_cycle_sim_v1/rtl_task_manifest --limit 20
+[run] python3 flood_local/check_rtl_task_manifest.py --task-csv results/flood_cycle_sim_v1/rtl_task_manifest/rtl_validation_tasks.csv --system-manifest results/flood_cycle_sim_v1/rtl_task_manifest/system_calibration_manifest_draft.csv --value-manifest results/flood_cycle_sim_v1/rtl_task_manifest/value_check_manifest_draft.csv --out-dir results/flood_cycle_sim_v1/rtl_task_manifest_check
+[run] python3 flood_local/run_completed_rtl_task_ingest.py --task-csv results/flood_cycle_sim_v1/completed_ingest_smoke_inputs/task_manifest.csv --system-manifest results/flood_cycle_sim_v1/completed_ingest_smoke_inputs/system_manifest.csv --value-manifest results/flood_cycle_sim_v1/completed_ingest_smoke_inputs/value_manifest.csv --paper-gate-manifest results/flood_cycle_sim_v1/completed_ingest_smoke_inputs/paper_gate_manifest.csv --workload-gate results/flood_cycle_sim_v1/batch_smoke/batch_readiness_summary.csv --rtl-source-summary results/flood_cycle_sim_v1/rtl_source_manifest/rtl_source_summary.csv --out-root results/flood_cycle_sim_v1/completed_ingest_smoke
+[run] python3 flood_local/audit_main_figure_export.py --final-gate results/flood_cycle_sim_v1/completed_ingest_smoke/final_gate/final_paper_data_gate.csv --export-dir results/flood_cycle_sim_v1/completed_ingest_smoke/main_figure_export --out-dir results/flood_cycle_sim_v1/completed_ingest_smoke/main_figure_export_audit
+[run] python3 flood_local/build_postprocessor_scorecard.py --results-root results/flood_cycle_sim_v1 --out-dir results/flood_cycle_sim_v1/postprocessor_scorecard
+[run] python3 flood_local/build_simulator_readiness_report.py --results-root results/flood_cycle_sim_v1 --out-dir results/flood_cycle_sim_v1/readiness_report
+FLOOD cycle simulator Linux regression finished: results/flood_cycle_sim_v1

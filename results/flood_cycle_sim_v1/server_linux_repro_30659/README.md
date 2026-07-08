@@ -15,7 +15,7 @@ bash flood_local/run_flood_cycle_sim.sh
 Result:
 
 - Linux runner completed successfully on the server.
-- RTL/source bundle verification passed before the Linux runner:
+- Linux runner now automatically verifies the RTL/source bundle before source-profile gates:
   - checked files: `185`
   - failed files: `0`
   - bundle signature: `47d35bd34fdb13cabbd0243b301f0bf3dce7c739448e3322ce70504c03c46937`
@@ -25,4 +25,4 @@ Result:
 
 Important limitation:
 
-The server run used the generated minimal source bundle copied to the system disk so that source-manifest and mechanism-profile checks could execute. The bundle is now manifest-checked, but it is still not the full RTL repository. It proves Linux/server postprocessor reproducibility, not full RTL simulation completeness.
+The server run used the generated minimal source bundle copied to the system disk so that source-manifest and mechanism-profile checks could execute. The Linux runner now treats that bundle manifest as an automatic preflight gate. The bundle is still not the full RTL repository, so this proves Linux/server postprocessor reproducibility, not full RTL simulation completeness.

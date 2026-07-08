@@ -29,6 +29,20 @@ mkdir -p "$OUT_DIR"
   echo "out_dir,$OUT_DIR"
 } > "$OUT_DIR/linux_runner_environment.csv"
 
+SOURCE_BUNDLE_MANIFEST="$OUT_DIR/source_bundle/rtl_source_bundle_manifest.csv"
+if [[ -f "$SOURCE_BUNDLE_MANIFEST" ]]; then
+  run "$PYTHON" flood_local/build_rtl_source_bundle.py \
+    --verify-root . \
+    --manifest "$SOURCE_BUNDLE_MANIFEST" \
+    --out-dir "$OUT_DIR/source_bundle_auto_verify"
+else
+  mkdir -p "$OUT_DIR/source_bundle_auto_verify"
+  {
+    echo "verify_status,checked_files,failed_files,expected_bundle_signature_sha256,actual_bundle_signature_sha256,policy"
+    echo "skipped,0,0,,,No source bundle manifest found; full local source tree is assumed for this run."
+  } > "$OUT_DIR/source_bundle_auto_verify/rtl_source_bundle_verify_summary.csv"
+fi
+
 run "$PYTHON" flood_local/build_mechanism_inventory.py \
   --base-root FLOOD \
   --out-dir "$OUT_DIR/mechanism_inventory"

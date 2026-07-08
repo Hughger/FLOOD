@@ -19,6 +19,10 @@ Result:
   - checked files: `185`
   - failed files: `0`
   - bundle signature: `47d35bd34fdb13cabbd0243b301f0bf3dce7c739448e3322ce70504c03c46937`
+- Latest scored run used commit: `ab65a99`
+- Latest scored result:
+  - postprocessor checks: `9`, non-pass checks: `2`
+  - readiness: `21/26` strict pass, `80.77%`
 - Postprocessor scorecard remained conservative: no paper-ready main-figure rows.
 - Main-figure export audits passed.
 - `person2_pytorchsim_transformer.csv` was not present on the server, so that workload remains missing evidence rather than being replaced by synthetic data.

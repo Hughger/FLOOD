@@ -62,8 +62,9 @@ def feature_generator_supports_multi_res_cols(text: str) -> bool:
         "args.res_cols *",
         "* args.res_cols",
         "RES_COL_TOTAL",
+        "line_multi256",
     ]
-    width_markers = ["FEAT_DATAW", "256 * args.res_cols", "args.res_cols * 256", "feature_row_bytes"]
+    width_markers = ["FEAT_DATAW", "256 * args.res_cols", "args.res_cols * 256", "feature_row_bytes", "line_multi256"]
     return any(marker in text for marker in multi_col_markers) and any(marker in text for marker in width_markers)
 
 

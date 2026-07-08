@@ -147,6 +147,19 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Require this gate before trusting server-generated postprocessor/source-profile results.",
     )
 
+    source_bundle_tamper_path = results_root / "server_linux_repro_30659" / "source_bundle_tamper_verify" / "rtl_source_bundle_verify_summary.csv"
+    source_bundle_tamper = first_row(source_bundle_tamper_path)
+    tamper_fail_ok = source_bundle_tamper.get("verify_status") == "fail" and as_int(source_bundle_tamper, "failed_files") > 0
+    add(
+        rows,
+        "rtl_source_binding",
+        "Source bundle verifier rejects tampered RTL/source files in an adversarial server test.",
+        PASS if tamper_fail_ok else MISSING,
+        f"{source_bundle_tamper_path}: status={source_bundle_tamper.get('verify_status','missing')}, failed_files={source_bundle_tamper.get('failed_files','0')}",
+        "" if tamper_fail_ok else "No passing negative test proves source tampering is rejected.",
+        "Keep this negative test whenever source bundle verification logic changes.",
+    )
+
     blocked_path = results_root / "rtl_validation" / "rtl_blocked_cases.csv"
     add(
         rows,

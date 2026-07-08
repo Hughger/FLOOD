@@ -57,6 +57,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     system_smoke = first_row(results_root / "system_calibration_smoke" / "system_calibration_summary.csv")
     source_bundle_auto = first_row(results_root / "source_bundle_auto_verify" / "rtl_source_bundle_verify_summary.csv")
     server_source_bundle_auto = first_row(results_root / "server_linux_repro_30659" / "source_bundle_auto_verify_summary.csv")
+    server_source_bundle_tamper = first_row(results_root / "server_linux_repro_30659" / "source_bundle_tamper_verify" / "rtl_source_bundle_verify_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -78,6 +79,10 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         if status
     ]
     source_bundle_auto_pass = "pass" in source_bundle_statuses
+    source_bundle_tamper_fails = (
+        server_source_bundle_tamper.get("verify_status") == "fail"
+        and as_int(server_source_bundle_tamper, "failed_files") > 0
+    )
 
     checks = [
         {
@@ -91,6 +96,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if source_bundle_auto_pass else "fail",
             "evidence": f"local={source_bundle_auto.get('verify_status','missing')}, server={server_source_bundle_auto.get('verify_status','missing')}",
             "next_action": "Run Linux/server postprocessor only after source bundle auto verification passes.",
+        },
+        {
+            "check": "source_bundle_tamper_adversarial_verify_fails",
+            "status": "pass" if source_bundle_tamper_fails else "fail",
+            "evidence": f"tamper_status={server_source_bundle_tamper.get('verify_status','missing')}, failed_files={server_source_bundle_tamper.get('failed_files','0')}",
+            "next_action": "Keep tamper failure evidence with server reproduction artifacts.",
         },
         {
             "check": "final_gate_exists_and_blocks_unqualified_rows",

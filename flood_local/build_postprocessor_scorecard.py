@@ -66,6 +66,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     rtl_value_repeat = first_row(results_root / "rtl_value_repeat_gate" / "rtl_value_repeat_gate_summary.csv")
     rtl_repeat_consistency = first_row(results_root / "rtl_repeat_consistency_gate" / "rtl_repeat_consistency_summary.csv")
     rtl_p1_progress = first_row(results_root / "rtl_p1_progress_gate" / "rtl_p1_progress_summary.csv")
+    rtl_calibrated_projection_v2 = first_row(results_root / "rtl_calibrated_projection_v2" / "rtl_calibrated_projection_v2_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -134,6 +135,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         rtl_p1_progress.get("p1_progress_status") in {"pass", "partial_pass_with_isolated_x_cases"}
         and as_int(rtl_p1_progress, "clean_progress_cases") > 0
         and as_int(rtl_p1_progress, "direct_paper_ready_cases") == 0
+    )
+    rtl_calibrated_projection_v2_ok = (
+        rtl_calibrated_projection_v2.get("projection_status") == "pass"
+        and as_int(rtl_calibrated_projection_v2, "projected_rows") > 0
+        and as_int(rtl_calibrated_projection_v2, "p1_selected_rows") > 0
+        and as_int(rtl_calibrated_projection_v2, "direct_paper_ready_rows") == 0
     )
 
     checks = [
@@ -238,6 +245,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if rtl_p1_progress_ok else "missing_input_evidence",
             "evidence": f"status={rtl_p1_progress.get('p1_progress_status','missing')}, clean={rtl_p1_progress.get('clean_progress_cases','0')}, x_isolated={rtl_p1_progress.get('isolated_x_or_error_cases','0')}, markers={rtl_p1_progress.get('clean_cycle_markers','0')}, direct_paper_ready={rtl_p1_progress.get('direct_paper_ready_cases','0')}",
             "next_action": "Use clean P1 markers as larger-tile calibration evidence; keep isolated X rows out of projection and paper data.",
+        },
+        {
+            "check": "rtl_calibrated_projection_v2_prefers_p1_and_falls_back_to_p0",
+            "status": "pass" if rtl_calibrated_projection_v2_ok else "missing_input_evidence",
+            "evidence": f"projected={rtl_calibrated_projection_v2.get('projected_rows','0')}, p1_selected={rtl_calibrated_projection_v2.get('p1_selected_rows','0')}, p0_fallback={rtl_calibrated_projection_v2.get('p0_fallback_rows','0')}, direct_paper_ready={rtl_calibrated_projection_v2.get('direct_paper_ready_rows','0')}",
+            "next_action": "Use v2 projection for calibration review; keep it out of paper rows until full-chip/golden gates pass.",
         },
         {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",

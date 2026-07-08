@@ -1,0 +1,2 @@
+projection_status,projected_rows,p1_selected_rows,p0_fallback_rows,direct_paper_ready_rows,paper_data_policy,main_blocker
+pass,4,1,3,0,calibrated_projection_only_not_direct_paper_data,full-chip timing and independent software golden remain required

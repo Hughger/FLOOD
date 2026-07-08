@@ -1,0 +1,5 @@
+source_case_id,selected_case_id,selected_priority,dataset,source_id,operator,shape_args,rtl_run_count,rtl_total_cycles,rtl_avg_cycles_per_marker,full_layer_tile_count_estimate,projected_mac_cycles,calibration_basis,ready_for_direct_paper_data,paper_data_blocker
+calib_07,calib_07_repeat,P0,synthetic_unet_trace,trace_conv_011,conv,1 32 32 64 64 3 2 1,4,532,133.00,8,1064,p0_safe_tile_fallback,no,projection_not_full_chip_and_no_independent_golden
+calib_08,calib_08_repeat,P0,synthetic_unet_trace,trace_conv_004,conv,1 32 32 64 64 3 1 1,4,532,133.00,4,532,p0_safe_tile_fallback,no,projection_not_full_chip_and_no_independent_golden
+calib_09,calib_09_longer_partial,P1,workload_v1,unet_conv_64_320_320,conv,1 64 64 320 320 3 1 1,9,4095,455.00,240,109200,p1_large_tile_preferred,no,projection_not_full_chip_and_no_independent_golden
+calib_10,calib_10_safe_tile,P0,workload_v1,unet_conv_32_640_640,conv,1 32 32 640 640 3 1 1,4,532,133.00,200,26600,p0_safe_tile_fallback,no,projection_not_full_chip_and_no_independent_golden

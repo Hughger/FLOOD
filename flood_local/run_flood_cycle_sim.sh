@@ -251,6 +251,12 @@ run "$PYTHON" flood_local/build_rtl_p1_progress_gate.py \
   --p1-gate "$OUT_DIR/rtl_p1_expansion_results_ingest/rtl_expansion_results_gate.csv" \
   --out-dir "$OUT_DIR/rtl_p1_progress_gate"
 
+run "$PYTHON" flood_local/build_rtl_calibrated_projection_v2.py \
+  --p0-gate "$OUT_DIR/rtl_expansion_results_ingest/rtl_expansion_results_gate.csv" \
+  --p1-gate "$OUT_DIR/rtl_p1_expansion_results_ingest/rtl_expansion_results_gate.csv" \
+  --plan "$OUT_DIR/real_workload_rtl_expansion_plan/next_server_run_manifest.csv" \
+  --out-dir "$OUT_DIR/rtl_calibrated_projection_v2"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

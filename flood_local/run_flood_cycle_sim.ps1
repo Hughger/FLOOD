@@ -208,6 +208,12 @@ if (-not $person2) {
     --p1-gate "$OutDir\rtl_p1_expansion_results_ingest\rtl_expansion_results_gate.csv" `
     --out-dir "$OutDir\rtl_p1_progress_gate"
 
+& $Python flood_local\build_rtl_calibrated_projection_v2.py `
+    --p0-gate "$OutDir\rtl_expansion_results_ingest\rtl_expansion_results_gate.csv" `
+    --p1-gate "$OutDir\rtl_p1_expansion_results_ingest\rtl_expansion_results_gate.csv" `
+    --plan "$OutDir\real_workload_rtl_expansion_plan\next_server_run_manifest.csv" `
+    --out-dir "$OutDir\rtl_calibrated_projection_v2"
+
 & $Python flood_local\build_postprocessor_scorecard.py `
     --results-root "$OutDir" `
     --out-dir "$OutDir\postprocessor_scorecard"

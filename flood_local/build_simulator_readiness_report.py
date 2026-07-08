@@ -481,6 +481,24 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use clean P1 markers for calibration review only; X cases remain excluded.",
     )
 
+    rtl_calibrated_projection_v2_path = results_root / "rtl_calibrated_projection_v2" / "rtl_calibrated_projection_v2_summary.csv"
+    rtl_calibrated_projection_v2 = first_row(rtl_calibrated_projection_v2_path)
+    projection_v2_ready = (
+        rtl_calibrated_projection_v2.get("projection_status") == "pass"
+        and as_int(rtl_calibrated_projection_v2, "projected_rows") > 0
+        and as_int(rtl_calibrated_projection_v2, "p1_selected_rows") > 0
+        and as_int(rtl_calibrated_projection_v2, "direct_paper_ready_rows") == 0
+    )
+    add(
+        rows,
+        "system_timing",
+        "Full-layer projection prefers clean P1 large-tile evidence and falls back to P0 safe tiles.",
+        PASS if projection_v2_ready else MISSING,
+        f"{rtl_calibrated_projection_v2_path}: projected={rtl_calibrated_projection_v2.get('projected_rows','0')}, p1_selected={rtl_calibrated_projection_v2.get('p1_selected_rows','0')}, p0_fallback={rtl_calibrated_projection_v2.get('p0_fallback_rows','0')}",
+        "" if projection_v2_ready else "No P1-priority calibrated projection is available.",
+        "Use this projection for calibration review only until full-chip and independent golden gates pass.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

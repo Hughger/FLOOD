@@ -464,6 +464,23 @@ def build_report(results_root: Path, out_dir: Path) -> None:
         "Use as output repeatability evidence; independent software golden remains required.",
     )
 
+    rtl_p1_progress_path = results_root / "rtl_p1_progress_gate" / "rtl_p1_progress_summary.csv"
+    rtl_p1_progress = first_row(rtl_p1_progress_path)
+    p1_progress_ready = (
+        rtl_p1_progress.get("p1_progress_status") in {"pass", "partial_pass_with_isolated_x_cases"}
+        and as_int(rtl_p1_progress, "clean_progress_cases") > 0
+        and as_int(rtl_p1_progress, "direct_paper_ready_cases") == 0
+    )
+    add(
+        rows,
+        "system_timing",
+        "Server P1 larger real-workload tile runs provide clean progress while isolating X cases.",
+        PASS if p1_progress_ready else MISSING,
+        f"{rtl_p1_progress_path}: status={rtl_p1_progress.get('p1_progress_status','missing')}, clean={rtl_p1_progress.get('clean_progress_cases','0')}, x_isolated={rtl_p1_progress.get('isolated_x_or_error_cases','0')}, markers={rtl_p1_progress.get('clean_cycle_markers','0')}",
+        "" if p1_progress_ready else "No clean P1 large-tile progress evidence is available.",
+        "Use clean P1 markers for calibration review only; X cases remain excluded.",
+    )
+
     mechanism_summary_path = results_root / "mechanism_inventory" / "mechanism_summary.csv"
     mechanisms = read_rows(mechanism_summary_path)
     expected = {"mactree", "outlier", "INT8-INT4", "softmax", "zero-skip", "channel_group_sparsity"}

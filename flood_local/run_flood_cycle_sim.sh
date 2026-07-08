@@ -242,6 +242,15 @@ run "$PYTHON" flood_local/build_rtl_repeat_consistency_gate.py \
   --server-root "$OUT_DIR/server_rtl_value_repeat_v1" \
   --out-dir "$OUT_DIR/rtl_repeat_consistency_gate"
 
+run "$PYTHON" flood_local/ingest_rtl_expansion_results.py \
+  --raw-csv "$OUT_DIR/server_rtl_p1_expansion_v1/results/p1_expansion_results.csv" \
+  --log-root "$OUT_DIR/server_rtl_p1_expansion_v1/logs" \
+  --out-dir "$OUT_DIR/rtl_p1_expansion_results_ingest"
+
+run "$PYTHON" flood_local/build_rtl_p1_progress_gate.py \
+  --p1-gate "$OUT_DIR/rtl_p1_expansion_results_ingest/rtl_expansion_results_gate.csv" \
+  --out-dir "$OUT_DIR/rtl_p1_progress_gate"
+
 run "$PYTHON" flood_local/build_postprocessor_scorecard.py \
   --results-root "$OUT_DIR" \
   --out-dir "$OUT_DIR/postprocessor_scorecard"

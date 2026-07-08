@@ -1,0 +1,2 @@
+ingest_status,total_cases,complete_clean_cases,partial_clean_cases,completed_without_cycle_marker_cases,timeout_no_output_cases,x_or_error_cases,calibration_ready_cases,direct_paper_ready_cases,paper_data_policy,main_blocker
+pass,2,0,1,0,0,1,1,0,calibration_only_not_direct_paper_data,tile-level RTL evidence without full-layer/full-chip value and timing

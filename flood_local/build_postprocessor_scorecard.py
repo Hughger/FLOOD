@@ -65,6 +65,7 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
     rtl_tile_projection = first_row(results_root / "rtl_tile_projection" / "rtl_tile_projection_summary.csv")
     rtl_value_repeat = first_row(results_root / "rtl_value_repeat_gate" / "rtl_value_repeat_gate_summary.csv")
     rtl_repeat_consistency = first_row(results_root / "rtl_repeat_consistency_gate" / "rtl_repeat_consistency_summary.csv")
+    rtl_p1_progress = first_row(results_root / "rtl_p1_progress_gate" / "rtl_p1_progress_summary.csv")
 
     exported_rows = as_int(export_summary, "exported_main_figure_rows")
     rejected_rows = as_int(export_summary, "rejected_rows")
@@ -128,6 +129,11 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
         rtl_repeat_consistency.get("repeat_consistency_status") == "pass"
         and as_int(rtl_repeat_consistency, "output_hash_pass_cases") > 0
         and as_int(rtl_repeat_consistency, "direct_paper_ready_cases") == 0
+    )
+    rtl_p1_progress_ok = (
+        rtl_p1_progress.get("p1_progress_status") in {"pass", "partial_pass_with_isolated_x_cases"}
+        and as_int(rtl_p1_progress, "clean_progress_cases") > 0
+        and as_int(rtl_p1_progress, "direct_paper_ready_cases") == 0
     )
 
     checks = [
@@ -226,6 +232,12 @@ def build_scorecard(results_root: Path, out_dir: Path) -> None:
             "status": "pass" if rtl_repeat_hash_ok else "missing_input_evidence",
             "evidence": f"cases={rtl_repeat_consistency.get('cases','0')}, output_hash_pass={rtl_repeat_consistency.get('output_hash_pass_cases','0')}, direct_paper_ready={rtl_repeat_consistency.get('direct_paper_ready_cases','0')}, policy={rtl_repeat_consistency.get('paper_data_policy','missing')}",
             "next_action": "Use as output repeatability evidence; independent software golden remains required.",
+        },
+        {
+            "check": "server_rtl_p1_large_tile_progress_is_captured_and_x_cases_are_isolated",
+            "status": "pass" if rtl_p1_progress_ok else "missing_input_evidence",
+            "evidence": f"status={rtl_p1_progress.get('p1_progress_status','missing')}, clean={rtl_p1_progress.get('clean_progress_cases','0')}, x_isolated={rtl_p1_progress.get('isolated_x_or_error_cases','0')}, markers={rtl_p1_progress.get('clean_cycle_markers','0')}, direct_paper_ready={rtl_p1_progress.get('direct_paper_ready_cases','0')}",
+            "next_action": "Use clean P1 markers as larger-tile calibration evidence; keep isolated X rows out of projection and paper data.",
         },
         {
             "check": "next_rtl_tasks_are_actionable_but_not_ingested",

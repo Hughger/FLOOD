@@ -1,0 +1,3 @@
+next_case_id,source_case_id,dataset,source_id,operator,shape_args,priority,expected_policy,k,cout_blocks,group_size,group_num,cin_idx_total,res_cols,res_rows,stride,timeout_s,rc,run_count,cycle_list,total_cycles,x_count,timeout,log
+calib_09_longer_partial,calib_09,workload_v1,unet_conv_64_320_320,conv,1 64 64 320 320 3 1 1,P1,partial_or_complete_tile,3,8,4,4,3,2,4,1,900,124,9,454;454;457;454;454;457;454;454;457,4095,0,yes,logs/calib_09_longer_partial.log
+calib_10_longer_partial,calib_10,workload_v1,unet_conv_32_640_640,conv,1 32 32 640 640 3 1 1,P1,partial_or_complete_tile,3,8,4,4,5,1,4,1,900,124,10,454;454;454;454;457;454;454;454;454;457,4546,4096,yes,logs/calib_10_longer_partial.log

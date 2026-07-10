@@ -169,7 +169,7 @@ class OutRouter(
   def truncateData(dataVec: Vec[SInt], width: Int): UInt = {
     val truncated = Wire(Vec(colSize, UInt(finalWidth.W)))
     for (i <- 0 until colSize) {
-      truncated(i) := dataVec(i).asUInt()(outputWidth+log2Ceil(tileSize)+log2Ceil(colSize)-1, outputWidth+log2Ceil(tileSize)+log2Ceil(colSize)-finalWidth)
+      truncated(i) := dataVec(i).asUInt(outputWidth+log2Ceil(tileSize)+log2Ceil(colSize)-1, outputWidth+log2Ceil(tileSize)+log2Ceil(colSize)-finalWidth)
     }
     Cat(truncated.reverse)
   }

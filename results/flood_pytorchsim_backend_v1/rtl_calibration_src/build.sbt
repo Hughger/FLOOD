@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "2.13.10"
 ThisBuild / organization := "flood.calibration"
 
 lazy val root = (project in file("."))

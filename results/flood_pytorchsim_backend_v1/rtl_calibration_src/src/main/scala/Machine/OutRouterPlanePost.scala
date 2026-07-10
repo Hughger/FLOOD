@@ -337,8 +337,8 @@ class OutRouterPlanePost extends Module {
           val shiftedData = data >> truncateBits
           
           // 四舍五入：检查被截去的最高位
-          val roundBit = data.asUInt()(truncateBits - 1)
-          val stickyBits = if (truncateBits > 1) data.asUInt()(truncateBits - 2, 0).orR() else false.B
+          val roundBit = data.asUInt(truncateBits - 1)
+          val stickyBits = if (truncateBits > 1) data.asUInt(truncateBits - 2, 0).orR else false.B
           val shouldRound = roundBit && (shiftedData(0) || stickyBits)
           
           Mux(shouldRound, shiftedData + 1.S, shiftedData)
@@ -346,7 +346,7 @@ class OutRouterPlanePost extends Module {
           data
         }
         
-        val truncated = quantizedData.asUInt()(outWidth-1, 0).asSInt
+        val truncated = quantizedData.asUInt(outWidth-1, 0).asSInt
         
         // 检查是否发生溢出
         val isOverflow = quantizedData > maxValue.S || quantizedData < minValue.S
@@ -365,8 +365,8 @@ class OutRouterPlanePost extends Module {
     } else {
       // 位宽不足，补符号位
       for (i <- 0 until colSize) {
-        val signBit = dataVec(i).asUInt()(elemWidth-1)
-        truncateData(i) := Cat(Fill(outWidth-elemWidth, signBit), dataVec(i).asUInt()).asSInt
+        val signBit = dataVec(i).asUInt(elemWidth-1)
+        truncateData(i) := Cat(Fill(outWidth-elemWidth, signBit), dataVec(i).asUInt).asSInt
       }
     }
     truncateData

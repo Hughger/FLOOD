@@ -219,8 +219,8 @@ class OutRouterPlane(
     val truncateData = Wire(Vec(colSize, SInt(outWidth.W)))
     val tmpData = Wire(Vec(colSize, UInt(outWidth.W)))
     for (i <- 0 until colSize) {
-      tmpData(i) := dataVec(i).asUInt()(inWidth-1, inWidth-outWidth)
-      truncateData(i) := tmpData(i).asSInt()
+      tmpData(i) := dataVec(i).asUInt(inWidth-1, inWidth-outWidth)
+      truncateData(i) := tmpData(i).asSInt
     }
     truncateData
   }
@@ -331,7 +331,7 @@ class OutRouterPlane(
   
   // Element-wise addition with conditional selection
   for (i <- 0 until colSize) {
-    s1_mergedData(i) := s1_currentData(i) +& s1_jointReadData(i).asSInt() +& s1_outputReadData(i).asSInt()
+    s1_mergedData(i) := s1_currentData(i) +& s1_jointReadData(i).asSInt +& s1_outputReadData(i).asSInt
   }
 
   // Pipeline stage 2: 将position>groupNum时的列拼接的读取结果累加，并写回
@@ -352,7 +352,7 @@ class OutRouterPlane(
   
   // Element-wise addition with conditional selection
   for (i <- 0 until colSize) {
-    s2_mergedData(i) := s2_currentData(i) +& s2_jointReadData(i).asSInt()
+    s2_mergedData(i) := s2_currentData(i) +& s2_jointReadData(i).asSInt
   }
 
   // 准备vector to bus转换

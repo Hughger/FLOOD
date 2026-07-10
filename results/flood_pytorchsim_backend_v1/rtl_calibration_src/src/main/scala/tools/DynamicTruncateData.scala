@@ -81,8 +81,8 @@ class DynamicTruncateData(
     // 计算截位后的值（位宽与输入一致）
     val truncatedValue = Wire(SInt((inputWidth+1).W)) // 预留移位避免溢出
     // 缺省赋值：符号扩展输入，避免未完全初始化（用 Cat + Fill 做标准符号扩展）
-    val signBit = inputValue.asUInt()(inputWidth-1)
-    val extended = Cat(Fill(1, signBit), inputValue.asUInt()).asSInt
+    val signBit = inputValue.asUInt(inputWidth-1)
+    val extended = Cat(Fill(1, signBit), inputValue.asUInt).asSInt
     truncatedValue := extended
     
     // 计算有效位宽的最大值和最小值
@@ -94,7 +94,7 @@ class DynamicTruncateData(
         // 算术右移
         val shifted = inputValue >> truncateBits
         // 检查被截掉的最低位（第truncateBits-1位）
-        val shouldRound = inputValue.asUInt()(truncateBits - 1.U)
+        val shouldRound = inputValue.asUInt(truncateBits - 1.U)
         // 四舍五入：如果被截掉的最低位是1，则加1
         val rounded = shifted + Mux(shouldRound, 1.S, 0.S)
         

@@ -65,7 +65,7 @@ class MultipleDetector extends Module {
     encoder.io.in := matchVec
     
     // 检查是否有匹配
-    val hasMatch = matchVec.asUInt.orR()
+    val hasMatch = matchVec.asUInt.orR
     
     io.isValid := hasMatch
     io.multiple := Mux(hasMatch, multipleVec(encoder.io.out), 0.U)

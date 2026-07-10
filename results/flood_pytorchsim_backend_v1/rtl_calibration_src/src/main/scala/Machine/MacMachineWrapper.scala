@@ -195,7 +195,7 @@ class MacMachineWrapper extends Module {
   io.interrupts.errorInterrupt := errorInterruptReg
 
   // 中断刷新：有效即清零，并自清 interruptFreshReg
-  when(interruptFreshReg.orR()) {
+  when(interruptFreshReg.orR) {
     doneInterruptReg := false.B
     errorInterruptReg := false.B
     interruptFreshReg := 0.U

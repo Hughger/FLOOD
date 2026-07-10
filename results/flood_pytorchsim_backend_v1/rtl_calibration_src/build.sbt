@@ -7,6 +7,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "edu.berkeley.cs" %% "chisel3" % "3.6.0"
     ),
+    addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.6.0" cross CrossVersion.full),
     Compile / scalaSource := baseDirectory.value / "src" / "main" / "scala",
     Test / scalaSource := baseDirectory.value / "src" / "test" / "scala"
   )

@@ -110,6 +110,8 @@ def test_repeatability_without_independent_golden_is_blocked_from_direct_paper_d
         assert checks["feature_hex_multi_resolution_column_packing"]["status"] == "missing"
         assert "RES_COL_TOTAL" in checks["feature_hex_multi_resolution_column_packing"]["paper_policy"]
         assert checks["python_feature_hex_mapping_helper_available"]["status"] == "pass"
+        assert checks["python_rtl_math_reference_available"]["status"] == "pass"
+        assert checks["python_rtl_postprocess_reference_available"]["status"] == "pass"
 
 
 if __name__ == "__main__":
